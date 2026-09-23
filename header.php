@@ -26,7 +26,9 @@
             </span>
             <ul>
                 <li><a href="login.php">Log in</a></li>
-                <li><a href="register.php">Register</a></li>
+                <li><a href="https://leadershipfauquier.org/program-general-information/">Program Information</a></li>
+                <li><a href="register.php">Register Now!</a></li>
+                <li>Meet our Team</li>
             </ul>
         </nav>';
     } else if ($_SESSION['logged_in']) {
@@ -125,13 +127,16 @@
             echo('<ul>');
             //echo " <br><b>"."Gwyneth's Gift Homebase"."</b>|"; //changed: 'Homebase' to 'Gwyneth's Gift Homebase'
 	        if ($_SESSION['access_level'] >= 1) {
+                echo('<li><a class="nav-link active" aria-current="page" href="' . $path . 'logout.php">Log out</a></li>');
                 echo('<li><a class="nav-link active" aria-current="page" href="' . $path . 'index.php">Home</a></li>');
+                echo('<li class="sub-item"><a class="nav-link active" aria-current="page" href="https://leadershipfauquier.org/program-general-information/">Program Information</a></li>');
+                echo('<li>Meet our Team</li>');
                 // echo('<li class="nav-item"><a class="nav-link active" aria-current="page" href="' . $path . 'about.php">About</a></li>');
                 // echo('<li class="nav-item"><a class="nav-link active" aria-current="page" href="' . $path . 'help.php?helpPage=' . $current_page . '" target="_BLANK">Help</a></li>');
                 echo('<span class="nav-divider">|</span>');
                 echo('<span class="navbar-brand">Events</span>');
                 echo('<li class="sub-item"><a class="nav-link active" aria-current="page" href="' . $path . 'calendar.php">Calendar</a></li>');
-		echo('<li class="sub-item"><a class="nav-link active" aria-current="page" href="' . $path . 'CourseEval.php">Course Evaluation</a></li>');
+		//echo('<li class="sub-item"><a class="nav-link active" aria-current="page" href="' . $path . 'CourseEval.php">Course Evaluation</a></li>');
                 echo('<li class="sub-item"><a class="nav-link active" aria-current="page" href="' . $path . 'eventSearch.php">Search</a></li>');
                 //echo('<button type="button" class="btn btn-link"><a href="' . $path . 'index.php" class="link-primary">home</a></button>');
 	        	//echo(' | <button type="button" class="btn btn-link"><a href="' . $path . 'about.php">about</a></button>');
@@ -143,15 +148,15 @@
 	            //echo('<br>master schedules: <a href="' . $path . 'viewSchedule.php?venue=portland'."".'">Portland, </a>');
 	            //echo('<a href="' . $path . 'viewSchedule.php?venue=bangor'."".'">Bangor</a>');
 		    echo('<li class="sub-item"><a class="nav-link active" aria-current="page" href="' . $path . 'verify.php">Verify</a></li>');
-	            echo('<li class="sub-item"><a class="nav-link active" aria-current="page" href="' . $path . 'selectTrainingPeriod.php">Add Training Period</a></li>');
+	            echo('<li class="sub-item"><a class="nav-link active" aria-current="page" href="' . $path . 'selectTrainingPeriod.php">Add Onboarding Period</a></li>');
                 echo('<li class="sub-item"><a class="nav-link active" aria-current="page" href="' . $path . 'manageCourses.php">Manage Courses</a></li>');
 	            echo('<span class="nav-divider">|</span>');
 	            echo('<span class="navbar-brand">Volunteers</span>');
-                echo('<li class="sub-item"><a class="nav-link active" aria-current="page" href="' . $path . 'personSearch.php">Search</a></li>
+                echo('<li class="sub-item"><a class="nav-link active" aria-current="page" href="' . $path . 'personSearch.php">Search Volunteers</a></li>
 			        <li class="sub-item"><a class="nav-link active" aria-current="page" href="register.php">Add Volunteer</a></li>'); 
 	            echo('<li class="sub-item"><a class="nav-link active" aria-current="page" href="' . $path . 'report.php">Reports</a></li>');
 	        }
-	        echo('<li><a class="nav-link active" aria-current="page" href="' . $path . 'logout.php">Log out</a></li>');
+	        
             echo '</ul></nav>';
         }
         
