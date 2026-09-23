@@ -49,8 +49,8 @@ table, td, tr, th, form, fieldset, em, button, a {
     --inactive-background-color: #f0f0f0;
     --standout-background: #fafafa;
 
-    --happy-toast-background-color: #1a7024;
-    --happy-toast-font-color: white;
+    --happy-toast-background-color: #0b7317; /*Danny changed this from blue to green*/
+    --happy-toast-font-color: rgb(255, 213, 44); /* Danny changed this from white to yellow */
 
     --info-toast-background-color: #2f2f2f;
     --info-toast-font-color: white;
@@ -60,7 +60,7 @@ table, td, tr, th, form, fieldset, em, button, a {
 
     --shadow-and-border-color: #e8e8e8;
 
-    --main-color: #2f4159;
+    --main-color: #0b7317;  /*Danny also changed this to green*/
     --accent-color: #f5c16e;
     --secondary-accent-color: #f6a4b5;
 
@@ -81,8 +81,8 @@ table, td, tr, th, form, fieldset, em, button, a {
     --error-color: red;
 
     /* Global rules */
-    font-size: 18px;
-    font-family: Montserrat;
+    font-size: 50px;   /* Danny changed this from 18 to 50 */
+    font-family: fantasy; /*  Danny changed the font from Montserrat to Fantasy*/
     font-weight: 300;
 }
 
@@ -98,7 +98,7 @@ header {
 body {
     background-color: var(--page-background-color);
     color: var(--page-font-color);
-    font-family: Montserrat;
+    font-family: fantasy; /*  Danny changed the font from Montserrat to Fantasy*/
 }
 
 header > img {
