@@ -31,15 +31,14 @@
     </head>
     <body>
         <?php require('header.php'); ?>
-        <h1 style="background-image: url(https://pixeltrex.neocities.org/images/Asparagus-0.jpg);">
-        Dashboard</h1>
+        <h1>Dashboard</h1>
         <main class='dashboard'>
             <?php if (isset($_GET['pcSuccess'])): ?>
                 <div class="happy-toast">Password changed successfully!</div>
             <?php elseif (isset($_GET['registerSuccess'])): ?>
                 <div class="happy-toast">Volunteer registered successfully!</div>
             <?php endif ?>
-            <p>Hesitation is Defeat, Sekiro!</p>
+            <p>Welcome back, <?php echo $person->get_first_name() ?>!</p>
             <p>Today is <?php echo date('l, F j, Y'); ?>.</p>
             <div id="dashboard">
                 <?php
@@ -78,7 +77,7 @@
                 </div>
                 <?php if ($_SESSION['access_level'] >= 2): ?>
                     <div class="dashboard-item" data-link="personSearch.php">
-                        <img src="https://pixeltrex.neocities.org/images/vulture.jpeg">
+                        <img src="images/person-search.svg">
                         <span>Find Person</span>
                     </div>
                     <div class="dashboard-item" data-link="register.php">
