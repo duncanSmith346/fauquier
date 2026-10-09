@@ -39,7 +39,7 @@
                 <div class="happy-toast">Volunteer registered successfully!</div>
             <?php endif ?>
             <p>Welcome back, <?php echo $person->get_first_name() ?>!</p>
-            <p>Today is <?php echo date('l, F j, Y'); ?>.</p>
+            <p>Today is <?php echo date('l, F j, Y'); ?>.</p>            
             <div id="dashboard">
                 <?php
                     require_once('database/dbMessages.php');
@@ -147,7 +147,13 @@
                     <img src="images/logout.svg">
                     <span>Log out</span>
                 </div>
-            </div>
+            </div> /* this doesn't work trying to get it to*/
+            <?php if ($admin): ?>
+                <div class="navigation">
+                    <a href="index.php" class="navigation_button"> navigation</a>
+                    
+                </div>
+            <?php endif ?>
         </main>
     </body>
 </html>

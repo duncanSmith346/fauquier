@@ -909,3 +909,14 @@ hr.solid {
 div {
     display: block;
 }
+
+navigation {
+    display: flex;
+    flex-direction: column;
+    
+
+}
+
+navigation_button {
+    display: block;
+}
