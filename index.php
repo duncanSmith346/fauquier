@@ -27,7 +27,7 @@
 <html>
     <head>
         <?php require('universal.inc'); ?>
-        <title>Empowerhouse VMS | Dashboard</title>
+        <title>Fauquier Leadership | Dashboard</title>
     </head>
     <body>
         <?php require('header.php'); ?>
@@ -40,6 +40,7 @@
             <?php endif ?>
             <p>Welcome back, <?php echo $person->get_first_name() ?>!</p>
             <p>Today is <?php echo date('l, F j, Y'); ?>.</p>            
+            <?php if (!$admin): ?>
             <div id="dashboard">
                 <?php
                     require_once('database/dbMessages.php');
@@ -148,9 +149,12 @@
                     <span>Log out</span>
                 </div>
             </div> /* this doesn't work trying to get it to*/
+            <?php endif ?>
             <?php if ($admin): ?>
                 <div class="navigation">
-                    <a href="index.php" class="navigation_button"> navigation</a>
+                    <a href="index.php" class="navigation_button"> navigation1</a>
+                    <a href="index.php" class="navigation_button"> navigation2</a>
+                    <a href="index.php" class="navigation_button"> navigation3</a>
                     
                 </div>
             <?php endif ?>
