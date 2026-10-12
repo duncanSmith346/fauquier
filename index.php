@@ -148,14 +148,24 @@
                     <img src="images/logout.svg">
                     <span>Log out</span>
                 </div>
-            </div> /* this doesn't work trying to get it to*/
+            </div>
             <?php endif ?>
             <?php if ($admin): ?>
-                <div class="navigation">
-                    <a href="index.php" class="navigation_button"> navigation1</a>
-                    <a href="index.php" class="navigation_button"> navigation2</a>
-                    <a href="index.php" class="navigation_button"> navigation3</a>
-                    
+                <div class="admin_dashboard">
+                    <div class="navigation">
+                        <a href="index.php" class="navigation_button"> Cohorts</a>
+                        <a href="index.php" class="navigation_button"> Committee Members</a>
+                        <a href="index.php" class="navigation_button"> logout</a>
+                        
+                    </div>
+                    <div class='application_list'>
+                        <div class="application_card">
+                            application
+                        </div>
+                        <div class="application_card">
+                            application 2
+                        </div>
+                    </div>
                 </div>
             <?php endif ?>
         </main>
