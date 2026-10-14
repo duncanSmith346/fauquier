@@ -909,3 +909,46 @@ hr.solid {
 div {
     display: block;
 }
+
+div.navigation {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    position: relative;
+    right: 5rem;
+}
+
+div.admin_dashboard {
+    display: flex;
+    flex-direction: row;
+}
+
+a.navigation_button {
+    padding: var(--button-padding);
+    border-radius: var(--button-border-radius);
+    color: var(--button-font-color);
+    background-color: var(--main-color);
+    margin-bottom: 0.25rem;
+}
+
+div.application_list {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    left: 5rem;
+}
+
+div.application_card {
+    padding: var(--button-padding);
+    border-radius: var(--button-border-radius);
+    color: var(--button-font-color);
+    background-color: var(--main-color);
+    margin-bottom: 0.5rem;
+    border-color: black;
+}
+
+select.application_list_select {
+    width: 150px;
+    height: 2.25rem;
+}
+
