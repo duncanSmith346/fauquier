@@ -41,6 +41,10 @@
             <?php endif ?>
             <p>Welcome back, <?php echo $person->get_first_name() ?>!</p>
             <p>Today is <?php echo date('l, F j, Y'); ?>.</p>            
+           
+           
+<!-- Original page code for empowerhouse -->
+
             <?php if (!$admin): ?>
             <div id="dashboard">
                 <?php
@@ -151,6 +155,10 @@
                 </div>
             </div>
             <?php endif ?>
+
+            <!-- Bellow here we shall add the code for each version of index acording to how Ryan wrote the if Admin section. -->
+            <!-- Dashboard for if Admin -->
+
             <?php if ($admin): ?>
                 <div class="admin_dashboard">
                     <div class="navigation">
@@ -180,6 +188,13 @@
                     </div>
                 </div>
             <?php endif ?>
+
+            <!-- Dashboard for if CM -->
+
+            <!-- Dashboard for if Cohort -->
+
+            <!-- Dashboard for if Applicant -->
+
         </main>
     </body>
 </html>
