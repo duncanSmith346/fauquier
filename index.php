@@ -22,6 +22,8 @@
     }
     $notRoot = $person->get_id() != 'vmsroot';
     $admin = $person->get_type()[0] == 'admin';
+    $applicant = in_array('applicant', $person->get_type(), true);
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -45,7 +47,7 @@
            
 <!-- Original page code for empowerhouse -->
 
-            <?php if (!$admin): ?>
+            <?php if (!$admin && !$applicant): ?>
             <div id="dashboard">
                 <?php
                     require_once('database/dbMessages.php');
@@ -194,6 +196,17 @@
             <!-- Dashboard for if Cohort -->
 
             <!-- Dashboard for if Applicant -->
+            <?php if ($applicant): ?>
+                <div class="applicant_dashboard">
+                     <h2>Applicant Dashboard</h2>
+
+                         <div class="dashboard-item">
+                             <a href="manageApplication.php">
+                                   Manage Application
+                            </a>
+                         </div>
+                 </div>
+            <?php endif; ?>
 
         </main>
     </body>
