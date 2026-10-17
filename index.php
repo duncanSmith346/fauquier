@@ -21,13 +21,15 @@
         $person = retrieve_person($_SESSION['_id']);
     }
     $notRoot = $person->get_id() != 'vmsroot';
-    $admin = $person->get_type() == 'admin';
+    $admin = $person->get_type()[0] == 'admin';
+    $applicant = in_array('applicant', $person->get_type(), true);
+
 ?>
 <!DOCTYPE html>
 <html>
     <head>
         <?php require('universal.inc'); ?>
-        <title>Empowerhouse VMS | Dashboard</title>
+        <title>Fauquier Leadership | Dashboard</title>
     </head>
     <body>
         <?php require('header.php'); ?>
@@ -39,7 +41,12 @@
                 <div class="happy-toast">Volunteer registered successfully!</div>
             <?php endif ?>
             <p>Welcome back, <?php echo $person->get_first_name() ?>!</p>
-            <p>Today is <?php echo date('l, F j, Y'); ?>.</p>
+            <p>Today is <?php echo date('l, F j, Y'); ?>.</p>            
+           
+           
+<!-- Original page code for empowerhouse -->
+
+            <?php if (!$admin && !$applicant): ?>
             <div id="dashboard">
                 <?php
                     require_once('database/dbMessages.php');
@@ -148,6 +155,58 @@
                     <span>Log out</span>
                 </div>
             </div>
+            <?php endif ?>
+
+            <!-- Bellow here we shall add the code for each version of index acording to how Ryan wrote the if Admin section. -->
+            <!-- Dashboard for if Admin -->
+
+            <?php if ($admin): ?>
+                <div class="admin_dashboard">
+                    <div class="navigation">
+                        <a href="Forms.php" class="navigation_button"> Forms</a>
+                        <a href="index.php" class="navigation_button"> Committee Members</a>
+                        <a href="logout.php" class="navigation_button"> logout</a>
+                        
+                    </div>
+                    <div class='application_list'>
+                        <form action='index.php' method='POST'> 
+                            <div class="application_card">
+                                Applicant Name: Applicant 1  |  Committee Member: 
+                                <select name="CM" id="CM" class='application_list_select'>
+                                    <option value="Unselected" class='application_list_option'>Unselected</option>
+                                    <option value="CM 1" class='application_list_option'> CM1 </option>
+                                </select>
+                            </div>
+                            <div class="application_card">
+                                Applicant Name: Applicant 2  |  Committee Member: 
+                                <select name="CM" id="CM" class='application_list_select'>
+                                    <option value="Unselected" class='application_list_option'>Unselected</option>
+                                    <option value="CM 1" class='application_list_option'> CM1 </option>
+                                </select>
+                            </div>
+                            <button type='submit' value='updateCMs'>Update</button>
+                        </form>
+                    </div>
+                </div>
+            <?php endif ?>
+
+            <!-- Dashboard for if CM -->
+
+            <!-- Dashboard for if Cohort -->
+
+            <!-- Dashboard for if Applicant -->
+            <?php if ($applicant): ?>
+                <div class="applicant_dashboard">
+                     <h2>Applicant Dashboard</h2>
+
+                         <div class="dashboard-item">
+                             <a href="manageApplication.php">
+                                   Manage Application
+                            </a>
+                         </div>
+                 </div>
+            <?php endif; ?>
+
         </main>
     </body>
 </html>

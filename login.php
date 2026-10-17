@@ -80,13 +80,12 @@
 <html>
     <head>
         <?php require_once('universal.inc') ?>
-        <title>Fauquier Leadership | Log In</title>
+        <title>Empowerhouse VMS | Log In</title>
     </head>
     <body>
         <?php require_once('header.php') ?>
         <main class="login">
-            <h1>Application Management System</h1>
-            <h2>Welcome to the Login Page</h2>
+            <h1>Volunteer Management System</h1>
             <?php if (isset($_GET['registerSuccess'])): ?>
                 <div class="happy-toast">
                     Your registration was successful! Please log in below.
@@ -102,10 +101,10 @@
                 ?>
                 <label for="username">Username</label>
         		<input type="text" name="username" placeholder="Enter your e-mail address" required>
-        		<label for="password">Your Secret Word</label>
+        		<label for="password">Password</label>
                 <input type="password" name="password" placeholder="Enter your password" required>
                 <input type="submit" name="login" value="Log in">
-                <p>Or <a href="register.php">register as a new Applicant</a>!</p>
+                <p>Or <a href="register.php">register as a new volunteer</a>!</p>
             </form>
         </main>
     </body>

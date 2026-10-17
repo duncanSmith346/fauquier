@@ -17,7 +17,15 @@
 $accessLevelsByRole = [
 	'volunteer' => 1,
 	'trainer' => 2,
-	'admin' => 3
+	
+
+	// if you get rid of the old code above,
+	// it might break code elseware. 
+	// we can reasign access levels to roles as needed.
+	'admin' => 3,
+	'applicant' => 1,
+    'committee' => 1,
+    'cohort' => 1
 ];
 
 class Person {

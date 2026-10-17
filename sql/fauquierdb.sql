@@ -25,6 +25,10 @@ DROP TABLE IF EXISTS `dbeventvolunteers`;
 DROP TABLE IF EXISTS `dbmessages`;
 DROP TABLE IF EXISTS `dbpersons`;
 DROP TABLE IF EXISTS `dbtrainingperiods`;
+DROP TABLE IF EXISTS `dbapplicant`;
+DROP TABLE IF EXISTS `dbcohort`;
+DROP TABLE IF EXISTS `dbadmin`;
+DROP TABLE IF EXISTS `dbcm`; /* this means committee member */
 
 DROP TABLE IF EXISTS `dbCourses`;
 DROP TABLE IF EXISTS `dbEventMedia`;
@@ -33,6 +37,10 @@ DROP TABLE IF EXISTS `dbEventVolunteers`;
 DROP TABLE IF EXISTS `dbMessages`;
 DROP TABLE IF EXISTS `dbPersons`;
 DROP TABLE IF EXISTS `dbTrainingPeriods`;
+DROP TABLE IF EXISTS `dbApplicant`;
+DROP TABLE IF EXISTS `dbCohort`;
+DROP TABLE IF EXISTS `dbAdmin`;
+DROP TABLE IF EXISTS `dbCM`; /* this means committee member */
 
 --
 -- Database: `fauquierdb`
@@ -168,7 +176,7 @@ CREATE TABLE `dbPersons` (
   `relation` text NOT NULL,
   `contact_time` text NOT NULL,
   `cMethod` text DEFAULT NULL,
-  `position` text DEFAULT NULL,
+  `position` text DEFAULT NULL, /*needs to be changed to not null when ready*/
   `credithours` text DEFAULT NULL,
   `howdidyouhear` text DEFAULT NULL,
   `commitment` text DEFAULT NULL,
@@ -216,6 +224,89 @@ INSERT INTO `dbPersons` (`id`, `start_date`, `venue`, `first_name`, `last_name`,
 ('vmsroot', 'N/A', 'portland', 'vmsroot', '', 'N/A', 'N/A', 'VA', 'N/A', '', 'N/A', 'N/A', 'N/A', 'N/A', 'vmsroot', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', '', 'N/A', '0', 'N/A', 'N/A', 'N/A', 'N/A', '$2y$10$8GyfE491ix9MD.1UVOgsZ.3PbX0w/AP8xGUNAgORt8nvvXprfHFeC', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '');
 
 -- --------------------------------------------------------
+--
+-- Table structure for table `dbApplicant`
+--
+
+CREATE TABLE `dbApplicant` (
+  `id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `person_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `Application_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
+)  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+
+--
+-- Table structure for table `dbCohort`
+--
+
+CREATE TABLE `dbCohort` (
+  `id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `person_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `Application_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `dateAccepted` date not NULL
+  `onboardingAppointment_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `Cycle_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `acceptanceConfirmedAt` date
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Table structure for table `dbCM`
+--
+
+CREATE TABLE `dbCM` (
+  `id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `person_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `committeeRole` text,
+  `appointedAt` date,
+  `retiredAt` date,
+  `canSubmitRecommendation` boolean,
+  `conflictOfInterestAcknowledgementAt` date,
+  `createdAt` date,
+  `updatedAt` date
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+--
+-- Table structure for table `dbAdmin`
+--
+
+CREATE TABLE `dbAdmin` (
+  `id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `person_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `createdAt` date,
+  `updatedAt` date
+  
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+
+--
+-- Table structure for table `dbApplication`
+--
+
+CREATE TABLE `dbApplication` (
+  `id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL PRIMARY KEY,
+  `applicant_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `createdAt` date NOT NULL DEFAULT (CURRENT_DATE),
+  `paymentStatus` boolean NOT NULL DEFAULT FALSE,
+  `applicationSaved` date DEFAULT NULL,
+  `cycle_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `submittedAt` date DEFAULT NULL,  
+  /*questions below*/
+  `answer1` text, /* name? */
+  `answer2` text,  /* message? */
+  /*below is staff*/
+  `reviewer_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `reviewStatus` boolean NOT NULL DEFAULT FALSE,
+  `decisionStatus` varchar(20) NOT NULL DEFAULT 'undecided', /* yes, no, undecided */
+  `decisionDate` date DEFAULT NULL,
+  FOREIGN KEY (`applicant_id`) REFERENCES `dbPersons`(`id`),
+  UNIQUE KEY `unique_applicant_cycle` (`applicant_id`, `cycle_id`)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 
 --
 -- Table structure for table `dbTrainingPeriods`
