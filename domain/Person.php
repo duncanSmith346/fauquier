@@ -24,7 +24,7 @@ $accessLevelsByRole = [
 	// we can reasign access levels to roles as needed.
 	'admin' => 3,
 	'applicant' => 1,
-    'committee' => 1,
+    'committee' => 4,
     'cohort' => 1
 ];
 

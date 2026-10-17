@@ -23,6 +23,7 @@
     $notRoot = $person->get_id() != 'vmsroot';
     $admin = $person->get_type()[0] == 'admin';
     $applicant = in_array('applicant', $person->get_type(), true);
+    $committee = in_array('committee', $person->get_type(), true);
 
 ?>
 <!DOCTYPE html>
@@ -191,6 +192,35 @@
             <?php endif ?>
 
             <!-- Dashboard for if CM -->
+
+             <?php if ($committee): ?>
+                <div class="admin_dashboard">
+                    <div class="navigation">
+                        <a href="Forms.php" class="navigation_button"> Forms</a>
+                        <a href="logout.php" class="navigation_button"> logout</a>
+                        
+                    </div>
+                    <div class='application_list'>
+                        <form action='index.php' method='POST'> 
+                            <div class="application_card">
+                                Applicant Name: Applicant 1  |  Committee Member: 
+                                <select name="CM" id="CM" class='application_list_select'>
+                                    <option value="Unselected" class='application_list_option'>Unselected</option>
+                                    <option value="CM 1" class='application_list_option'> CM1 </option>
+                                </select>
+                            </div>
+                            <div class="application_card">
+                                Applicant Name: Applicant 2  |  Committee Member: 
+                                <select name="CM" id="CM" class='application_list_select'>
+                                    <option value="Unselected" class='application_list_option'>Unselected</option>
+                                    <option value="CM 1" class='application_list_option'> CM1 </option>
+                                </select>
+                            </div>
+                            <button type='submit' value='updateCMs'>Update</button>
+                        </form>
+                    </div>
+                </div>
+             <?php endif ?>
 
             <!-- Dashboard for if Cohort -->
 
