@@ -33,8 +33,7 @@
     </head>
     <body>
         <?php require('header.php'); ?>
-        <h1 style="background-image: url(https://pixeltrex.neocities.org/images/Asparagus-0.jpg);">
-        Dashboard</h1>
+        <h1>Dashboard</h1>
         <main class='dashboard'>
             <?php if (isset($_GET['pcSuccess'])): ?>
                 <div class="happy-toast">Password changed successfully!</div>
@@ -164,9 +163,9 @@
             <?php if ($admin): ?>
                 <div class="admin_dashboard">
                     <div class="navigation">
-                        <a href="index.php" class="navigation_button"> Cohorts</a>
+                        <a href="Forms.php" class="navigation_button"> Forms</a>
                         <a href="index.php" class="navigation_button"> Committee Members</a>
-                        <a href="index.php" class="navigation_button"> logout</a>
+                        <a href="logout.php" class="navigation_button"> logout</a>
                         
                     </div>
                     <div class='application_list'>

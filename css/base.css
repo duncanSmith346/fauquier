@@ -952,3 +952,38 @@ select.application_list_select {
     height: 2.25rem;
 }
 
+div.forms_dashboard {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    left: 150px;
+}
+
+div.form_dashboard-item {
+    display: inline;
+    background-color: var(--main-color);
+    transition: background-color .3s;
+    font-weight: 400;
+    border-radius: 1rem;
+    padding: 2rem;
+    color: var(--button-font-color);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    width: 14rem;
+    height: 14rem;
+    margin: 2rem;
+}
+
+div.form_dashboard-item > img {
+    filter: invert();
+    height: 4rem;
+}
+
+div.form_dashboard-item:hover {
+    background-color: var(--accent-color);
+    cursor: pointer;
+    text-shadow: 0px 0px .25rem black;
+}
