@@ -223,6 +223,14 @@ INSERT INTO `dbPersons` (`id`, `start_date`, `venue`, `first_name`, `last_name`,
 ('testvol@test.com', NULL, NULL, 'Alex', 'Keehan', NULL, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, 'alex.k@gmail.com', NULL, NULL, '', '', '', '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Volunteer', 'Active', 'True', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 0, ''),
 ('vmsroot', 'N/A', 'portland', 'vmsroot', '', 'N/A', 'N/A', 'VA', 'N/A', '', 'N/A', 'N/A', 'N/A', 'N/A', 'vmsroot', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', '', 'N/A', '0', 'N/A', 'N/A', 'N/A', 'N/A', '$2y$10$8GyfE491ix9MD.1UVOgsZ.3PbX0w/AP8xGUNAgORt8nvvXprfHFeC', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '');
 
+
+
+INSERT INTO `dbPersons` (`id`,`email`,`first_name`,`last_name`,`phone1`,`camera`,`transportation`,`contact_name`,`contact_num`,`relation`,`contact_time`,`type`,`completedTraining`,`profile_pic`,`force_password_change`,`gender`) VALUES
+('testCohort@test.com','testCohort@test.com','John','Doe','5551234567','Yes','Yes','Jane Doe','5559876543','Spouse','Anytime','cohort','False','',0,'Male'),
+('testApplicant@test.com','testApplicant@test.com','Jane','Smith','5552345678','No','Yes','John Smith','5558765432','Parent','Evenings','applicant','False','',0,'Female'),
+('testCM@test.com','testCM@test.com','Alex','Johnson','5553456789','Yes','No','Taylor Johnson','5557654321','Friend','Anytime','cm','False','',0,'Other');
+
+
 -- --------------------------------------------------------
 --
 -- Table structure for table `dbApplicant`

@@ -165,6 +165,7 @@
                     <div class="navigation">
                         <a href="Forms.php" class="navigation_button"> Forms</a>
                         <a href="index.php" class="navigation_button"> Committee Members</a>
+                        <a href="personSearch.php" class="navigation_button"> Person Search</a>
                         <a href="logout.php" class="navigation_button"> logout</a>
                         
                     </div>
