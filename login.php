@@ -47,6 +47,8 @@
                     $_SESSION['access_level'] = 2;
                 } else if (in_array('volunteer', $types)) {
                     $_SESSION['access_level'] = 1;
+                } else if (in_array('cm', $types)) {
+                    $_SESSION['access_level'] = 4;
                 } else {
 		            $_SESSION['access_level'] = 0;
 		        }
