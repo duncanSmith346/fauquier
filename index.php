@@ -23,7 +23,7 @@
     $notRoot = $person->get_id() != 'vmsroot';
     $admin = $person->get_type()[0] == 'admin';
     $applicant = in_array('applicant', $person->get_type(), true);
-    $committee = in_array('committee', $person->get_type(), true);
+    $cm = in_array('cm', $person->get_type(), true);
 
 ?>
 <!DOCTYPE html>
@@ -194,7 +194,7 @@
 
             <!-- Dashboard for if CM -->
 
-             <?php if ($committee): ?>
+             <?php if ($cm): ?>
                 <div class="admin_dashboard">
                     <div class="navigation">
                         <a href="Forms.php" class="navigation_button"> Forms</a>
