@@ -287,22 +287,24 @@ CREATE TABLE `dbAdmin` (
 --
 
 CREATE TABLE `dbApplication` (
-  `id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL PRIMARY KEY,
   `applicant_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `createdAt` date,
-  `paymentStatus` boolean,
-  `applicationSaved` date,
+  `createdAt` date NOT NULL DEFAULT (CURRENT_DATE),
+  `paymentStatus` boolean NOT NULL DEFAULT FALSE,
+  `applicationSaved` date DEFAULT NULL,
   `cycle_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `submittedAt` date,
+  `submittedAt` date DEFAULT NULL,  
   /*questions below*/
   `answer1` text, /* name? */
-  `answer2` text  /* message? */
+  `answer2` text,  /* message? */
   /*below is staff*/
-  `reviwer_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `reviewStatus` boolean,
-  `decisionStatus` text, /* yes, no, undecided */
-  `decisionDate` date,
-  
+  `reviewer_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `reviewStatus` boolean NOT NULL DEFAULT FALSE,
+  `decisionStatus` varchar(20) NOT NULL DEFAULT 'undecided', /* yes, no, undecided */
+  `decisionDate` date DEFAULT NULL,
+  FOREIGN KEY (`applicant_id`) REFERENCES `dbPersons`(`id`),
+  UNIQUE KEY `unique_applicant_cycle` (`applicant_id`, `cycle_id`)
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 

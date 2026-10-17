@@ -22,6 +22,8 @@
     }
     $notRoot = $person->get_id() != 'vmsroot';
     $admin = $person->get_type()[0] == 'admin';
+    $applicant = in_array('applicant', $person->get_type(), true);
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -31,8 +33,7 @@
     </head>
     <body>
         <?php require('header.php'); ?>
-        <h1 style="background-image: url(https://pixeltrex.neocities.org/images/Asparagus-0.jpg);">
-        Dashboard</h1>
+        <h1>Dashboard</h1>
         <main class='dashboard'>
             <?php if (isset($_GET['pcSuccess'])): ?>
                 <div class="happy-toast">Password changed successfully!</div>
@@ -41,7 +42,11 @@
             <?php endif ?>
             <p>Welcome back, <?php echo $person->get_first_name() ?>!</p>
             <p>Today is <?php echo date('l, F j, Y'); ?>.</p>            
-            <?php if (!$admin): ?>
+           
+           
+<!-- Original page code for empowerhouse -->
+
+            <?php if (!$admin && !$applicant): ?>
             <div id="dashboard">
                 <?php
                     require_once('database/dbMessages.php');
@@ -151,12 +156,16 @@
                 </div>
             </div>
             <?php endif ?>
+
+            <!-- Bellow here we shall add the code for each version of index acording to how Ryan wrote the if Admin section. -->
+            <!-- Dashboard for if Admin -->
+
             <?php if ($admin): ?>
                 <div class="admin_dashboard">
                     <div class="navigation">
-                        <a href="index.php" class="navigation_button"> Cohorts</a>
+                        <a href="Forms.php" class="navigation_button"> Forms</a>
                         <a href="index.php" class="navigation_button"> Committee Members</a>
-                        <a href="index.php" class="navigation_button"> logout</a>
+                        <a href="logout.php" class="navigation_button"> logout</a>
                         
                     </div>
                     <div class='application_list'>
@@ -180,6 +189,24 @@
                     </div>
                 </div>
             <?php endif ?>
+
+            <!-- Dashboard for if CM -->
+
+            <!-- Dashboard for if Cohort -->
+
+            <!-- Dashboard for if Applicant -->
+            <?php if ($applicant): ?>
+                <div class="applicant_dashboard">
+                     <h2>Applicant Dashboard</h2>
+
+                         <div class="dashboard-item">
+                             <a href="manageApplication.php">
+                                   Manage Application
+                            </a>
+                         </div>
+                 </div>
+            <?php endif; ?>
+
         </main>
     </body>
 </html>
