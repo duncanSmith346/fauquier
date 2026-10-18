@@ -122,3 +122,27 @@ function update_reviewer($reviewer_id, $application_id) {
     return $success;
 }
 
+function update_choice($choice, $application_id) {
+    $con = connect();
+
+    $sql = "UPDATE dbapplication SET decisionStatus = ? WHERE id = ?";
+
+    $stmt = mysqli_prepare($con, $sql);
+
+    if (!$stmt) {
+        die("Prepare failed: " . mysqli_error($con));
+    }
+
+    mysqli_stmt_bind_param($stmt, "ss", $choice, $application_id);
+
+    if (!mysqli_stmt_execute($stmt)) {
+        die("Execute failed: " . mysqli_stmt_error($stmt));
+    }
+
+    $success = mysqli_stmt_affected_rows($stmt);
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+
+    return $success;
+}

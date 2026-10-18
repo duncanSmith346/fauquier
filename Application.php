@@ -27,7 +27,9 @@ $existing_application = get_applicant_application(
     $cycle_id         // Program cycle being checked.
 );
 
-
+$id = NULL;
+$choice = NULL;
+$success = NULL;
 // Process the application when the form is submitted.
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -80,6 +82,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $error = "Unable to submit comment.";
             }
+        }
+    }
+} elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    if($admin) {
+        $id = $_GET['id'] ?? null;
+        $choice = null;
+
+        if (isset($_GET['reject'])) {
+            $choice = 'reject';
+        } elseif (isset($_GET['accept'])) {
+            $choice = 'accept';
+        }
+
+        if ($id !== null && $choice !== null) {
+            $success = update_choice($choice, $id);
         }
     }
 }
@@ -156,6 +173,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <p>Tell us about yourself: <?php echo $result['answer2'] ?></p>
     <p>comment: <?php echo $result['comments'] ?></p>
     <p>reviewer: <?php echo $result['reviewer_id'] ?></p>
+    <p>decision Status: <?php echo $result['decisionStatus'] ?></p>
+    <form action="Application.php" method="GET">
+        <input type='hidden' name='id' value='<?php echo $result['id'] ?>' />
+        <button type='submit' name='reject' value='reject'>Reject</button>
+        <button type='submit' name='accept' value='accept'>Accept</button>
+    </form>
 
 <?php     
     elseif($cm):
