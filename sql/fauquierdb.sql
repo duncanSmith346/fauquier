@@ -152,7 +152,7 @@ INSERT INTO `dbMessages` (`id`, `senderID`, `recipientID`, `title`, `body`, `tim
 --
 
 CREATE TABLE `dbPersons` (
-  `id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL PRIMARY KEY,
   `start_date` text DEFAULT NULL,
   `venue` text DEFAULT NULL,
   `first_name` text NOT NULL,
@@ -315,7 +315,6 @@ CREATE TABLE `dbApplication` (
   UNIQUE KEY `unique_applicant_cycle` (`applicant_id`, `cycle_id`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 
 --
 -- Table structure for table `dbTrainingPeriods`

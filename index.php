@@ -238,12 +238,15 @@
                         
                     </div>
                     <div class='application_list'>
-                        <form action='index.php' method='POST'> 
+                        <?php
+                            $results = retrieve_undecided_applicantions_names();
+                            $reviewers = get_cms();
+                            foreach($results as $result) : 
+                        ?>
                             <div class="application_card">
-                                <h2><a href="Application.php" style="text_decoration:none; color:white;">Application 1</a></h2> 
+                                <a href='Application.php?id=<?= urldecode($result['id'])?>' class='href_application_card'> Applicant Name: <?php echo $result['answer1'];?>  </a>|  Committee Member: 
                             </div>
-                            <button type='submit' value='updateCMs'>Update</button>
-                        </form>
+                        <?php endforeach; ?>
                     </div>
                 </div>
              <?php endif ?>
