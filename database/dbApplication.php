@@ -68,3 +68,57 @@ function get_applicant_application($applicant_id, $cycle_id) {
 
     return $application ?: null;
 }
+
+function retrieve_undecided_applicantions_names() {
+    $con = connect();
+
+    $sql = "SELECT answer1,dbApplication.id FROM dbApplication INNER JOIN dbPersons ON dbApplication.applicant_id=dbPersons.id
+            WHERE decisionStatus='undecided'";
+
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_execute($stmt);
+
+    $results = mysqli_stmt_get_result($stmt);
+    
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+
+    return $results ?: null;
+}
+
+function add_comment($comment, $applicant_id) {
+    $con = connect();
+
+    $sql = "UPDATE dbapplication SET comments= ? WHERE applicant_id = ?";
+
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "ss", $comment, $applicant_id);
+ 
+
+    $success = mysqli_stmt_execute($stmt);
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+
+    return $success;
+}
+
+function update_reviewer($reviewer_id, $application_id) {
+    $con = connect();
+
+    $sql = "UPDATE dbapplication SET reviewer_id= ? WHERE id = ?";
+
+    $stmt = mysqli_prepare($con, $sql);
+    
+    mysqli_stmt_bind_param($stmt, "ss", $reviewer_id, $application_id);
+ 
+
+    $success = mysqli_stmt_execute($stmt);
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+
+    return $success;
+}
+

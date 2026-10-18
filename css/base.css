@@ -987,3 +987,8 @@ div.form_dashboard-item:hover {
     cursor: pointer;
     text-shadow: 0px 0px .25rem black;
 }
+
+a.href_application_card {
+    color: var(--button-font-color);
+    text-decoration: none;
+}
