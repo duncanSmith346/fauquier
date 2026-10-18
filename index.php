@@ -28,10 +28,10 @@
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $application_id = $_POST['application_id'];
         $reviewer_id = $_POST['CM'];
-        if ($reviewer_id === 'unselected'){
+        if ($reviewer_id === 'Unselected'){
             $reviewer_id = NULL;
         }
-        $success = update_reviewer($reviewer_id,$application_id);
+        $success = update_reviewer($reviewer_id, $application_id);
         
     }
 
@@ -188,6 +188,7 @@
                             $results = retrieve_undecided_applicantions_names();
                             $reviewers = get_cms();
                             foreach($results as $result) : 
+                                
                         ?>
                         <div class="application_card">
                             <form action='index.php' method='POST'>
@@ -200,7 +201,8 @@
                                             <?= htmlspecialchars(($reviewer['first_name'] ?? '') . ' ' . ($reviewer['last_name'] ?? '')) ?>
                                         </option>                                       
                                         <?php endforeach; 
-                                    else:     
+                                    else:
+                                        $reviewer = get_name_from_id($result['reviewer_id']);
                                     ?>  
                                     <option value="<?php echo $result['reviewer_id'] ?>"class="application_list_option">
                                             <?= htmlspecialchars(($reviewer['first_name'] ?? '') . ' ' . ($reviewer['last_name'] ?? '')) ?>
@@ -218,7 +220,7 @@
                                     endif;
                                     ?>
                                 </select>
-                                <input type='hidden' name='application_id' value=<?php echo $result['id'] ?>/>
+                                <input type='hidden' name='application_id' value='<?php echo $result['id'] ?>' />
                                 <button type='submit' value='updateCMs'>Update</button>
                             </form>
                         </div>

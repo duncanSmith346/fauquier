@@ -72,7 +72,7 @@ function get_applicant_application($applicant_id, $cycle_id) {
 function retrieve_undecided_applicantions_names() {
     $con = connect();
 
-    $sql = "SELECT answer1,dbApplication.id FROM dbApplication INNER JOIN dbPersons ON dbApplication.applicant_id=dbPersons.id
+    $sql = "SELECT answer1,dbApplication.id,reviewer_id FROM dbApplication INNER JOIN dbPersons ON dbApplication.applicant_id=dbPersons.id
             WHERE decisionStatus='undecided'";
 
     $stmt = mysqli_prepare($con, $sql);
@@ -107,7 +107,7 @@ function add_comment($comment, $applicant_id) {
 function update_reviewer($reviewer_id, $application_id) {
     $con = connect();
 
-    $sql = "UPDATE dbapplication SET reviewer_id= ? WHERE id = ?";
+    $sql = "UPDATE dbapplication SET reviewer_id = ? WHERE id = ?";
 
     $stmt = mysqli_prepare($con, $sql);
     

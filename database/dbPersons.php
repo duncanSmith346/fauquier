@@ -1090,7 +1090,7 @@ function get_name_from_id($id) {
     }
     
     $row = mysqli_fetch_assoc($result);
-    return ($row['first_name'] ?? ' ') . ' ' . ($row['last_name'] ?? 'User');
+    return $row;
     mysqli_close($connection);
 }
 
