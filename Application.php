@@ -16,6 +16,8 @@ $person = retrieve_person($_SESSION['_id']);
 $notRoot = $person->get_id() != 'vmsroot';
 $admin = $person->get_type()[0] == 'admin';
 $applicant = in_array('applicant', $person->get_type(), true);
+$cm = $person->get_type()[0] == 'cm';
+$cohort = $person->get_type()[0] == 'cohort';
 
 // Set the current application cycle.
 $cycle_id = '2026';
