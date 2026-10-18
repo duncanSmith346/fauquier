@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 // Return to this page after saving.
                 if ($success) {
-                    header("Location: manageApplication.php?submitted=1");
+                    header("Location: Application.php?submitted=1");
                     exit;
                 } else {
                     $error = "Unable to submit application.";
@@ -71,11 +71,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
         elseif($cm) {
-            $comment = trim($_POST['comment'] ?? '');
+            $comment = trim($_POST['comments'] ?? '');
             $applicant_id = $_POST['$applicant_id'];
-            $success = add_comment($comment,$applicant_id);
+            $success = add_comment($comment, $applicant_id);
             if ($success) {
-                header("Location: manageApplication.php?commentsubmitted=1");
+                header("Location: Application.php?commentsubmitted=1");
                 exit;
             } else {
                 $error = "Unable to submit comment.";
@@ -169,7 +169,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <form action="Application.php" method='POST'>
         <input type="text" name='comment'>
-        <input type='hidden' name='application_id' value=<?php echo $id ?>/>
+        <input type='hidden' name='applicant_id' value=<?php echo $id ?> />
         <button type='submit'>Submit Comment</button>
     </form>
 <?php     
