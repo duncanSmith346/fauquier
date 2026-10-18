@@ -87,13 +87,13 @@ function retrieve_undecided_applicantions_names() {
     return $results ?: null;
 }
 
-function add_comment($comment, $applicant_id) {
+function add_comment($comment, $application_id) {
     $con = connect();
 
-    $sql = "UPDATE dbapplication SET comments= ? WHERE applicant_id = ?";
+    $sql = "UPDATE dbapplication SET comments= ? WHERE id = ?";
 
     $stmt = mysqli_prepare($con, $sql);
-    mysqli_stmt_bind_param($stmt, "ss", $comment, $applicant_id);
+    mysqli_stmt_bind_param($stmt, "ss", $comment, $application_id);
  
 
     $success = mysqli_stmt_execute($stmt);
