@@ -13,7 +13,8 @@
         }
         die();
     }
-        
+    
+    include_once('database/dbApplication.php');
     include_once('database/dbPersons.php');
     include_once('domain/Person.php');
     // Get date?
@@ -24,6 +25,16 @@
     $admin = $person->get_type()[0] == 'admin';
     $applicant = in_array('applicant', $person->get_type(), true);
     $cm = $person->get_type()[0] == 'cm';
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $application_id = $_POST['application_id'];
+        $reviewer_id = $_POST['CM'];
+        if ($reviewer_id === 'unselected'){
+            $reviewer_id = NULL;
+        }
+        $success = update_reviewer($reviewer_id,$application_id);
+        
+    }
 
 ?>
 <!DOCTYPE html>
@@ -161,7 +172,10 @@
             <!-- Bellow here we shall add the code for each version of index acording to how Ryan wrote the if Admin section. -->
             <!-- Dashboard for if Admin -->
 
-            <?php if ($admin): ?>
+            <?php if ($admin):
+               
+            ?>
+
                 <div class="admin_dashboard">
                     <div class="navigation">
                         <a href="Forms.php" class="navigation_button"> Forms</a>
@@ -171,23 +185,45 @@
                         
                     </div>
                     <div class='application_list'>
-                        <form action='index.php' method='POST'> 
-                            <div class="application_card">
-                                Applicant Name: Applicant 1  |  Committee Member: 
+                        <?php
+                            $results = retrieve_undecided_applicantions_names();
+                            $reviewers = get_cms();
+                            foreach($results as $result) : 
+                        ?>
+                        <div class="application_card">
+                            <form action='index.php' method='POST'>
+                                <a href='Application.php?id=<?= urldecode($result['id'])?>' class='href_application_card'> Applicant Name: <?php echo $result['answer1'];?>  </a>|  Committee Member: 
                                 <select name="CM" id="CM" class='application_list_select'>
+                                    <?php if ($result['reviewer_id'] == NULL): ?>
+                                        <option value="Unselected" class='application_list_option'>Unselected</option>
+                                        <?php foreach ($reviewers as $reviewer): ?>
+                                        <option value="<?php echo $reviewer['id'] ?>"class="application_list_option">
+                                            <?= htmlspecialchars(($reviewer['first_name'] ?? '') . ' ' . ($reviewer['last_name'] ?? '')) ?>
+                                        </option>                                       
+                                        <?php endforeach; 
+                                    else:     
+                                    ?>  
+                                    <option value="<?php echo $result['reviewer_id'] ?>"class="application_list_option">
+                                            <?= htmlspecialchars(($reviewer['first_name'] ?? '') . ' ' . ($reviewer['last_name'] ?? '')) ?>
+                                    </option>
                                     <option value="Unselected" class='application_list_option'>Unselected</option>
-                                    <option value="CM 1" class='application_list_option'> CM1 </option>
+                                    <?php foreach ($reviewers as $reviewer): 
+                                        if (!($result['reviewer_id'] === $reviewer['id'])):
+                                        ?>
+                                        <option value="<?php echo $reviewer['id'] ?>"class="application_list_option">
+                                            <?= htmlspecialchars(($reviewer['first_name'] ?? '') . ' ' . ($reviewer['last_name'] ?? '')) ?>
+                                        </option>
+                                    <?php
+                                        endif;
+                                        endforeach;    
+                                    endif;
+                                    ?>
                                 </select>
-                            </div>
-                            <div class="application_card">
-                                Applicant Name: Applicant 2  |  Committee Member: 
-                                <select name="CM" id="CM" class='application_list_select'>
-                                    <option value="Unselected" class='application_list_option'>Unselected</option>
-                                    <option value="CM 1" class='application_list_option'> CM1 </option>
-                                </select>
-                            </div>
-                            <button type='submit' value='updateCMs'>Update</button>
-                        </form>
+                                <input type='hidden' name='application_id' value=<?php echo $result['id'] ?>/>
+                                <button type='submit' value='updateCMs'>Update</button>
+                            </form>
+                        </div>
+                        <?php endforeach; ?>             
                     </div>
                 </div>
             <?php endif ?>
@@ -220,7 +256,7 @@
                      <h2>Applicant Dashboard</h2>
 
                          <div class="dashboard-item">
-                             <a href="manageApplication.php">
+                             <a href="Application.php">
                                    Manage Application
                             </a>
                          </div>

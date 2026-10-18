@@ -988,21 +988,7 @@ div.form_dashboard-item:hover {
     text-shadow: 0px 0px .25rem black;
 }
 
-div.appli_card {
-    background-color:beige;
-    padding: 0.25rem;
-    border-radius: 1rem;
-    margin-bottom: 2rem;
-}
-
-div.application_outline {
-    float: left;
-    flex-direction: column;
-    margin-top: 3rem;
-    margin-right: 6rem;
-    background-color:rgb(235, 235, 235);
-    border: 0.1rem solid;
-    border-radius: .5rem;
-    padding: 1rem;
-    width: 50%;
+a.href_application_card {
+    color: var(--button-font-color);
+    text-decoration: none;
 }
