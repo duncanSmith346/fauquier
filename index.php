@@ -23,7 +23,7 @@
     $notRoot = $person->get_id() != 'vmsroot';
     $admin = $person->get_type()[0] == 'admin';
     $applicant = in_array('applicant', $person->get_type(), true);
-    $cm = in_array('cm', $person->get_type(), true);
+    $cm = $person->get_type()[0] == 'cm';
 
 ?>
 <!DOCTYPE html>
@@ -47,7 +47,7 @@
            
 <!-- Original page code for empowerhouse -->
 
-            <?php if (!$admin && !$applicant): ?>
+            <?php if (!$admin && !$applicant && !$cm): ?>
             <div id="dashboard">
                 <?php
                     require_once('database/dbMessages.php');
@@ -197,25 +197,14 @@
              <?php if ($cm): ?>
                 <div class="admin_dashboard">
                     <div class="navigation">
-                        <a href="Forms.php" class="navigation_button"> Forms</a>
+                        <a href="index.php" class="navigation_button"> Applications</a>
                         <a href="logout.php" class="navigation_button"> logout</a>
                         
                     </div>
                     <div class='application_list'>
                         <form action='index.php' method='POST'> 
                             <div class="application_card">
-                                Applicant Name: Applicant 1  |  Committee Member: 
-                                <select name="CM" id="CM" class='application_list_select'>
-                                    <option value="Unselected" class='application_list_option'>Unselected</option>
-                                    <option value="CM 1" class='application_list_option'> CM1 </option>
-                                </select>
-                            </div>
-                            <div class="application_card">
-                                Applicant Name: Applicant 2  |  Committee Member: 
-                                <select name="CM" id="CM" class='application_list_select'>
-                                    <option value="Unselected" class='application_list_option'>Unselected</option>
-                                    <option value="CM 1" class='application_list_option'> CM1 </option>
-                                </select>
+                                <h2><a href="Application.php" style="text_decoration:none; color:white;">Application 1</a></h2> 
                             </div>
                             <button type='submit' value='updateCMs'>Update</button>
                         </form>
