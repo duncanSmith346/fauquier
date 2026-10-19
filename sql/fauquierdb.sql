@@ -29,6 +29,8 @@ DROP TABLE IF EXISTS `dbapplicant`;
 DROP TABLE IF EXISTS `dbcohort`;
 DROP TABLE IF EXISTS `dbadmin`;
 DROP TABLE IF EXISTS `dbcm`; /* this means committee member */
+DROP TABLE IF EXISTS `dbquestions`
+DROP TABLE IF EXISTS `dbanswers`
 
 DROP TABLE IF EXISTS `dbCourses`;
 DROP TABLE IF EXISTS `dbEventMedia`;
@@ -41,6 +43,8 @@ DROP TABLE IF EXISTS `dbApplicant`;
 DROP TABLE IF EXISTS `dbCohort`;
 DROP TABLE IF EXISTS `dbAdmin`;
 DROP TABLE IF EXISTS `dbCM`; /* this means committee member */
+DROP TABLE IF EXISTS `dbQuestions`;
+DROP TABLE IF EXISTS `dbAnswers`
 
 --
 -- Database: `fauquierdb`
@@ -276,6 +280,25 @@ CREATE TABLE `dbCM` (
   `updatedAt` date
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+
+--
+-- Table structure for table `dbQuestions`
+--
+CREATE TABLE `dbQuestions` (
+  `number` int,
+  `application_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `type` text,
+  `comment` text,
+  `answer` text,
+  `question` text,
+)
+--
+-- Table structure for table `dbQuestions`
+--
+CREATE TABLE `dbAnswers` (
+  `number` int,
+  `answer` text,
+)
 
 --
 -- Table structure for table `dbAdmin`
