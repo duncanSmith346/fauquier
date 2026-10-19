@@ -156,11 +156,11 @@ class Person {
 		else
 			$this->availability = explode(',', $av);
 		if ($sch !== "")
-			$this->schedule = explode(',', $sch);
+			$this->schedule = explode(',', $sch ?? '');
 		else
 			$this->schedule = array();
 		if ($hrs !== "")
-			$this->hours = explode(',', $hrs);
+			$this->hours = explode(',', $hrs ?? '');
 		else
 			$this->hours = array();
 		$this->notes = $notes;

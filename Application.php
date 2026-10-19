@@ -72,12 +72,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
         }
-        elseif($cm) {
+        elseif ($cm) {
             $comment = trim($_POST['comment'] ?? '');
-            $application_id = $_POST['application_id'];
+            $application_id = $_POST['application_id'] ?? '';
+
             $success = add_comment($comment, $application_id);
-            if ($success) {
-                header("Location: index.php");
+
+             if ($success) {
+                header("Location: Application.php?id=" . urlencode($application_id) . "&commentsubmitted=1");
                 exit;
             } else {
                 $error = "Unable to submit comment.";
@@ -97,10 +99,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($id !== null && $choice !== null) {
             $success = update_choice($choice, $id);
-            if ($success) {
-                header("Location: index.php");
-                exit;
-            }
         }
     }
 }
@@ -139,12 +137,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $status = $existing_application['decisionStatus'];
 
     // Translate database values into readable statuses.
-    if ($status === 'yes') {
-        echo "<p>Accepted</p>";
-    } elseif ($status === 'no') {
+    if ($status === 'accept') {
+      echo "<p>Accepted</p>";
+    } elseif ($status === 'reject') {
         echo "<p>Rejected</p>";
     } else {
-        echo "<p>Pending Review</p>";
+       echo "<p>Pending Review</p>";
     }
     ?>
 
@@ -186,13 +184,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <?php     
     elseif($cm):
-        if (isset($_GET['id'])) {
-            $id = $_GET['id'];
-        } else {
-            $id = $_POST['application_id'];
-        }
-        
-        
+        $id = $_GET['id'];
         $result = retrieve_application($id);
 
 ?>
@@ -202,7 +194,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <form action="Application.php" method='POST'>
         <input type="text" name='comment'>
-        <input type='hidden' name='application_id' value='<?php echo $id ?>' />
+        <input type="hidden" name="application_id" value="<?php echo htmlspecialchars($id); ?>">
         <button type='submit'>Submit Comment</button>
     </form>
 <?php     
