@@ -29,8 +29,8 @@ DROP TABLE IF EXISTS `dbapplicant`;
 DROP TABLE IF EXISTS `dbcohort`;
 DROP TABLE IF EXISTS `dbadmin`;
 DROP TABLE IF EXISTS `dbcm`; /* this means committee member */
-DROP TABLE IF EXISTS `dbquestions`
-DROP TABLE IF EXISTS `dbanswers`
+DROP TABLE IF EXISTS `dbquestions`;
+DROP TABLE IF EXISTS `dbanswers`;
 
 DROP TABLE IF EXISTS `dbCourses`;
 DROP TABLE IF EXISTS `dbEventMedia`;
@@ -44,7 +44,7 @@ DROP TABLE IF EXISTS `dbCohort`;
 DROP TABLE IF EXISTS `dbAdmin`;
 DROP TABLE IF EXISTS `dbCM`; /* this means committee member */
 DROP TABLE IF EXISTS `dbQuestions`;
-DROP TABLE IF EXISTS `dbAnswers`
+DROP TABLE IF EXISTS `dbAnswers`;
 
 --
 -- Database: `fauquierdb`
