@@ -290,14 +290,14 @@ CREATE TABLE `dbQuestions` (
   `type` text,
   `comment` text,
   `answer` text,
-  `question` text,
+  `question` text
 )
 --
 -- Table structure for table `dbQuestions`
 --
 CREATE TABLE `dbAnswers` (
   `number` int,
-  `answer` text,
+  `answer` text
 )
 
 --
