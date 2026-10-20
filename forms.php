@@ -39,10 +39,11 @@ if ($accessLevel < 2) {
             <div class="navigation">
                 <a href="index.php" class="navigation_button"> Home</a>
                 <a href="index.php" class="navigation_button"> Committee Members</a>
-                <a href="index.php" class="navigation_button"> logout</a>
+                <a href="personSearch.php" class="navigation_button"> Person Search</a>
+                <a href="logout.php" class="navigation_button"> logout</a>
                             
             </div>
-            <a href="forms.php">
+            <a href="editApplicationQuestions.php">
                 <div class="form_dashboard-item">
                     <img src="images/document.svg">
                     <span>Application</span>
