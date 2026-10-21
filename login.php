@@ -74,7 +74,7 @@
                 }
                 die();
             } else {
-                echo"<h1>hella bad!</h1>";
+                echo"<h1>Incorrect username or password or both</h1>";
                 $badLogin = true;
             }
         }

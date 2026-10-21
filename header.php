@@ -19,7 +19,7 @@
         <nav>
             <span id="nav-top">
                 <span class="logo">
-                    <img src="images/empowerhouse_logo.jpeg">
+                    <img src="https://leadershipfauquier.org/wp-content/uploads/2022/09/LeadershipFauquierLogo-404x236-1.png">
                     <span id="vms-logo">VMS</span>
                 </span>
                 <img id="menu-toggle" src="images/menu.png">
