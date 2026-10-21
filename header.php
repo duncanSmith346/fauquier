@@ -20,7 +20,7 @@
             <span id="nav-top">
                 <span class="logo">
                     <img src="https://leadershipfauquier.org/wp-content/uploads/2022/09/LeadershipFauquierLogo-404x236-1.png">
-                    <span id="vms-logo">VMS</span>
+                    <span id="vms-logo">Fauquier Leadership</span>
                 </span>
                 <img id="menu-toggle" src="images/menu.png">
             </span>
@@ -121,8 +121,8 @@
         }
         else {
             echo('<nav>');
-            echo('<span id="nav-top"><span class="logo"><a class="navbar-brand" href="' . $path . 'index.php"><img src="images/empowerhouse_logo.jpeg"></a>');
-            echo('<a class="navbar-brand" id="vms-logo">VMS</a></span><img id="menu-toggle" src="images/menu.png"></span>');
+            echo('<span id="nav-top"><span class="logo"><a class="navbar-brand" href="' . $path . 'index.php"><img src="https://leadershipfauquier.org/wp-content/uploads/2022/09/LeadershipFauquierLogo-404x236-1.png"></a>');
+            echo('<a class="navbar-brand" id="vms-logo">Fauquier Leadership</a></span><img id="menu-toggle" src="images/menu.png"></span>');
             echo('<ul>');
             //echo " <br><b>"."Gwyneth's Gift Homebase"."</b>|"; //changed: 'Homebase' to 'Gwyneth's Gift Homebase'
 	        if ($_SESSION['access_level'] >= 1) {
