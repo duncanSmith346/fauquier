@@ -23,6 +23,7 @@ if ($accessLevel < 2) {
     echo 'bad access level';
     die();
 }
+require_once('database/dbQuestions.php');
 ?>
 <DOCTYPE html>
 <html>
@@ -34,14 +35,27 @@ if ($accessLevel < 2) {
         <h1>Edit Application</h1>
         <div class="forms_dashboard">
             <div class="navigation">
+                <a href="addApplicationQuestion.php" class='navigation_button'> Add Question</a>
+                <a href='index.php' class='navigation_button'> Home</a>
                 <a href="Forms.php" class="navigation_button"> Forms</a>
                 <a href="index.php" class="navigation_button"> Committee Members</a>
                 <a href="personSearch.php" class="navigation_button"> Person Search</a>
                 <a href="logout.php" class="navigation_button"> logout</a>
             </div>
+            <div class='question_list'>
+                <?php
+                    $questions = getQuestions('sampleapplicatio');
+                    foreach($questions as $question):
+                ?>
+                <div class='question_card'>
+                    <?php
+                    echo $question['number'];
+                    echo " ";
+                    echo $question['question'];
+                    ?>
+                </div>
+                <?php endforeach ?>
+            </div>
         </div>
-        <form action="addApplicationQuestion.php">
-            <button type='submit'>Add Question</button>
-        </form>
     </main>
 </html>

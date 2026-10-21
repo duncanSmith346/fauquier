@@ -51,3 +51,27 @@ function getNextQuestionNumber() {
     mysqli_close($con);
     return $number;
 }
+
+function getQuestions($application_id) {
+    $con = connect();
+
+    $sql = "SELECT * FROM dbQuestions WHERE application_id=?";
+
+    $stmt = mysqli_prepare($con, $sql);
+
+    mysqli_stmt_bind_param(
+        $stmt,
+        "s",
+        $application_id
+    );
+
+    mysqli_stmt_execute($stmt);
+
+    $results = mysqli_stmt_get_result($stmt);
+    
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+
+    return $results ?: null;
+}
