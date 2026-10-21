@@ -9,4 +9,4 @@
         <script src="lib/jquery-1.9.1.js"></script>
         <link rel="stylesheet" href="css/base.css" type="text/css" />
         <script src="css/header.js"></script>
-        <link rel="icon" type="image/x-icon" href="images/empowerhouse_logo.jpeg">
+        <link rel="icon" type="image/x-icon" href="https://leadershipfauquier.org/wp-content/uploads/2022/09/LeadershipFauquierLogo-404x236-1.png">
