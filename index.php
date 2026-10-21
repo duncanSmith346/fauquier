@@ -198,7 +198,7 @@
                                     <?php if ($result['reviewer_id'] == NULL): ?>
                                         <option value="Unselected" class='application_list_option'>Unselected</option>
                                         <?php foreach ($reviewers as $reviewer): ?>
-                                        <option value="<?php echo $reviewer['id'] ?>"class="application_list_option">
+                                        <option value="<?php echo $reviewer['id'] ?>" class="application_list_option">
                                             <?= htmlspecialchars(($reviewer['first_name'] ?? '') . ' ' . ($reviewer['last_name'] ?? '')) ?>
                                         </option>                                       
                                         <?php endforeach; 

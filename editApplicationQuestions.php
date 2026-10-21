@@ -52,7 +52,11 @@ require_once('database/dbQuestions.php');
                     echo $question['number'];
                     echo " ";
                     echo $question['question'];
+                    
                     ?>
+                    <form action="removeApplicationQuestion.php" Method='GET'>
+                        <button type='submit' name='number' value='<?php echo $question['number'] ?>'>Remove</button>
+                    </form>
                 </div>
                 <?php endforeach ?>
             </div>
