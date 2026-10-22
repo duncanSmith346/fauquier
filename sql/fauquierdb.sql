@@ -297,7 +297,8 @@ CREATE TABLE `dbQuestions` (
 --
 CREATE TABLE `dbAnswers` (
   `number` int,
-  `answer` text
+  `answer` text,
+  `isSample` boolean
 )
 
 --
