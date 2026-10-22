@@ -52,10 +52,25 @@ require_once('database/dbQuestions.php');
                     echo $question['number'];
                     echo " ";
                     echo $question['question'];
-                    
+                    echo " ";
+                    echo $question['type'];
+                    if ($question['type'] === "multipleChoice" || $question['type'] === "checkbox"):
                     ?>
+                    <p>Possible answers include:</p>
+                    <ul>
+                        <?php
+                        $answers = getAnswers($question['number']);
+                        foreach($answers as $answer):
+                        ?>
+                        <li><?php echo $answer['answer'] ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                    <form action="AddAnswer.php" Method='GET'>
+                        <button type='submit' name='number' value='<?php echo $question['number']; ?>'>Add Answers</button>
+                    </form>
+                    <?php endif; ?>
                     <form action="removeApplicationQuestion.php" Method='GET'>
-                        <button type='submit' name='number' value='<?php echo $question['number'] ?>'>Remove</button>
+                        <button type='submit' name='number' value='<?php echo $question['number']; ?>'>Remove</button>
                     </form>
                 </div>
                 <?php endforeach ?>

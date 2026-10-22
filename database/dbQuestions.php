@@ -29,6 +29,30 @@ function addQuestion($question, $type) {
     return $success;
 }
 
+function addAnswer($question,$answer) {
+    $con = connect();
+
+    $sql = "INSERT INTO dbAnswers
+            (" . "number" . ", isSample, answer)
+            VALUES (?,1,?)";
+
+    $stmt = mysqli_prepare($con, $sql);
+
+    mysqli_stmt_bind_param(
+        $stmt,
+        "is",
+        $question,
+        $answer
+    );
+
+    $success = mysqli_stmt_execute($stmt);
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+
+    return $success;
+}
+
 function removeApplicationQuestion($removeNumber) {
     //fist needs to remove answers from the ansers table
     //remove the question from the questions table
@@ -117,4 +141,66 @@ function getQuestions($application_id) {
     mysqli_close($con);
 
     return $results ?: null;
+}
+
+function getQuestion($application_id, $number) {
+    $con = connect();
+
+    $sql = "SELECT * FROM dbQuestions WHERE application_id=? and " . "number" . " = ?";
+
+    $stmt = mysqli_prepare($con, $sql);
+
+    mysqli_stmt_bind_param(
+        $stmt,
+        "si",
+        $application_id,
+        $number
+    );
+
+    mysqli_stmt_execute($stmt);
+
+    $results = mysqli_stmt_get_result($stmt);
+    
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+
+    return $results ?: null;
+}
+
+function getAnswers($number) {
+    $con = connect();
+
+    $sql = "SELECT * FROM dbAnswers WHERE isSample=1 and " . "number" . " = ?";
+
+    $stmt = mysqli_prepare($con, $sql);
+
+    mysqli_stmt_bind_param(
+        $stmt,
+        "i",
+        $number
+    );
+
+    mysqli_stmt_execute($stmt);
+
+    $results = mysqli_stmt_get_result($stmt);
+    
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+
+    return $results ?: null;
+}
+function removeAnswer($question, $answer) {
+        $con = connect();
+
+    $sql = "DELETE FROM dbAnswers WHERE " . "number" . "=? AND isSample=1 AND answer= ?";
+
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt,"is",$question,$answer);
+    $success = mysqli_stmt_execute($stmt);
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+    return $success;
 }

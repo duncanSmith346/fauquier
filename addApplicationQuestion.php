@@ -27,7 +27,7 @@ if ($accessLevel < 2) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     include_once('database/dbQuestions.php');
     $question = $_POST['question'];
-    $type = $_POST['question'];
+    $type = $_POST['type'];
     $success = addQuestion($question, $type);
     if ($success) {
         header("Location: editApplicationQuestions.php");
