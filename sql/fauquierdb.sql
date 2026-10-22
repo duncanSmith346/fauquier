@@ -11,11 +11,16 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
+CREATE DATABASE IF NOT EXISTS fauquierdb;
+USE fauquierdb;
+
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
+
+SET FOREIGN_KEY_CHECKS = 0;
 
 -- Drop tables
 DROP TABLE IF EXISTS `dbcourses`;
@@ -23,7 +28,6 @@ DROP TABLE IF EXISTS `dbeventmedia`;
 DROP TABLE IF EXISTS `dbevents`;
 DROP TABLE IF EXISTS `dbeventvolunteers`;
 DROP TABLE IF EXISTS `dbmessages`;
-DROP TABLE IF EXISTS `dbpersons`;
 DROP TABLE IF EXISTS `dbtrainingperiods`;
 DROP TABLE IF EXISTS `dbapplicant`;
 DROP TABLE IF EXISTS `dbcohort`;
@@ -31,13 +35,14 @@ DROP TABLE IF EXISTS `dbadmin`;
 DROP TABLE IF EXISTS `dbcm`; /* this means committee member */
 DROP TABLE IF EXISTS `dbquestions`;
 DROP TABLE IF EXISTS `dbanswers`;
+DROP TABLE IF EXISTS `dbapplication`;
+DROP TABLE IF EXISTS `dbpersons`;
 
 DROP TABLE IF EXISTS `dbCourses`;
 DROP TABLE IF EXISTS `dbEventMedia`;
 DROP TABLE IF EXISTS `dbEvents`;
 DROP TABLE IF EXISTS `dbEventVolunteers`;
 DROP TABLE IF EXISTS `dbMessages`;
-DROP TABLE IF EXISTS `dbPersons`;
 DROP TABLE IF EXISTS `dbTrainingPeriods`;
 DROP TABLE IF EXISTS `dbApplicant`;
 DROP TABLE IF EXISTS `dbCohort`;
@@ -45,6 +50,10 @@ DROP TABLE IF EXISTS `dbAdmin`;
 DROP TABLE IF EXISTS `dbCM`; /* this means committee member */
 DROP TABLE IF EXISTS `dbQuestions`;
 DROP TABLE IF EXISTS `dbAnswers`;
+DROP TABLE IF EXISTS `dbApplication`;
+DROP TABLE IF EXISTS `dbPersons`;
+
+SET FOREIGN_KEY_CHECKS = 1;
 
 --
 -- Database: `fauquierdb`
@@ -156,7 +165,7 @@ INSERT INTO `dbMessages` (`id`, `senderID`, `recipientID`, `title`, `body`, `tim
 --
 
 CREATE TABLE `dbPersons` (
-  `id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL PRIMARY KEY,
+  `id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `start_date` text DEFAULT NULL,
   `venue` text DEFAULT NULL,
   `first_name` text NOT NULL,
@@ -256,7 +265,7 @@ CREATE TABLE `dbCohort` (
   `id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `person_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `Application_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `dateAccepted` date not NULL
+  `dateAccepted` date not NULL,
   `onboardingAppointment_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `Cycle_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `acceptanceConfirmedAt` date
@@ -290,15 +299,15 @@ CREATE TABLE `dbQuestions` (
   `comment` text,
   `answer` text,
   `question` text
-)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 --
--- Table structure for table `dbQuestions`
+-- Table structure for table `dbAnswers`
 --
 CREATE TABLE `dbAnswers` (
-  `number` int,
-  `answer` text,
+  `number` int(11) NOT NULL, 
+  `answer` text, 
   `isSample` boolean
-)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Table structure for table `dbAdmin`
@@ -334,7 +343,6 @@ CREATE TABLE `dbApplication` (
   `reviewStatus` boolean NOT NULL DEFAULT FALSE,
   `decisionStatus` varchar(20) NOT NULL DEFAULT 'undecided', /* yes, no, undecided */
   `decisionDate` date DEFAULT NULL,
-  FOREIGN KEY (`applicant_id`) REFERENCES `dbPersons`(`id`),
   UNIQUE KEY `unique_applicant_cycle` (`applicant_id`, `cycle_id`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -415,6 +423,12 @@ ALTER TABLE `dbPersons`
 --
 ALTER TABLE `dbTrainingPeriods`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `dbApplication`
+--
+ALTER TABLE `dbApplication`
+  ADD FOREIGN KEY (`applicant_id`) REFERENCES `dbPersons`(`id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
