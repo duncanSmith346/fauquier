@@ -3,9 +3,9 @@
 require_once('dbinfo.php');
 
 function addQuestion($question, $type) {
-$number = getNextQuestionNumber();    
+    $number = getNextQuestionNumber();    
 
-$con = connect();
+    $con = connect();
 
     $sql = "INSERT INTO dbQuestions
             (" . "number" . ", application_id, " . "type" . ", question)
@@ -26,6 +26,49 @@ $con = connect();
     mysqli_stmt_close($stmt);
     mysqli_close($con);
 
+    return $success;
+}
+
+function removeApplicationQuestion($removeNumber) {
+    //fist needs to remove answers from the ansers table
+    //remove the question from the questions table
+    //shift the answers in the answer table down
+    //shift the questions in the questions table down
+    $maxnumber = getNextQuestionNumber();
+    $con = connect();
+
+    $sql = "DELETE FROM dbAnswers WHERE " . "number" . "=? AND isSample=1";
+
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt,"i",$removeNumber);
+    $success = mysqli_stmt_execute($stmt);
+
+    for ($i = $removeNumber + 1; $i < $maxnumber; $i = $i + 1) {
+        $sql = "UPDATE dbAnswers SET " . "number" . "= ? WHERE " . "number" . " = ?";
+
+        $stmt = mysqli_prepare($con, $sql);
+        $x = $i-1;
+        mysqli_stmt_bind_param($stmt,"ii",$x,$i);
+        $success1 = mysqli_stmt_execute($stmt);
+    }
+
+    $sql = "DELETE FROM dbQuestions WHERE " . "number" . "=? AND application_id='sampleapplicatio'";
+
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt,"i",$removeNumber);
+    $success = mysqli_stmt_execute($stmt);
+
+    for ($i = $removeNumber + 1; $i < $maxnumber; $i = $i + 1) {
+        $sql = "UPDATE dbQuestions SET " . "number" . "= ? WHERE " . "number" . " = ? AND application_id='sampleapplicatio'";
+
+        $stmt = mysqli_prepare($con, $sql);
+        $x = $i-1;
+        mysqli_stmt_bind_param($stmt,"ii",$x,$i);
+        $success = mysqli_stmt_execute($stmt);
+    }
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
     return $success;
 }
 
