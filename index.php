@@ -25,6 +25,7 @@
     $admin = $person->get_type()[0] == 'admin';
     $applicant = in_array('applicant', $person->get_type(), true);
     $cm = $person->get_type()[0] == 'cm';
+    $cohort = in_array('cohort', $person->get_type(), true);
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $application_id = $_POST['application_id'];
@@ -58,7 +59,7 @@
            
 <!-- Original page code for empowerhouse -->
 
-            <?php if (!$admin && !$applicant && !$cm): ?>
+            <?php if (!$admin && !$applicant && !$cm && !$cohort): ?>
             <div id="dashboard">
                 <?php
                     require_once('database/dbMessages.php');
@@ -254,6 +255,11 @@
              <?php endif ?>
 
             <!-- Dashboard for if Cohort -->
+            <?php if ($cohort): ?> 
+                <div id="dashboard">
+                    <?php require('header.php'); ?>
+                </div>
+            <?php endif; ?>
 
             <!-- Dashboard for if Applicant -->
             <?php if ($applicant): ?>
