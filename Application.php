@@ -4,7 +4,7 @@ session_start();
 
 require_once('database/dbPersons.php');
 require_once('database/dbApplication.php');
-
+require_once('database/dbQuestions.php');
 // Require the user to be logged in.
 if (!isset($_SESSION['_id'])) {
     header("Location: login.php");
@@ -21,6 +21,12 @@ $cohort = $person->get_type()[0] == 'cohort';
 
 // Set the current application cycle.
 $cycle_id = '2026';
+
+
+// Retrieve the current application questions from the database,
+// including any questions added or removed by the administrator.
+$questions = getQuestions('sampleapplicatio');
+
 // Check whether this user already has an application for this cycle.
 $existing_application = get_applicant_application(
     $_SESSION['_id'],  // ID of the logged-in user.
@@ -151,14 +157,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- No application exists yet, so show the form. -->
 
     <form method="POST">
-        <label for="name">Full Name:</label>
-        <input type="text" id="name" name="name" required>
+        <?php
+       // Display each question currently defined by the administrator.
+        while ($question = mysqli_fetch_assoc($questions)):
+        ?>
+            <label for="question_<?php echo $question['number']; ?>">
+               <?php echo htmlspecialchars($question['question']); ?>
+            </label>
 
-        <br><br>
+           <textarea
+               id="question_<?php echo $question['number']; ?>"
+               name="answers[<?php echo $question['number']; ?>]"
+               rows="4"
+               required
+           ></textarea>
 
-        <label for="message">Tell us about yourself:</label>
-        <textarea id="message" name="message" rows="6" required></textarea>
+           <br><br>
 
+        <?php endwhile; ?>
         <br><br>
 
         <button type="submit">Submit Application</button>
