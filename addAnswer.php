@@ -27,27 +27,36 @@ $success = 0;
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     include_once('database/dbQuestions.php');
     $question = $_GET['number'];
-    if ($_GET['answer1'] !== "") {
-        $answer1 = $_GET['answer1'];
-        $success = addAnswer($question, $answer1);    
+    if (isset($_GET['answer1'])) {
+        if ($_GET['answer1'] !== "" && $_GET['answer1'] !== NULL) {
+            $answer1 = $_GET['answer1'];
+            $success = addAnswer($question, $answer1);    
+        }
     }
-    if ($_GET['answer2'] !== "") {
-        $answer2 = $_GET['answer2'];
-        $success = addAnswer($question, $answer2);    
+    if (isset($_GET['answer1'])) {
+        if ($_GET['answer2'] !== "" && $_GET['answer2'] !== NULL) {
+            $answer2 = $_GET['answer2'];
+            $success = addAnswer($question, $answer2);    
+        }
     }
-    if ($_GET['answer3'] !== "") {
-        $answer3 = $_GET['answer3'];
-        $success = addAnswer($question, $answer3);    
+    if (isset($_GET['answer1'])) {
+        if ($_GET['answer3'] !== "" && $_GET['answer3'] !== NULL) {
+            $answer3 = $_GET['answer3'];
+            $success = addAnswer($question, $answer3);    
+        }
     }
-    if ($_GET['answer4'] !== "") {
-        $answer4 = $_GET['answer4'];
-        $success = addAnswer($question, $answer4);    
+    if (isset($_GET['answer1'])) {
+        if ($_GET['answer4'] !== "" && $_GET['answer4'] !== NULL) {
+            $answer4 = $_GET['answer4'];
+            $success = addAnswer($question, $answer4);    
+        }
     }
-    if ($_GET['answer5'] !== "") {
-        $answer5 = $_GET['answer5'];
-        $success = addAnswer($question, $answer5);    
+    if (isset($_GET['answer1'])) {
+        if ($_GET['answer5'] !== "" && $_GET['answer5'] !== NULL) {
+            $answer5 = $_GET['answer5'];
+            $success = addAnswer($question, $answer5);    
+        }
     }
-    
 
     if ($success) {
         header("Location: editApplicationQuestions.php");
