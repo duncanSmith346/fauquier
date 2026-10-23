@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         <title>Edit Application Questions | Fauquier Leadership</title>
     </head>
     <main>
-        <h1>Add Ansers</h1>
+        <h1>Add Answers</h1>
     </main>
         <h2><?php echo "" ?>
         <form action='addAnswer.php' method='GET'>
