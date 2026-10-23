@@ -55,8 +55,7 @@
             <?php endif ?>
             <p>Welcome back, <?php echo $person->get_first_name() ?>!</p>
             <p>Today is <?php echo date('l, F j, Y'); ?>.</p>            
-           
-           
+             
 <!-- Original page code for empowerhouse -->
 
             <?php if (!$admin && !$applicant && !$cm && !$cohort): ?>
@@ -173,10 +172,7 @@
             <!-- Bellow here we shall add the code for each version of index acording to how Ryan wrote the if Admin section. -->
             <!-- Dashboard for if Admin -->
 
-            <?php if ($admin):
-               
-            ?>
-
+            <?php if ($admin):?>
                 <div class="admin_dashboard">
                     <div class="navigation">
                         <a href="Forms.php" class="navigation_button"> Forms</a>
