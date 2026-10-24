@@ -191,8 +191,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 ?>
     
-    <p>Full name: <?php echo $result['answer1'] ?> </p>
-    <p>Tell us about yourself: <?php echo $result['answer2'] ?></p>
+    <?php
+    $answers = get_application_answers($id);
+
+    foreach ($answers as $answer):
+?>
+    <p>
+        Question <?php echo htmlspecialchars($answer['number']); ?>:
+        <?php echo htmlspecialchars($answer['answer']); ?>
+    </p>
+<?php endforeach; ?>
     <p>comment: <?php echo $result['comments'] ?></p>
     <p>reviewer: <?php echo $result['reviewer_id'] ?></p>
     <p>decision Status: <?php echo $result['decisionStatus'] ?></p>

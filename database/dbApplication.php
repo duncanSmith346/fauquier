@@ -74,11 +74,14 @@ function get_applicant_application($applicant_id, $cycle_id) {
 function retrieve_undecided_applicantions_names() {
     $con = connect();
 
-    $sql = "SELECT answer1, dbApplication.id, reviewer_id
-            FROM dbApplication
-            INNER JOIN dbPersons
-                ON dbApplication.applicant_id = dbPersons.id
-            WHERE decisionStatus = 'undecided'";
+   $sql = "SELECT
+            CONCAT(dbPersons.first_name, ' ', dbPersons.last_name) AS answer1,
+            dbApplication.id,
+            reviewer_id
+        FROM dbApplication
+        INNER JOIN dbPersons
+            ON dbApplication.applicant_id = dbPersons.id
+        WHERE decisionStatus = 'undecided'";
 
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_execute($stmt);
@@ -253,4 +256,28 @@ function submit_application_with_answers($id, $applicant_id, $cycle_id, $answers
         error_log("Application submission failed: " . $e->getMessage());
         return false;
     }
+}
+
+
+// Retrieve all submitted answers for one application
+function get_application_answers($application_id) {
+    $con = connect();
+
+    $sql = "SELECT number, answer
+            FROM dbAnswers
+            WHERE application_id = ?
+              AND (isSample = 0 OR isSample IS NULL)
+            ORDER BY number";
+
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "s", $application_id);
+    mysqli_stmt_execute($stmt);
+
+    $result = mysqli_stmt_get_result($stmt);
+    $answers = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+
+    return $answers;
 }
