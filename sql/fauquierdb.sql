@@ -299,27 +299,15 @@ CREATE TABLE `dbQuestions` (
   `comment` text,
   `answer` text,
   `question` text
-<<<<<<< HEAD
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-=======
-);
->>>>>>> origin/dev
 --
 -- Table structure for table `dbAnswers`
 --
 CREATE TABLE `dbAnswers` (
-<<<<<<< HEAD
   `number` int(11) NOT NULL, 
   `answer` text, 
   `isSample` boolean
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-=======
-  `number` int,
-  `application_id` varchar(256) NOT NULL,
-  `answer` text,
-  `isSample` boolean
-);
->>>>>>> origin/dev
 
 --
 -- Table structure for table `dbAdmin`
