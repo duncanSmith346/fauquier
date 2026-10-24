@@ -45,31 +45,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     } else {
         // Read the submitted form fields.
-        if ($applicant){
-            $name = trim($_POST['name'] ?? '');
-            $message = trim($_POST['message'] ?? '');
+            if ($applicant) {
+            $answers = $_POST['answers'] ?? [];
 
-            // Make sure both fields contain information.
-            if ($name === '' || $message === '') {
-                $error = "Please complete both fields.";
+            // Make sure the applicant answered the questions.
+            if (!is_array($answers) || empty($answers)) {
+                $error = "Please complete the application.";
+
+            } elseif (count(array_filter($answers, function ($answer) {
+                return is_string($answer) && trim($answer) !== '';
+            })) !== count($answers)) {
+                $error = "Please answer every question.";
 
             } else {
                 // Create a unique ID for this application.
                 $application_id = bin2hex(random_bytes(16));
-
-                // Get the logged-in applicant's ID.
                 $applicant_id = $_SESSION['_id'];
 
-                // Save the application to MySQL.
-                $success = add_application(
+                // Save the application and all answers together.
+                $success = submit_application_with_answers(
                     $application_id,
                     $applicant_id,
                     $cycle_id,
-                    $name,
-                    $message
+                    $answers
                 );
 
-                // Return to this page after saving.
                 if ($success) {
                     header("Location: Application.php?submitted=1");
                     exit;
@@ -78,6 +78,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
         }
+
+
         elseif ($cm) {
             $comment = trim($_POST['comment'] ?? '');
             $application_id = $_POST['application_id'] ?? '';
@@ -92,6 +94,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     }
+
+
 } elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if($admin) {
         $id = $_GET['id'] ?? null;

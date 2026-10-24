@@ -62,7 +62,11 @@ require_once('database/dbQuestions.php');
                         $answers = getAnswers($question['number']);
                         foreach($answers as $answer):
                         ?>
-                        <li><?php echo $answer['answer'] ?></li>
+                        <li>
+                            <a class='remove_answer_link' href='removeAnswer.php?question=<?php echo $answer['number']; ?> &answer=<?php echo $answer['answer']; ?>'>
+                                <?php echo $answer['answer'] ?>
+                            </a>
+                        </li>
                         <?php endforeach; ?>
                     </ul>
                     <form action="AddAnswer.php" Method='GET'>

@@ -1009,3 +1009,12 @@ div.question_card {
     margin-bottom: 0.5rem;
     border-color: black;
 }
+
+a.remove_answer_link {
+    color: var(--button-font-color);
+    text-decoration: none;   
+}
+
+a.remove_answer_link:hover {
+    color: black;   
+}
