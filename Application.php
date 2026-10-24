@@ -79,20 +79,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
+            if ($cm) {
+                if(isset($_POST['comments']))
+                {
+                    $application_id = $_POST['application_id'];
 
-        elseif ($cm) {
-            $comment = trim($_POST['comment'] ?? '');
-            $application_id = $_POST['application_id'] ?? '';
-
-            $success = add_comment($comment, $application_id);
-
-             if ($success) {
-                header("Location: Application.php?id=" . urlencode($application_id) . "&commentsubmitted=1");
-                exit;
-            } else {
-                $error = "Unable to submit comment.";
+                    foreach($_POST['comments'] as $number => $comment)
+                    {
+                        add_comment(
+                            $application_id,
+                            $number,
+                            trim($comment)
+                        );
+                    }
+                }
             }
-        }
     }
 
 
@@ -209,7 +210,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 ?>
     // Display each question currently defined by the administrator.
-    <?php while ($question = mysqli_fetch_assoc($questions)):
+    <form action="Application.php" method='POST'>
+     <?php while ($question = mysqli_fetch_assoc($questions)):
         ?>
             <label for="question_<?php echo $question['number']; ?>">
                <?php echo htmlspecialchars($question['question']); ?>
@@ -221,6 +223,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                rows="4"
                required
            ></textarea>
+           <br><br>
 
            <?php echo <h3> . htmlspecialchars($question['question']) . </h3>; ?>
 
@@ -228,12 +231,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo "<p>" . nl2br(htmlspecialchars($result[$answerField])) . "</p>";
             } ?>
 
+            <br><br>
+
+            <?php
+        if($_SESSION['_role'] == 'CM' || $_SESSION['_role'] == 'Admin')
+        {
+        ?>
+
+            <label for="comments"><strong>Comment:</strong></label>
+            <br>
+            <textarea
+                name="comments[<?php echo $question['number']; ?>"
+                rows="4"
+                cols="80"><?php
+                    echo htmlspecialchars($question['comment'] ?? '');
+                ?>
+            </textarea>
+        <?php
+        }
+        ?>
+
+        <?php
+        if($_SESSION['_role'] == 'Applicant' && !empty($question['comment']))
+        {
+        ?>
+            <label for="comments"><strong>Comment:</strong></label><br>
+
+        <?php echo nl2br(htmlspecialchars($question['comment'])); ?>
+            
+        <?php
+        }
+        ?>
+
         <?php endwhile; ?>
 
-    <form action="Application.php" method='POST'>
+    
         <input type="text" name='comment'>
         <input type="hidden" name="application_id" value="<?php echo htmlspecialchars($id); ?>">
-        <button type='submit'>Submit Comment</button>
+        <?php
+            if($_SESSION['_role'] == 'CM' || $_SESSION['_role'] == 'Admin')
+            {
+        ?>
+            <button type="submit"> Save Comments </button>
+        <?php
+            }
+        ?>
     </form>
 <?php     
     elseif($cohort): 
