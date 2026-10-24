@@ -83,7 +83,7 @@ function removeApplicationQuestion($removeNumber) {
     $success = mysqli_stmt_execute($stmt);
 
     for ($i = $removeNumber + 1; $i < $maxnumber; $i = $i + 1) {
-        $sql = "UPDATE dbQuestions SET " . "comment" . "= ? WHERE " . "number" . " = ? AND application_id='sampleapplicatio'";
+        $sql = "UPDATE dbQuestions SET " . "number" . "= ? WHERE " . "number" . " = ? AND application_id='sampleapplicatio'";
 
         $stmt = mysqli_prepare($con, $sql);
         $x = $i-1;
@@ -167,7 +167,7 @@ function getQuestion($application_id, $number) {
     mysqli_close($con);
 
     return $question ?: null;
-}
+    }
 
 function getAnswers($number) {
     $con = connect();
