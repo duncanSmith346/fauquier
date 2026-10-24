@@ -291,15 +291,16 @@ CREATE TABLE `dbQuestions` (
   `comment` text,
   `answer` text,
   `question` text
-)
+);
 --
 -- Table structure for table `dbQuestions`
 --
 CREATE TABLE `dbAnswers` (
   `number` int,
+  `application_id` varchar(256) NOT NULL,
   `answer` text,
   `isSample` boolean
-)
+);
 
 --
 -- Table structure for table `dbAdmin`
