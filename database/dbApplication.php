@@ -190,3 +190,67 @@ function save_application_answers($application_id, $answers) {
 
     return true;
 }
+
+
+ // Save the application and all its answers together
+function submit_application_with_answers($id, $applicant_id, $cycle_id, $answers) {
+    $con = connect();
+
+    mysqli_begin_transaction($con);
+
+    try {
+        // Create the application record
+        $sql = "INSERT INTO dbApplication
+                (id, applicant_id, cycle_id, answer1, answer2, submittedAt)
+                VALUES (?, ?, ?, '', '', CURRENT_DATE)";
+
+        $stmt = mysqli_prepare($con, $sql);
+
+        if (!$stmt) {
+            throw new Exception(mysqli_error($con));
+        }
+
+        mysqli_stmt_bind_param($stmt, "sss", $id, $applicant_id, $cycle_id);
+
+        if (!mysqli_stmt_execute($stmt)) {
+            throw new Exception(mysqli_stmt_error($stmt));
+        }
+
+        mysqli_stmt_close($stmt);
+
+        // Save each answer using the same connection
+        $sql = "INSERT INTO dbAnswers (number, application_id, answer)
+                VALUES (?, ?, ?)";
+
+        $stmt = mysqli_prepare($con, $sql);
+
+        if (!$stmt) {
+            throw new Exception(mysqli_error($con));
+        }
+
+        foreach ($answers as $number => $answer) {
+            $number = (int) $number;
+            $answer = trim($answer);
+
+            mysqli_stmt_bind_param($stmt, "iss", $number, $id, $answer);
+
+            if (!mysqli_stmt_execute($stmt)) {
+                throw new Exception(mysqli_stmt_error($stmt));
+            }
+        }
+
+        mysqli_stmt_close($stmt);
+
+        mysqli_commit($con);
+        mysqli_close($con);
+
+        return true;
+
+    } catch (Throwable $e) {
+        mysqli_rollback($con);
+        mysqli_close($con);
+
+        error_log("Application submission failed: " . $e->getMessage());
+        return false;
+    }
+}

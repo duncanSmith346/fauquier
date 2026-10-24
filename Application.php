@@ -62,22 +62,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $application_id = bin2hex(random_bytes(16));
                 $applicant_id = $_SESSION['_id'];
 
-                // Create the application record.
-                $success = add_application(
+                // Save the application and all answers together.
+                $success = submit_application_with_answers(
                     $application_id,
                     $applicant_id,
                     $cycle_id,
-                    '',
-                    ''
+                    $answers
                 );
-
-                // Save the answers to the database.
-                if ($success) {
-                    $success = save_application_answers(
-                        $application_id,
-                        $answers
-                    );
-                }
 
                 if ($success) {
                     header("Location: Application.php?submitted=1");
@@ -87,6 +78,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
         }
+
+
         elseif ($cm) {
             $comment = trim($_POST['comment'] ?? '');
             $application_id = $_POST['application_id'] ?? '';
@@ -101,6 +94,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     }
+
+
 } elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if($admin) {
         $id = $_GET['id'] ?? null;
