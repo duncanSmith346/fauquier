@@ -159,13 +159,14 @@ function getQuestion($application_id, $number) {
 
     mysqli_stmt_execute($stmt);
 
-    $results = mysqli_stmt_get_result($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    $question = mysqli_fetch_assoc($result);
     
 
     mysqli_stmt_close($stmt);
     mysqli_close($con);
 
-    return $results ?: null;
+    return $question ?: null;
 }
 
 function getAnswers($number) {

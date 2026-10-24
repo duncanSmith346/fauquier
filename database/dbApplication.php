@@ -142,27 +142,16 @@ function update_choice($choice, $application_id) {
 function save_application_answers($application_id, $answers) {
     $con = connect();
 
-    $sql = "INSERT INTO dbAnswers (number, application_id, answer)
-            VALUES (?, ?, ?)";
-
-    $stmt = mysqli_prepare($con, $sql);
-
-    if (!$stmt) {
-        mysqli_close($con);
-        return false;
-    }
 
     foreach ($answers as $number => $answer) {
         $number = (int) $number;
         $answer = trim($answer);
+        $question = getQuestion('sampleapplicatio', $number);
+        $sql = "INSERT INTO dbQuestions (number, application_id, answer, question, type)
+            VALUES (?, ?, ?, ?, ?)";
 
-        mysqli_stmt_bind_param(
-            $stmt,
-            "iss",
-            $number,
-            $application_id,
-            $answer
-        );
+        $stmt = mysqli_prepare($con, $sql);
+        mysqli_stmt_bind_param($stmt, "issss", $number, $id, $answer, $question['question'], $question['type']);
 
         if (!mysqli_stmt_execute($stmt)) {
             mysqli_stmt_close($stmt);
@@ -203,13 +192,8 @@ function submit_application_with_answers($id, $applicant_id, $cycle_id, $answers
         }
 
         mysqli_stmt_close($stmt);
-
+        
         // Save each answer using the same connection
-        $sql = "INSERT INTO dbAnswers (number, application_id, answer)
-                VALUES (?, ?, ?)";
-
-        $stmt = mysqli_prepare($con, $sql);
-
         if (!$stmt) {
             throw new Exception(mysqli_error($con));
         }
@@ -217,8 +201,12 @@ function submit_application_with_answers($id, $applicant_id, $cycle_id, $answers
         foreach ($answers as $number => $answer) {
             $number = (int) $number;
             $answer = trim($answer);
+            $question = getQuestion('sampleapplicatio', $number);
+            $sql = "INSERT INTO dbQuestions (number, application_id, answer, question, type)
+                VALUES (?, ?, ?, ?, ?)";
 
-            mysqli_stmt_bind_param($stmt, "iss", $number, $id, $answer);
+            $stmt = mysqli_prepare($con, $sql);
+            mysqli_stmt_bind_param($stmt, "issss", $number, $id, $answer, $question['question'], $question['type']);
 
             if (!mysqli_stmt_execute($stmt)) {
                 throw new Exception(mysqli_stmt_error($stmt));

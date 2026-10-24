@@ -193,7 +193,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
     
     <?php
-    $answers = get_application_answers($id);
+    $answers = getQuestions($id);
 
     foreach ($answers as $answer):
 ?>
@@ -201,8 +201,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         Question <?php echo htmlspecialchars($answer['number']); ?>:
         <?php echo htmlspecialchars($answer['answer']); ?>
     </p>
+    <p> 
+        comment: <?php echo htmlspecialchars($answer['comment']); ?>
+    </p>
 <?php endforeach; ?>
-    <p>comment: <?php echo $result['comments'] ?></p>
     <p>reviewer: <?php echo $result['reviewer_id'] ?></p>
     <p>decision Status: <?php echo $result['decisionStatus'] ?></p>
     <form action="Application.php" method="GET">
