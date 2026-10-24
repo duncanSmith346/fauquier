@@ -87,9 +87,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     foreach($_POST['comments'] as $number => $comment)
                     {
                         add_comment(
-                            $application_id,
+                            trim($comment),
                             $number,
-                            trim($comment)
+                            $application_id
                         );
                     }
                 }
@@ -224,20 +224,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <label for="question_<?php echo $question['number']; ?>">
                <?php echo htmlspecialchars($question['question']); ?>
             </label>
-
+            <!--
            <textarea
                id="question_<?php echo $question['number']; ?>"
                name="answers[<?php echo $question['number']; ?>]"
                rows="4"
                required
            ></textarea>
+
            <br><br>
+             -->
+           <h3><?php echo htmlspecialchars($question['question']); ?></h3>
 
-           <?php echo <h3> . htmlspecialchars($question['question']) . </h3>; ?>
-
-           <?php if (isset($result[$answerField])) {
-                echo "<p>" . nl2br(htmlspecialchars($result[$answerField])) . "</p>";
-            } ?>
+          <?php
+           /*
+           if (isset($result[$answerField])) {
+           echo "<p>" . nl2br(htmlspecialchars($result[$answerField])) . "</p>";
+           }
+           */
+            ?>
 
             <br><br>
 
