@@ -84,7 +84,7 @@
 <html>
     <head>
         <?php require_once('universal.inc') ?>
-        <title>Empowerhouse VMS | Log In</title>
+        <title>Leadership Fauquier | Log In</title>
     </head>
     <body>
         <?php require_once('header.php') ?>

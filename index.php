@@ -25,6 +25,7 @@
     $admin = $person->get_type()[0] == 'admin';
     $applicant = in_array('applicant', $person->get_type(), true);
     $cm = $person->get_type()[0] == 'cm';
+    $cohort = in_array('cohort', $person->get_type(), true);
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $application_id = $_POST['application_id'];
@@ -41,7 +42,7 @@
 <html>
     <head>
         <?php require('universal.inc'); ?>
-        <title>Fauquier Leadership | Dashboard</title>
+        <title>Leadership Fauquier | Dashboard</title>
     </head>
     <body>
         <?php require('header.php'); ?>
@@ -54,11 +55,10 @@
             <?php endif ?>
             <p>Welcome back, <?php echo $person->get_first_name() ?>!</p>
             <p>Today is <?php echo date('l, F j, Y'); ?>.</p>            
-           
-           
+             
 <!-- Original page code for empowerhouse -->
 
-            <?php if (!$admin && !$applicant && !$cm): ?>
+            <?php if (!$admin && !$applicant && !$cm && !$cohort): ?>
             <div id="dashboard">
                 <?php
                     require_once('database/dbMessages.php');
@@ -172,10 +172,7 @@
             <!-- Bellow here we shall add the code for each version of index acording to how Ryan wrote the if Admin section. -->
             <!-- Dashboard for if Admin -->
 
-            <?php if ($admin):
-               
-            ?>
-
+            <?php if ($admin):?>
                 <div class="admin_dashboard">
                     <div class="navigation">
                         <a href="Forms.php" class="navigation_button"> Forms</a>
@@ -254,6 +251,11 @@
              <?php endif ?>
 
             <!-- Dashboard for if Cohort -->
+            <?php if ($cohort): ?> 
+                <div id="dashboard">
+                    <?php require('header.php'); ?>
+                </div>
+            <?php endif; ?>
 
             <!-- Dashboard for if Applicant -->
             <?php if ($applicant): ?>

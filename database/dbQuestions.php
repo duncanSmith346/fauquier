@@ -83,7 +83,7 @@ function removeApplicationQuestion($removeNumber) {
     $success = mysqli_stmt_execute($stmt);
 
     for ($i = $removeNumber + 1; $i < $maxnumber; $i = $i + 1) {
-        $sql = "UPDATE dbQuestions SET " . "number" . "= ? WHERE " . "number" . " = ? AND application_id='sampleapplicatio'";
+        $sql = "UPDATE dbQuestions SET " . "comment" . "= ? WHERE " . "number" . " = ? AND application_id='sampleapplicatio'";
 
         $stmt = mysqli_prepare($con, $sql);
         $x = $i-1;
@@ -202,5 +202,22 @@ function removeAnswer($question, $answer) {
 
     mysqli_stmt_close($stmt);
     mysqli_close($con);
+    return $success;
+}
+
+// Add a committee member's comment
+function add_comment($comment, $question_number, $application_id) {
+    $con = connect();
+
+    $sql = "UPDATE dbQuestions SET comment = ? WHERE application_id = ? AND " . "number" . " = ? ";
+
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "ssi", $comment, $application_id, $question_number);
+
+    $success = mysqli_stmt_execute($stmt);
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+
     return $success;
 }

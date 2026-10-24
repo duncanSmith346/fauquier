@@ -94,23 +94,6 @@ function retrieve_undecided_applicantions_names() {
     return $results ?: null;
 }
 
-// Add a committee member's comment
-function add_comment($comment, $application_id) {
-    $con = connect();
-
-    $sql = "UPDATE dbapplication SET comments = ? WHERE id = ?";
-
-    $stmt = mysqli_prepare($con, $sql);
-    mysqli_stmt_bind_param($stmt, "ss", $comment, $application_id);
-
-    $success = mysqli_stmt_execute($stmt);
-
-    mysqli_stmt_close($stmt);
-    mysqli_close($con);
-
-    return $success;
-}
-
 // Assign a reviewer to an application
 function update_reviewer($reviewer_id, $application_id) {
     $con = connect();
