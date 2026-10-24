@@ -204,9 +204,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $result = retrieve_application($id);
 
 ?>
-    
-    <p>Full name: <?php echo $result['answer1'] ?> </p>
-    <p>Tell us about yourself: <?php echo $result['answer2'] ?>
+    // Display each question currently defined by the administrator.
+    <?php while ($question = mysqli_fetch_assoc($questions)):
+        ?>
+            <label for="question_<?php echo $question['number']; ?>">
+               <?php echo htmlspecialchars($question['question']); ?>
+            </label>
+
+           <textarea
+               id="question_<?php echo $question['number']; ?>"
+               name="answers[<?php echo $question['number']; ?>]"
+               rows="4"
+               required
+           ></textarea>
+
+           <?php echo <h3> . htmlspecialchars($question['question']) . </h3>; ?>
+
+           <?php if (isset($result[$answerField])) {
+                echo "<p>" . nl2br(htmlspecialchars($result[$answerField])) . "</p>";
+            } ?>
+
+        <?php endwhile; ?>
 
     <form action="Application.php" method='POST'>
         <input type="text" name='comment'>

@@ -42,7 +42,7 @@
 <html>
     <head>
         <?php require('universal.inc'); ?>
-        <title>Fauquier Leadership | Dashboard</title>
+        <title>Leadership Fauquier | Dashboard</title>
     </head>
     <body>
         <?php require('header.php'); ?>
