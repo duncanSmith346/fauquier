@@ -80,11 +80,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
             if ($cm) {
-                if(isset($_POST['comments']))
+                if(isset($_POST['answers']))
                 {
                     $application_id = $_POST['application_id'];
 
-                    foreach($_POST['comments'] as $number => $comment)
+                    foreach($_POST['answers'] as $number => $comment)
                     {
                         add_comment(
                             trim($comment),
@@ -215,28 +215,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <?php     
     elseif($cm):
-        $id = $_GET['id'];
+        $id = 0;
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id = $_POST['application_id'];
+        } else {
+            $id = $_GET['id'];
+        }
         $result = retrieve_application($id);
+        $questions = getQuestions($id);
 
 ?>
-    // Display each question currently defined by the administrator.
+    <!-- Display each question currently defined by the administrator. -->
     <form action="Application.php" method='POST'>
      <?php while ($question = mysqli_fetch_assoc($questions)):
         ?>
+            <p><?php echo htmlspecialchars($question['question']) . ": ".  htmlspecialchars($question['answer']); ?> </p>
             <label for="question_<?php echo $question['number']; ?>">
-               <?php echo htmlspecialchars($question['question']); ?>
+               comment:
             </label>
-            <!--
+            
            <textarea
                id="question_<?php echo $question['number']; ?>"
                name="answers[<?php echo $question['number']; ?>]"
                rows="4"
                required
-           ></textarea>
+           ><?php echo $question['comment']; ?></textarea>
 
            <br><br>
-             -->
-           <h3><?php echo htmlspecialchars($question['question']); ?></h3>
+          <!-- <h3><?php echo htmlspecialchars($question['question']); ?></h3> -->
 
           <?php
            /*
@@ -249,7 +255,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <br><br>
 
             <?php
-        if($_SESSION['_role'] == 'CM' || $_SESSION['_role'] == 'Admin')
+        if($_SESSION['type'] == 'cm' || $_SESSION['type'] == 'Admin')
         {
         ?>
 
@@ -267,7 +273,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ?>
 
         <?php
-        if($_SESSION['_role'] == 'Applicant' && !empty($question['comment']))
+        if($_SESSION['type'] == 'Applicant' && !empty($question['comment']))
         {
         ?>
             <label for="comments"><strong>Comment:</strong></label><br>
@@ -278,18 +284,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         ?>
 
-        <?php endwhile; ?>
-
-    
-        <input type="text" name='comment'>
+    <?php endwhile; ?>
         <input type="hidden" name="application_id" value="<?php echo htmlspecialchars($id); ?>">
         <?php
-            if($_SESSION['_role'] == 'CM' || $_SESSION['_role'] == 'Admin')
-            {
+        
+            if($_SESSION['type'][0] == 'cm' || $_SESSION['type'] == 'Admin'):
         ?>
             <button type="submit"> Save Comments </button>
-        <?php
-            }
+        <?php endif;
         ?>
     </form>
 <?php     
