@@ -99,6 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 } elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if($admin) {
+        $success = 0;
         $id = $_GET['id'] ?? null;
         $choice = null;
 
@@ -110,6 +111,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($id !== null && $choice !== null) {
             $success = update_choice($choice, $id);
+        }
+        if ($success) {
+            header("Location: index.php");
+            exit;
         }
     }
 }
