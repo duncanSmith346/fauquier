@@ -129,7 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <h1>Leadership Fauquier Application</h1>
     <?php
-        if ($applicant) :
+        if ($applicant || $cohort) :
         if (isset($error)):
     ?>
      <!-- Display an error if the application could not be submitted. -->
@@ -150,6 +150,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Translate database values into readable statuses.
     if ($status === 'accept') {
       echo "<p>Accepted</p>";
+      update_type($id, 'cohort');
     } elseif ($status === 'reject') {
         echo "<p>Rejected</p>";
     } else {
@@ -294,11 +295,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php endif;
         ?>
     </form>
-<?php     
-    elseif($cohort): 
-?>
-    cohort view
-<?php endif; ?>
+
     <p><a href="index.php">Back to Dashboard</a></p>
 
 </body>

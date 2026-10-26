@@ -722,9 +722,9 @@ $query = "select * from dbPersons $where order by last_name, first_name";
     return $persons;
 }
 
-function update_type($id, $role) {
+function update_type($id, $type) {
     $con=connect();
-    $query = 'UPDATE dbPersons SET type = "' . $role . '" WHERE id = "' . $id . '"';
+    $query = 'UPDATE dbPersons SET type = "' . $type . '" WHERE id = "' . $id . '"';
     $result = mysqli_query($con,$query);
     mysqli_close($con);
     return $result;
