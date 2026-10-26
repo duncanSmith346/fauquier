@@ -99,7 +99,7 @@ function removeApplicationQuestion($removeNumber) {
 function getNextQuestionNumber() {
     $con = connect();
 
-    $sql = "SELECT DISTINCT " . "number" . " FROM dbQuestions ORDER BY " . "number" . " DESC LIMIT 1";
+    $sql = "SELECT DISTINCT " . "number" . " FROM dbQuestions WHERE application_id='sampleapplicatio' ORDER BY " . "number" . " DESC LIMIT 1";
 
     $stmt = mysqli_prepare($con, $sql);
 
