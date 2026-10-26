@@ -175,15 +175,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                <?php echo htmlspecialchars($question['question']); ?>
             </label>
 
-           <textarea
-               id="question_<?php echo $question['number']; ?>"
-               name="answers[<?php echo $question['number']; ?>]"
-               rows="4"
-               required
-           ></textarea>
-
-           <br><br>
-
+            <?php if ($question['type'] === 'textarea'): ?>
+                <textarea
+                    id="question_<?php echo $question['number']; ?>"
+                    name="answers[<?php echo $question['number']; ?>]"
+                    rows="4"
+                    required
+                ></textarea>
+            <?php elseif($question['type'] === 'checkbox'): 
+                $ans = getAnswers($question['number']);
+                foreach($ans as $an):
+                ?>
+                    <br>
+                    <input type="checkbox" id="question_<?php echo $question['number']; ?>" name="answers[<?php echo $question['number']; ?>]" value='<?php echo $an['answer'];?>'><?php echo $an['answer'];?>
+                <?php endforeach; ?>
+            <?php elseif($question['type'] === 'multipleChoice'):
+                $ans = getAnswers($question['number']); ?>
+                <Select id="question_<?php echo $question['number']; ?>" name="answers[<?php echo $question['number']; ?>]">
+                    <?php foreach($ans as $an): ?>
+                        <option type="select" id="question_<?php echo $question['number']; ?>" value='<?php echo $an['answer'];?>'><?php echo $an['answer'];?></option>
+                    <?php endforeach; ?>
+                </Select>
+            <?php else: ?>
+                <input type="<?php echo $question['type']; ?>" id="question_<?php echo $question['number']; ?>" name="answers[<?php echo $question['number']; ?>]"></input>
+            <?php endif; ?>
+            <br><br>
         <?php endwhile; ?>
         <br><br>
 
@@ -204,6 +220,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
     <p>
         Question <?php echo htmlspecialchars($answer['number']); ?>:
+        <?php echo htmlspecialchars($answer['question']); ?>
+    </p>
+    <p>
         <?php echo htmlspecialchars($answer['answer']); ?>
     </p>
     <p> 
