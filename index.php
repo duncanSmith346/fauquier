@@ -252,10 +252,57 @@
 
             <!-- Dashboard for if Cohort -->
             <?php if ($cohort): ?> 
-                <div id="dashboard">
-                    <?php require('header.php'); ?>
+            <div id="dashboard">
+                <div class="dashboard-item" data-link="inbox.php">
+                    <img src="images/<?php echo $inboxIcon ?>">
+                    <span>Notifications<?php 
+                        if ($unreadMessageCount > 0) {
+                            echo ' (' . $unreadMessageCount . ')';
+                        }
+                    ?></span>
                 </div>
-            <?php endif; ?>
+                <div class="dashboard-item" data-link="calendar.php">
+                    <img src="images/view-calendar.svg">
+                    <span>View Calendar</span>
+                </div>
+                <div class="dashboard-item" data-link="documents.php">
+                    <img src="images/create-report.svg">
+                    <span>Commitment Form</span>
+                </div>
+                <div class="dashboard-item" data-link="documents.php">
+                    <img src="images/create-report.svg">
+                    <span>Pay Tuition</span>
+                </div>
+                <div class="dashboard-item" data-link="documents.php">
+                    <img src="images/create-report.svg">
+                    <span>Self-Assessment</span>
+                </div>
+                <div class="dashboard-item" data-link="documents.php">
+                    <img src="images/create-report.svg">
+                    <span>Emergency Contact</span>
+                </div>
+                <div class="dashboard-item" data-link="documents.php">
+                    <img src="images/create-report.svg">
+                    <span>Allergy Information</span>
+                </div>
+                <div class="dashboard-item" data-link="documents.php">
+                    <img src="images/document.svg">
+                    <span>View Forms</span>
+                </div>
+                <div class="dashboard-item" data-link="changePassword.php">
+                    <img src="images/change-password.svg">
+                    <span>Change Password</span>
+                </div>
+                <div class="dashboard-item" data-link="TShirtSize.php">
+                    <img src="images/t-shirt.svg">
+                    <span>Change T-Shirt Size</span>
+                </div>
+                <div class="dashboard-item" data-link="logout.php">
+                    <img src="images/logout.svg">
+                    <span>Log out</span>
+                </div>
+            </div>
+            <?php endif ?>
 
             <!-- Dashboard for if Applicant -->
             <?php if ($applicant): ?>
