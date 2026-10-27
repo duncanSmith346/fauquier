@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     include_once('database/dbQuestions.php');
     $question = $_POST['question'];
     $type = $_POST['type'];
-    $success = addQuestion($question, $type);
+    $success = addQuestion($question, $type,'sampleapplicatio');
     if ($success) {
         header("Location: editApplicationQuestions.php");
         exit;

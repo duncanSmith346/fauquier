@@ -2,21 +2,22 @@
 
 require_once('dbinfo.php');
 
-function addQuestion($question, $type) {
+function addQuestion($question, $type, $form) {
     $number = getNextQuestionNumber();    
 
     $con = connect();
 
     $sql = "INSERT INTO dbQuestions
             (" . "number" . ", application_id, " . "type" . ", question)
-            VALUES (?,'sampleapplicatio',?, ?)";
+            VALUES (?,?,?, ?)";
 
     $stmt = mysqli_prepare($con, $sql);
 
     mysqli_stmt_bind_param(
         $stmt,
-        "iss",
+        "isss",
         $number,
+        $form,
         $type,
         $question
     );
