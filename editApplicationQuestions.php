@@ -59,11 +59,11 @@ require_once('database/dbQuestions.php');
                     <p>Possible answers include:</p>
                     <ul>
                         <?php
-                        $answers = getAnswers($question['number']);
+                        $answers = getAnswers($question['number'],'sampleapplicatio');
                         foreach($answers as $answer):
                         ?>
                         <li>
-                            <a class='remove_answer_link' href='removeAnswer.php?question=<?php echo $answer['number']; ?> &answer=<?php echo $answer['answer']; ?>'>
+                            <a class='remove_answer_link' href='removeAnswer.php?question=<?php echo $answer['number']; ?>&answer=<?php echo $answer['answer']; ?>'>
                                 <?php echo $answer['answer'] ?>
                             </a>
                         </li>

@@ -30,31 +30,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (isset($_GET['answer1'])) {
         if ($_GET['answer1'] !== "" && $_GET['answer1'] !== NULL) {
             $answer1 = $_GET['answer1'];
-            $success = addAnswer($question, $answer1);    
+            $success = addAnswer($question, $answer1, 'sampleapplicatio');    
         }
     }
     if (isset($_GET['answer1'])) {
         if ($_GET['answer2'] !== "" && $_GET['answer2'] !== NULL) {
             $answer2 = $_GET['answer2'];
-            $success = addAnswer($question, $answer2);    
+            $success = addAnswer($question, $answer2, 'sampleapplicatio');    
         }
     }
     if (isset($_GET['answer1'])) {
         if ($_GET['answer3'] !== "" && $_GET['answer3'] !== NULL) {
             $answer3 = $_GET['answer3'];
-            $success = addAnswer($question, $answer3);    
+            $success = addAnswer($question, $answer3, 'sampleapplicatio');    
         }
     }
     if (isset($_GET['answer1'])) {
         if ($_GET['answer4'] !== "" && $_GET['answer4'] !== NULL) {
             $answer4 = $_GET['answer4'];
-            $success = addAnswer($question, $answer4);    
+            $success = addAnswer($question, $answer4, 'sampleapplicatio');    
         }
     }
     if (isset($_GET['answer1'])) {
         if ($_GET['answer5'] !== "" && $_GET['answer5'] !== NULL) {
             $answer5 = $_GET['answer5'];
-            $success = addAnswer($question, $answer5);    
+            $success = addAnswer($question, $answer5, 'sampleapplicatio');    
         }
     }
 

@@ -26,7 +26,7 @@ if ($accessLevel < 2) {
 require_once('database/dbQuestions.php');
 
 
-$success = removeApplicationQuestion($_GET['number']);
+$success = removeQuestion($_GET['number'],'sampleapplicatio');
 if ($success) {
         header("Location: editApplicationQuestions.php");
         exit;

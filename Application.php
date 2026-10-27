@@ -183,14 +183,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     required
                 ></textarea>
             <?php elseif($question['type'] === 'checkbox'): 
-                $ans = getAnswers($question['number']);
+                $ans = getAnswers($question['number'],'sampleapplicatio');
                 foreach($ans as $an):
                 ?>
                     <br>
                     <input type="checkbox" id="question_<?php echo $question['number']; ?>" name="answers[<?php echo $question['number']; ?>]" value='<?php echo $an['answer'];?>'><?php echo $an['answer'];?>
                 <?php endforeach; ?>
             <?php elseif($question['type'] === 'multipleChoice'):
-                $ans = getAnswers($question['number']); ?>
+                $ans = getAnswers($question['number'],'sampleapplicatio'); ?>
                 <Select id="question_<?php echo $question['number']; ?>" name="answers[<?php echo $question['number']; ?>]">
                     <?php foreach($ans as $an): ?>
                         <option type="select" id="question_<?php echo $question['number']; ?>" value='<?php echo $an['answer'];?>'><?php echo $an['answer'];?></option>
