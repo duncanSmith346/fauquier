@@ -57,6 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <option value='checkbox'>Checkbox</option>
                 <option value='email'>Email</option>
                 <option value='tel'>Phone Number</option>
+                <option value='number'>number</option>
             </select>
             <button type='submit'>Add Question</button>
         </form>
