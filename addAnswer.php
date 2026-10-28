@@ -64,6 +64,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             header("Location: editApplicationQuestions.php");
         } elseif ($form === 'samplescholarshi') {
             header("Location: editScholarshipQuestions.php");
+        } elseif ($form === 'samplecommitment') {
+            header("Location: editCommitmentQuestions.php");
         }
         exit;
     }
