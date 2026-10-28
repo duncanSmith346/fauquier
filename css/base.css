@@ -1018,3 +1018,17 @@ a.remove_answer_link {
 a.remove_answer_link:hover {
     color: black;   
 }
+
+td.admin_applicatin_table {
+    border: 1px solid;
+    border-color: var(white);
+    color: white;
+    background-color: var(--main-color);
+}
+
+th.admin_applicatin_table {
+    border: 1px solid;
+    border-color: var(white);
+    color: white;
+    background-color: var(--main-color);
+}

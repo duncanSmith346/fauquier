@@ -185,44 +185,35 @@
                         <?php
                             $results = retrieve_undecided_applicantions_names();
                             $reviewers = get_cms();
-                            foreach($results as $result) : 
-                                
                         ?>
-                        <div class="application_card">
-                            <form action='index.php' method='POST'>
-                                <a href='Application.php?id=<?= urldecode($result['id'])?>' class='href_application_card'> Applicant Name: <?php echo $result['answer1'];?>  </a>|  Committee Member: 
-                                <select name="CM" id="CM" class='application_list_select'>
-                                    <?php if ($result['reviewer_id'] == NULL): ?>
-                                        <option value="Unselected" class='application_list_option'>Unselected</option>
-                                        <?php foreach ($reviewers as $reviewer): ?>
-                                        <option value="<?php echo $reviewer['id'] ?>" class="application_list_option">
-                                            <?= htmlspecialchars(($reviewer['first_name'] ?? '') . ' ' . ($reviewer['last_name'] ?? '')) ?>
-                                        </option>                                       
-                                        <?php endforeach; 
-                                    else:
-                                        $reviewer = get_name_from_id($result['reviewer_id']);
-                                    ?>  
-                                    <option value="<?php echo $result['reviewer_id'] ?>"class="application_list_option">
-                                            <?= htmlspecialchars(($reviewer['first_name'] ?? '') . ' ' . ($reviewer['last_name'] ?? '')) ?>
-                                    </option>
-                                    <option value="Unselected" class='application_list_option'>Unselected</option>
-                                    <?php foreach ($reviewers as $reviewer): 
-                                        if (!($result['reviewer_id'] === $reviewer['id'])):
-                                        ?>
-                                        <option value="<?php echo $reviewer['id'] ?>"class="application_list_option">
-                                            <?= htmlspecialchars(($reviewer['first_name'] ?? '') . ' ' . ($reviewer['last_name'] ?? '')) ?>
-                                        </option>
-                                    <?php
-                                        endif;
-                                        endforeach;    
-                                    endif;
-                                    ?>
-                                </select>
-                                <input type='hidden' name='application_id' value='<?php echo $result['id'] ?>' />
-                                <button type='submit' value='updateCMs'>Update</button>
-                            </form>
-                        </div>
-                        <?php endforeach; ?>             
+                        <table class='admin_applicatin_table'>
+                            <tr class='admin_applicatin_table'>
+                                <th class='admin_applicatin_table'>Applicant</th>
+                                <th class='admin_applicatin_table'>Application</th>
+                                <th class='admin_applicatin_table'>Documents</th>
+                                <th class='admin_applicatin_table'>Application Fee</th>
+                                <th class='admin_applicatin_table'>Review</th>
+                                <th class='admin_applicatin_table'>Accepted</th>
+                                <th class='admin_applicatin_table'>Commitment</th>
+                                <th class='admin_applicatin_table'>Tuition</th>
+                                <th class='admin_applicatin_table'>Onboarding</th>
+                            </tr>
+                            <?php foreach($results as $result) : 
+                                $applicaition = retrieve_application($result['id']); ?>
+                            <tr class='admin_applicatin_table'>
+                                <td class='admin_applicatin_table'><a href='Application.php?id=<?= urldecode($result['id'])?>' class='href_application_card'>
+                                    <?php echo $result['answer1'];?></a></td>
+                                <td class='admin_applicatin_table'>Application</td>
+                                <td class='admin_applicatin_table'>Documents</td>
+                                <td class='admin_applicatin_table'>Application Fee</td>
+                                <td class='admin_applicatin_table'><?php echo $applicaition['reviewStatus'] ?></td>
+                                <td class='admin_applicatin_table'><?php echo $applicaition['decisionStatus'] ?></td>
+                                <td class='admin_applicatin_table'>Commitment</td>
+                                <td class='admin_applicatin_table'>Tuition</td>
+                                <td class='admin_applicatin_table'>Onboarding</td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </table>             
                     </div>
                 </div>
             <?php endif ?>
