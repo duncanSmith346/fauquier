@@ -110,6 +110,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($id !== null && $choice !== null) {
             $success = update_choice($choice, $id);
+
+            if ($choice == 'accept') {
+                $application = retrieve_application($id);
+                update_type($application['applicant_id'], 'cohort');
+            }
+            
         }
     }
 }
@@ -147,7 +153,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Translate database values into readable statuses.
         if ($status === 'accept') {
             echo "<p>Accepted</p>";
-            update_type($id, 'cohort');
         } elseif ($status === 'reject') {
             echo "<p>Rejected</p>";
         } else {
