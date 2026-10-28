@@ -151,7 +151,7 @@ function save_application_answers($application_id, $answers) {
             VALUES (?, ?, ?, ?, ?)";
 
         $stmt = mysqli_prepare($con, $sql);
-        mysqli_stmt_bind_param($stmt, "issss", $number, $id, $answer, $question['question'], $question['type']);
+        mysqli_stmt_bind_param($stmt, "issss", $number, $application_id, $answer, $question['question'], $question['type']);
 
         if (!mysqli_stmt_execute($stmt)) {
             mysqli_stmt_close($stmt);
@@ -238,7 +238,7 @@ function get_application_answers($application_id) {
             FROM dbAnswers
             WHERE application_id = ?
               AND (isSample = 0 OR isSample IS NULL)
-            ORDER BY number";
+            ORDER BY number";     
 
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_bind_param($stmt, "s", $application_id);
@@ -251,4 +251,180 @@ function get_application_answers($application_id) {
     mysqli_close($con);
 
     return $answers;
+}
+
+// Save an application without submitting it
+function save_draft_application($applicant_id, $cycle_id, $answers) {
+    $con = connect();
+    mysqli_begin_transaction($con);
+
+    try {
+        // Check whether the applicant already has an application
+        $sql = "SELECT id, submittedAt
+                FROM dbApplication
+                WHERE applicant_id = ? AND cycle_id = ?
+                FOR UPDATE";
+
+        $stmt = mysqli_prepare($con, $sql);
+        mysqli_stmt_bind_param($stmt, "ss", $applicant_id, $cycle_id);
+        mysqli_stmt_execute($stmt);
+
+        $result = mysqli_stmt_get_result($stmt);
+        $application = mysqli_fetch_assoc($result);
+        mysqli_stmt_close($stmt);
+
+        if ($application) {
+            // Prevent changes after final submission
+            if ($application['submittedAt'] !== null) {
+                throw new Exception("Application already submitted.");
+            }
+
+            // Reuse the existing application ID
+            $id = $application['id'];
+
+            // Update the last saved date
+            $sql = "UPDATE dbApplication
+                    SET applicationSaved = CURRENT_DATE
+                    WHERE id = ?";
+
+            $stmt = mysqli_prepare($con, $sql);
+            mysqli_stmt_bind_param($stmt, "s", $id);
+
+            if (!mysqli_stmt_execute($stmt)) {
+                throw new Exception(mysqli_stmt_error($stmt));
+            }
+
+            mysqli_stmt_close($stmt);
+
+        } else {
+            // Create a new draft application
+            $id = bin2hex(random_bytes(16));
+
+            $sql = "INSERT INTO dbApplication
+                    (id, applicant_id, cycle_id, applicationSaved)
+                    VALUES (?, ?, ?, CURRENT_DATE)";
+
+            $stmt = mysqli_prepare($con, $sql);
+            mysqli_stmt_bind_param(
+                $stmt,
+                "sss",
+                $id,
+                $applicant_id,
+                $cycle_id
+            );
+
+            if (!mysqli_stmt_execute($stmt)) {
+                throw new Exception(mysqli_stmt_error($stmt));
+            }
+
+            mysqli_stmt_close($stmt);
+        }
+
+        // Save every answer, including empty answers
+        foreach ($answers as $number => $answer) {
+            $number = (int) $number;
+
+            // Convert the answer to a string
+            if (is_array($answer)) {
+                $answer = implode(", ", $answer);
+            }
+
+            $answer = trim((string) $answer);
+
+            // Retrieve the original question
+            $question = getQuestion('sampleapplicatio', $number);
+
+            if (!$question) {
+                throw new Exception("Question not found: " . $number);
+            }
+
+            // Check whether this answer already exists
+            $sql = "SELECT number
+                    FROM dbQuestions
+                    WHERE application_id = ? AND number = ?";
+
+            $stmt = mysqli_prepare($con, $sql);
+            mysqli_stmt_bind_param($stmt, "si", $id, $number);
+            mysqli_stmt_execute($stmt);
+
+            $result = mysqli_stmt_get_result($stmt);
+            $existing_answer = mysqli_fetch_assoc($result);
+            mysqli_stmt_close($stmt);
+
+            if ($existing_answer) {
+                // Update the existing answer
+                // Do not change the committee's comment
+                $sql = "UPDATE dbQuestions
+                        SET answer = ?
+                        WHERE application_id = ? AND number = ?";
+
+                $stmt = mysqli_prepare($con, $sql);
+                mysqli_stmt_bind_param(
+                    $stmt,
+                    "ssi",
+                    $answer,
+                    $id,
+                    $number
+                );
+
+            } else {
+                // Insert an answer that has not been saved before
+                $sql = "INSERT INTO dbQuestions
+                        (number, application_id, answer, question, type)
+                        VALUES (?, ?, ?, ?, ?)";
+
+                $stmt = mysqli_prepare($con, $sql);
+                mysqli_stmt_bind_param(
+                    $stmt,
+                    "issss",
+                    $number,
+                    $id,
+                    $answer,
+                    $question['question'],
+                    $question['type']
+                );
+            }
+
+            if (!mysqli_stmt_execute($stmt)) {
+                throw new Exception(mysqli_stmt_error($stmt));
+            }
+
+            mysqli_stmt_close($stmt);
+        }
+
+        // Commit all changes together
+        mysqli_commit($con);
+        mysqli_close($con);
+
+        return true;
+
+    } catch (Throwable $e) {
+        // Undo changes if anything fails
+        mysqli_rollback($con);
+        mysqli_close($con);
+
+        error_log("Draft save failed: " . $e->getMessage());
+
+        return false;
+    }
+}
+
+// Mark an existing saved draft as submitted
+function submit_saved_draft($application_id) {
+    $con = connect();
+
+    $sql = "UPDATE dbApplication
+            SET submittedAt = CURRENT_DATE
+            WHERE id = ?
+            AND submittedAt IS NULL";
+
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "s", $application_id);
+
+    $success = mysqli_stmt_execute($stmt);
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+
+    return $success;
 }
