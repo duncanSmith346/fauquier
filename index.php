@@ -308,7 +308,6 @@
             <?php if ($applicant): ?>
                 <div class="applicant_dashboard">
                      <h2>Applicant Dashboard</h2>
-
                          <div class="dashboard-item">
                              <a href="Application.php">
                                    Manage Application
