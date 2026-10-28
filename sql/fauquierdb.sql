@@ -348,6 +348,20 @@ CREATE TABLE `dbApplication` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- Table structure for table `dbScholarship`
+--
+
+CREATE TABLE `dbScholarships` (
+  `scholarship_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `application_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `scholarshipStatus` text,
+  `submittedDate` date,
+  `decisionStatus` boolean,
+  `amountAwarded` int,
+  `cycle_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
 -- Table structure for table `dbTrainingPeriods`
 --
 
