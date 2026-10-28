@@ -60,7 +60,7 @@ function removeQuestion($removeNumber,$form) {
     //remove the question from the questions table
     //shift the answers in the answer table down
     //shift the questions in the questions table down
-    $maxnumber = getNextQuestionNumber($from);
+    $maxnumber = getNextQuestionNumber($form);
     $con = connect();
 
     $sql = "DELETE FROM dbAnswers WHERE " . "number" . "=? AND isSample=1 and application_id=?";
