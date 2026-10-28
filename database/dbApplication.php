@@ -70,6 +70,25 @@ function get_applicant_application($applicant_id, $cycle_id) {
     return $application ?: null;
 }
 
+function get_applicant_scholarship($application_id, $cycle_id) {
+    $con = connect();
+
+    $sql = "SELECT * FROM dbscholarships
+            WHERE application_id = ? AND cycle_id = ?";
+
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "ss", $application_id, $cycle_id);
+    mysqli_stmt_execute($stmt);
+
+    $result = mysqli_stmt_get_result($stmt);
+    $application = mysqli_fetch_assoc($result);
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+
+    return $application ?: null;
+}
+
 // Retrieve undecided applications and their assigned reviewers
 function retrieve_undecided_applicantions_names() {
     $con = connect();
@@ -225,6 +244,66 @@ function submit_application_with_answers($id, $applicant_id, $cycle_id, $answers
         mysqli_close($con);
 
         error_log("Application submission failed: " . $e->getMessage());
+        return false;
+    }
+}
+function submit_Scholarship_with_answers($scholarship_id, $application_id, $cycle_id, $answers) {
+    $con = connect();
+
+    mysqli_begin_transaction($con);
+
+    try {
+        // Create the application record
+        $sql = "INSERT INTO dbScholarships
+                (scholarship_id, application_id, cycle_id, submittedDate, scholarshipStatus)
+                VALUES (?, ?, ?, CURRENT_DATE, 'undecided')";
+
+        $stmt = mysqli_prepare($con, $sql);
+
+        if (!$stmt) {
+            throw new Exception(mysqli_error($con));
+        }
+
+        mysqli_stmt_bind_param($stmt, "sss", $scholarship_id, $application_id, $cycle_id);
+
+        if (!mysqli_stmt_execute($stmt)) {
+            throw new Exception(mysqli_stmt_error($stmt));
+        }
+
+        mysqli_stmt_close($stmt);
+        
+        // Save each answer using the same connection
+        if (!$stmt) {
+            throw new Exception(mysqli_error($con));
+        }
+
+        foreach ($answers as $number => $answer) {
+            $number = (int) $number;
+            $answer = trim($answer);
+            $question = getQuestion('samplescholarshi', $number);
+            $sql = "INSERT INTO dbQuestions (number, application_id, answer, question, type)
+                VALUES (?, ?, ?, ?, ?)";
+
+            $stmt = mysqli_prepare($con, $sql);
+            mysqli_stmt_bind_param($stmt, "issss", $number, $scholarship_id, $answer, $question['question'], $question['type']);
+
+            if (!mysqli_stmt_execute($stmt)) {
+                throw new Exception(mysqli_stmt_error($stmt));
+            }
+        }
+
+        mysqli_stmt_close($stmt);
+
+        mysqli_commit($con);
+        mysqli_close($con);
+
+        return true;
+
+    } catch (Throwable $e) {
+        mysqli_rollback($con);
+        mysqli_close($con);
+
+        error_log("Scholarship submission failed: " . $e->getMessage());
         return false;
     }
 }

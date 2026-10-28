@@ -302,8 +302,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <button type='submit' name='reject' value='reject'>Reject</button>
         <button type='submit' name='accept' value='accept'>Accept</button>
     </form>
+    <?php
+        $scholarship = get_applicant_scholarship($result['id'], $cycle_id);
+        if ($scholarship !== NULL): 
+    ?>
+    <form action='Scholarship.php' method='GET'>
+        <button type='submit' name='id' value='<?php echo $scholarship['scholarship_id'] ?>'>view Scholarship</button>
+    </form>
 
 <?php     
+        endif;
     elseif($cm):
         $id = 0;
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {

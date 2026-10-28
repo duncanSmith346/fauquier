@@ -27,39 +27,44 @@ $success = 0;
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     include_once('database/dbQuestions.php');
     $question = $_GET['number'];
+    $form = $_GET['form'];
     if (isset($_GET['answer1'])) {
         if ($_GET['answer1'] !== "" && $_GET['answer1'] !== NULL) {
             $answer1 = $_GET['answer1'];
-            $success = addAnswer($question, $answer1, 'sampleapplicatio');    
+            $success = addAnswer($question, $answer1, $form);    
         }
     }
-    if (isset($_GET['answer1'])) {
+    if (isset($_GET['answer2'])) {
         if ($_GET['answer2'] !== "" && $_GET['answer2'] !== NULL) {
             $answer2 = $_GET['answer2'];
-            $success = addAnswer($question, $answer2, 'sampleapplicatio');    
+            $success = addAnswer($question, $answer2, $form);    
         }
     }
-    if (isset($_GET['answer1'])) {
+    if (isset($_GET['answer3'])) {
         if ($_GET['answer3'] !== "" && $_GET['answer3'] !== NULL) {
             $answer3 = $_GET['answer3'];
-            $success = addAnswer($question, $answer3, 'sampleapplicatio');    
+            $success = addAnswer($question, $answer3, $form);    
         }
     }
-    if (isset($_GET['answer1'])) {
+    if (isset($_GET['answer4'])) {
         if ($_GET['answer4'] !== "" && $_GET['answer4'] !== NULL) {
             $answer4 = $_GET['answer4'];
-            $success = addAnswer($question, $answer4, 'sampleapplicatio');    
+            $success = addAnswer($question, $answer4, $form);    
         }
     }
-    if (isset($_GET['answer1'])) {
+    if (isset($_GET['answer5'])) {
         if ($_GET['answer5'] !== "" && $_GET['answer5'] !== NULL) {
             $answer5 = $_GET['answer5'];
-            $success = addAnswer($question, $answer5, 'sampleapplicatio');    
+            $success = addAnswer($question, $answer5, $form);    
         }
     }
 
     if ($success) {
-        header("Location: editApplicationQuestions.php");
+        if ($form === 'sampleapplicatio') {
+            header("Location: editApplicationQuestions.php");
+        } elseif ($form === 'samplescholarshi') {
+            header("Location: editScholarshipQuestions.php");
+        }
         exit;
     }
 }
@@ -75,7 +80,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     <main>
         <h1>Add Answers</h1>
     </main>
-        <h2><?php echo "" ?>
         <form action='addAnswer.php' method='GET'>
             <label for="answer1">Answer 1:</label>
             <input type='text' name="answer1">
@@ -88,6 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             <label for="answer5">Answer 5:</label>
             <input type='text' name="answer5">
             <input type='hidden' name='number' value='<?php echo $question; ?>'/>
+            <input type='hidden' name='form' value='<?php echo $form;?>'/>
             <button type='submit'>Add Answers</button>
         </form>
     </main>
