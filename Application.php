@@ -297,7 +297,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php endif;
             ?>
         </form>
-
+    <?php endif;?>
         <p><a href="index.php">Back to Dashboard</a></p>
 
     </body>
