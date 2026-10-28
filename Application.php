@@ -329,6 +329,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $result = retrieve_application($id);
         $questions = getQuestions($id);
 
+        if ($result['reviewer_id'] == $_SESSION['_id']):
     ?>
         <!-- Display each question currently defined by the administrator. -->
         <form action="Application.php" method='POST'>
@@ -399,6 +400,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php endif;
             ?>
         </form>
+        
+        <?php else:?>
+            <?php while ($question = mysqli_fetch_assoc($questions)):
+            ?>
+                <p><?php echo htmlspecialchars($question['question']) . ": ".  htmlspecialchars($question['answer']); ?> </p>
+            
+            <p>Comment: <?php echo $question['comment']; ?> </p>
+            <!-- <h3><?php echo htmlspecialchars($question['question']); ?></h3> -->
+
+            <?php
+            /*
+            if (isset($result[$answerField])) {
+            echo "<p>" . nl2br(htmlspecialchars($result[$answerField])) . "</p>";
+            }
+            */
+                ?>
+
+
+                <?php
+            if($_SESSION['type'] == 'cm' || $_SESSION['type'] == 'Admin')
+            {
+            ?>
+            <?php
+            }
+            ?>
+
+            <?php
+            if($_SESSION['type'] == 'Applicant' && !empty($question['comment']))
+            {
+            ?>
+                <label for="comments"><strong>Comment:</strong></label><br>
+
+            <?php echo nl2br(htmlspecialchars($question['comment'])); ?>
+                
+            <?php
+            }
+            ?>
+            <?php endwhile; ?>
+        <?php endif;?>
     <?php endif;?>
         <p><a href="index.php">Back to Dashboard</a></p>
 
