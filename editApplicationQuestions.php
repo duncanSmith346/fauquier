@@ -35,7 +35,7 @@ require_once('database/dbQuestions.php');
         <h1>Edit Application</h1>
         <div class="forms_dashboard">
             <div class="navigation">
-                <a href="addApplicationQuestion.php" class='navigation_button'> Add Question</a>
+                <a href="addQuestion.php?form=sampleapplicatio" class='navigation_button'> Add Question</a>
                 <a href='index.php' class='navigation_button'> Home</a>
                 <a href="Forms.php" class="navigation_button"> Forms</a>
                 <a href="index.php" class="navigation_button"> Committee Members</a>
@@ -59,21 +59,25 @@ require_once('database/dbQuestions.php');
                     <p>Possible answers include:</p>
                     <ul>
                         <?php
-                        $answers = getAnswers($question['number']);
+                        $answers = getAnswers($question['number'],'sampleapplicatio');
                         foreach($answers as $answer):
                         ?>
                         <li>
-                            <a class='remove_answer_link' href='removeAnswer.php?question=<?php echo $answer['number']; ?> &answer=<?php echo $answer['answer']; ?>'>
+                            <a class='remove_answer_link' href='removeAnswer.php?question=<?php echo $answer['number']; ?>
+                            &answer=<?php echo $answer['answer']; ?>
+                            &form=sampleapplicatio'>
                                 <?php echo $answer['answer'] ?>
                             </a>
                         </li>
                         <?php endforeach; ?>
                     </ul>
                     <form action="AddAnswer.php" Method='GET'>
+                        <input type='hidden' name='form' value='sampleapplicatio'/>
                         <button type='submit' name='number' value='<?php echo $question['number']; ?>'>Add Answers</button>
                     </form>
                     <?php endif; ?>
-                    <form action="removeApplicationQuestion.php" Method='GET'>
+                    <form action="removeQuestion.php" Method='GET'>
+                        <input type='hidden' name='form' value='sampleapplicatio'/>
                         <button type='submit' name='number' value='<?php echo $question['number']; ?>'>Remove</button>
                     </form>
                 </div>

@@ -28,15 +28,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     include_once('database/dbQuestions.php');
     $question = $_POST['question'];
     $type = $_POST['type'];
-    $success = addQuestion($question, $type);
+    $success = addQuestion($question, $type, $_POST['form']);
     if ($success) {
-        header("Location: editApplicationQuestions.php");
+        if ($_POST['form'] === 'sampleapplicatio') {
+            header("Location: editApplicationQuestions.php");
+        } elseif ($_POST['form'] === 'samplescholarshi') {
+            header("Location: editScholarshipQuestions.php");
+        }
         exit;
     }
 }
 ?>
 
-<DOCTYPE html>
+<!DOCTYPE html>
 <html>
     <head>
         <?php require('universal.inc'); ?>
@@ -44,10 +48,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </head>
     <main>
         <h1>Add Question</h1>
-    </main>
-        <form action='addApplicationQuestion.php' method='POST'>
+        <form action='addQuestion.php' method='POST'>
             <label for="question">Question:</label>
-            <input type="text" id="question" name="question" required>
+            <input type="text" id="question" name="question" required/>
             <label for="type">Answer Type:</label>
             <select id='type' name='type'>
                 <option value='text'>Short Text</option>
@@ -57,7 +60,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <option value='checkbox'>Checkbox</option>
                 <option value='email'>Email</option>
                 <option value='tel'>Phone Number</option>
+                <option value='number'>number</option>
             </select>
+            <input type='hidden' name='form' value='<?= htmlspecialchars($_GET['form']) ?>'/>
             <button type='submit'>Add Question</button>
         </form>
     </main>

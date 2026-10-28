@@ -49,13 +49,13 @@ if ($accessLevel < 2) {
                     <span>Application</span>
                 </div>
             </a>
-            <a href="forms.php">
+            <a href="editScholarshipQuestions.php">
                 <div class="form_dashboard-item">
                     <img src="images/document.svg">
                     <span>Scholarship</span>
                 </div>
             </a>
-            <a href="forms.php">
+            <a href="editCommitmentQuestions.php">
                 <div class="form_dashboard-item">
                     <img src="images/document.svg">
                     <span>Onboarding</span>

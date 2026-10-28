@@ -26,9 +26,13 @@ if ($accessLevel < 2) {
 require_once('database/dbQuestions.php');
 
 
-$success = removeAnswer($_GET['question'],$_GET['answer']);
+$success = removeAnswer($_GET['question'],$_GET['answer'],$_GET['form']);
 if ($success) {
+    if ($_GET['form'] === 'sampleapplicatio') {
         header("Location: editApplicationQuestions.php");
-        exit;
+    } elseif ($_GET['form'] === 'samplescholarshi') {
+        header("Location: editScholarshipQuestions.php");
     }
+    exit;
+}
 ?>

@@ -33,16 +33,60 @@ $existing_application = get_applicant_application(
     $cycle_id         // Program cycle being checked.
 );
 
+$saved_answers = [];
+
+if ($applicant && $existing_application &&
+    $existing_application['submittedAt'] === null) {
+
+    $saved_questions = getQuestions($existing_application['id']);
+
+    foreach ($saved_questions as $question) {
+        $saved_answers[$question['number']] = $question['answer'];
+    }
+}
+
 $id = NULL;
 $choice = NULL;
 $success = NULL;
 // Process the application when the form is submitted.
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+        // Save an applicant's draft without submitting it
+    if ($applicant && ($_POST['action'] ?? '') === 'save') {
+        $answers = $_POST['answers'] ?? [];       
+
+        $success = save_draft_application(
+            $_SESSION['_id'],
+            $cycle_id,
+            $answers
+        );
+
+        if ($success) {
+            header("Location: Application.php?saved=1");
+            exit;
+        } else {
+            $error = "Unable to save application.";
+        }
+    }
+
     // Stop applicants from submitting twice in the same cycle.
-    if ($existing_application) {
+    if ($applicant && ($_POST['action'] ?? '') === 'save') {
+    // Save was already handled above.
+    } elseif ($existing_application && $existing_application['submittedAt'] !== null) {
         $error = "You have already submitted an application for this cycle.";
 
+    } else {
+
+    if ($existing_application && $existing_application['submittedAt'] === null) {
+        $answers = $_POST['answers'] ?? [];
+
+        if (save_draft_application($_SESSION['_id'], $cycle_id, $answers)
+            && submit_saved_draft($existing_application['id'])) {
+            header("Location: Application.php?submitted=1");
+            exit;
+    } else {
+        $error = "Unable to submit application.";
+    }
     } else {
         // Read the submitted form fields.
             if ($applicant) {
@@ -96,9 +140,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
     }
 
-
+    }
 } elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if($admin) {
+        $success = 0;
         $id = $_GET['id'] ?? null;
         $choice = null;
 
@@ -116,6 +161,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 update_type($application['applicant_id'], 'cohort');
             }
             
+        }
+        if ($success) {
+            header("Location: index.php");
+            exit;
+        }
+        if ($success) {
+            header("Location: index.php");
+            exit;
         }
     }
 }
@@ -141,7 +194,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </p>
         <?php endif; ?>
 
-        <?php if ($existing_application): ?>
+    <?php if ($existing_application && $existing_application['submittedAt'] !== null): ?>
 
         <!-- Show the status of an existing application. -->
         <h2>Application Status</h2>
@@ -173,59 +226,108 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php echo htmlspecialchars($question['question']); ?>
                 </label>
 
-            <textarea
-                id="question_<?php echo $question['number']; ?>"
-                name="answers[<?php echo $question['number']; ?>]"
-                rows="4"
-                required
-            ></textarea>
+            <?php if ($question['type'] === 'textarea'): ?>
+                <textarea
+                    id="question_<?php echo $question['number']; ?>"
+                    name="answers[<?php echo $question['number']; ?>]"
+                    rows="4"
+                    required
+                ><?php echo htmlspecialchars($saved_answers[$question['number']] ?? ''); ?></textarea>
 
+            <?php elseif($question['type'] === 'checkbox'): 
+                $ans = getAnswers($question['number'],'sampleapplicatio');
+            ?>   
+                <input type="hidden" name="answers[<?php echo $question['number']; ?>][]" value="">
+            <?php foreach($ans as $an):
+                ?>
+                    <br>
+                    <input type="checkbox"
+                        id="question_<?php echo $question['number']; ?>"
+                        name="answers[<?php echo $question['number']; ?>][]"
+                        value="<?php echo htmlspecialchars($an['answer']); ?>"
+                        <?php echo in_array($an['answer'], explode(', ', $saved_answers[$question['number']] ?? '')) ? 'checked' : ''; ?>>
+                    <?php echo htmlspecialchars($an['answer']); ?>
+
+                <?php endforeach; ?>
+            <?php elseif($question['type'] === 'multipleChoice'):
+                $ans = getAnswers($question['number'],'sampleapplicatio'); ?>
+                <Select id="question_<?php echo $question['number']; ?>" name="answers[<?php echo $question['number']; ?>]">
+                    <?php foreach($ans as $an): ?>
+                        <option value="<?php echo htmlspecialchars($an['answer']); ?>"
+                                 <?php echo (($saved_answers[$question['number']] ?? '') === $an['answer']) ? 'selected' : ''; ?>>
+                                 <?php echo htmlspecialchars($an['answer']); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </Select>
+            <?php else: ?>
+                <input type="<?php echo $question['type'];?>" 
+                id="question_<?php echo $question['number'];?>"
+                name="answers[<?php echo $question['number'];?>]"
+                value="<?php echo htmlspecialchars($saved_answers[$question['number']] ?? '');?>"
+                ></input>
+            <?php endif; ?>
             <br><br>
+        <?php endwhile; ?>
+        <br><br>
 
-            <?php endwhile; ?>
-            <br><br>
+        <button type="submit" name="action" value="save" formnovalidate>
+              Save Application
+        </button>
 
-            <button type="submit">Submit Application</button>
-        </form>
-    <?php 
-        endif;
-        elseif($admin):
-            $id = $_GET['id'];
-            $result = retrieve_application($id);
+        <button type="submit" name="action" value="submit">
+              Submit Application
+        </button>
+    </form>
+ <?php 
+    endif;
+    elseif($admin):
+        $id = $_GET['id'];
+        $result = retrieve_application($id);
 
     ?>
         
         <?php
         $answers = getQuestions($id);
 
-        foreach ($answers as $answer):
+    foreach ($answers as $answer):
+?>
+    <p>
+        Question <?php echo htmlspecialchars($answer['number']); ?>:
+        <?php echo htmlspecialchars($answer['question']); ?>
+    </p>
+    <p>
+        <?php echo htmlspecialchars($answer['answer']); ?>
+    </p>
+    <p> 
+        comment: <?php echo htmlspecialchars($answer['comment']); ?>
+    </p>
+<?php endforeach; ?>
+    <p>reviewer: <?php echo $result['reviewer_id'] ?></p>
+    <p>decision Status: <?php echo $result['decisionStatus'] ?></p>
+    <form action="Application.php" method="GET">
+        <input type='hidden' name='id' value='<?php echo $result['id'] ?>' />
+        <button type='submit' name='reject' value='reject'>Reject</button>
+        <button type='submit' name='accept' value='accept'>Accept</button>
+    </form>
+    <?php
+        $scholarship = get_applicant_scholarship($result['id'], $cycle_id);
+        if ($scholarship !== NULL): 
     ?>
-        <p>
-            Question <?php echo htmlspecialchars($answer['number']); ?>:
-            <?php echo htmlspecialchars($answer['answer']); ?>
-        </p>
-        <p> 
-            comment: <?php echo htmlspecialchars($answer['comment']); ?>
-        </p>
-    <?php endforeach; ?>
-        <p>reviewer: <?php echo $result['reviewer_id'] ?></p>
-        <p>decision Status: <?php echo $result['decisionStatus'] ?></p>
-        <form action="Application.php" method="GET">
-            <input type='hidden' name='id' value='<?php echo $result['id'] ?>' />
-            <button type='submit' name='reject' value='reject'>Reject</button>
-            <button type='submit' name='accept' value='accept'>Accept</button>
-        </form>
+    <form action='Scholarship.php' method='GET'>
+        <button type='submit' name='id' value='<?php echo $scholarship['scholarship_id'] ?>'>view Scholarship</button>
+    </form>
 
-    <?php     
-        elseif($cm):
-            $id = 0;
-            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $id = $_POST['application_id'];
-            } else {
-                $id = $_GET['id'];
-            }
-            $result = retrieve_application($id);
-            $questions = getQuestions($id);
+<?php     
+        endif;
+    elseif($cm):
+        $id = 0;
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id = $_POST['application_id'];
+        } else {
+            $id = $_GET['id'];
+        }
+        $result = retrieve_application($id);
+        $questions = getQuestions($id);
 
     ?>
         <!-- Display each question currently defined by the administrator. -->
