@@ -32,6 +32,8 @@ if ($success) {
         header("Location: editApplicationQuestions.php");
     } elseif ($_GET['form'] === 'samplescholarshi') {
         header("Location: editScholarshipQuestions.php");
+    } elseif ($_GET['form'] === 'samplecommitment') {
+        header("Location: editCommitmentQuestions.php");
     }
     exit;
 }

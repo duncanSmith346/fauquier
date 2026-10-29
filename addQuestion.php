@@ -34,6 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header("Location: editApplicationQuestions.php");
         } elseif ($_POST['form'] === 'samplescholarshi') {
             header("Location: editScholarshipQuestions.php");
+        } elseif ($_POST['form'] === 'samplecommitment') {
+            header("Location: editCommitmentQuestions.php");
         }
         exit;
     }

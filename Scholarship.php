@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Stop applicants from submitting twice in the same cycle.
     if ($existing_Scholarship) {
-        $error = "You have already submitted an application for this cycle.";
+        $error = "You have already submitted an scholarship for this cycle.";
 
     } else {
         // Read the submitted form fields.
@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Make sure the applicant answered the questions.
             if (!is_array($answers) || empty($answers)) {
-                $error = "Please complete the application.";
+                $error = "Please complete the scholarship.";
 
             } elseif (count(array_filter($answers, function ($answer) {
                 return is_string($answer) && trim($answer) !== '';
