@@ -37,6 +37,7 @@ DROP TABLE IF EXISTS `dbquestions`;
 DROP TABLE IF EXISTS `dbanswers`;
 DROP TABLE IF EXISTS `dbapplication`;
 DROP TABLE IF EXISTS `dbpersons`;
+DROP TABLE IF EXISTS `dbscholarships`
 
 DROP TABLE IF EXISTS `dbCourses`;
 DROP TABLE IF EXISTS `dbEventMedia`;
@@ -52,6 +53,7 @@ DROP TABLE IF EXISTS `dbQuestions`;
 DROP TABLE IF EXISTS `dbAnswers`;
 DROP TABLE IF EXISTS `dbApplication`;
 DROP TABLE IF EXISTS `dbPersons`;
+DROP TABLE IF EXISTS `dbScholarships`
 
 SET FOREIGN_KEY_CHECKS = 1;
 
