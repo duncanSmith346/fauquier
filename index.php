@@ -314,20 +314,17 @@
 
             <!-- Dashboard for if Applicant -->
             <?php if ($applicant): ?>
-                <div class="applicant_dashboard">
-                    <h2>Applicant Dashboard</h2>
-                    <div class="dashboard-item">
-                        <a href="Application.php">
-                            Manage Application
-                        </a>
-                    </div>
-                    <div class="dashboard-item">
-                        <a href="Scholarship.php">
-                            Manage Scholarship
-                        </a>
-                    </div>
-                 </div>
-            <?php endif; ?>
+            <div id="dashboard">
+                <div class="dashboard-item" data-link="Application.php">
+                    <img src="images/create-report.svg">
+                    <span style="text-align:center;">Manage Application</span>
+                </div>
+                <div class="dashboard-item" data-link="Scholarship.php">
+                    <img src="images/create-report.svg">
+                    <span style="text-align:center;">Manage Scholarship</span>
+                </div>        
+            </div>    
+            <?php endif; ?>    
 
         </main>
     </body>
