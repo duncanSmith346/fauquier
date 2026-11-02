@@ -115,7 +115,7 @@
 		$venues = array("portland"=>"RMH Portland");
         
         //they're logged in and session variables are set.
-        if (!isset($_SESSION['venue']) || $_SESSION['venue'] == "") {
+        if (!isset($_SESSION['type']) || $_SESSION['type'] == "") {
         	echo(' <a href="' . $path . 'personEdit.php?id=' . 'new' . '">Apply</a>');
         	echo(' | <a href="' . $path . 'logout.php">Logout</a><br>');
         }

@@ -365,7 +365,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             {
             ?>
 
-                <label for="comments"><strong>Comment:</strong></label>
+                <label for="comments"><strong>Comment</strong></label>
                 <br>
                 <textarea
                     name="comments[<?php echo $question['number']; ?>"
@@ -382,7 +382,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if($_SESSION['type'] == 'Applicant' && !empty($question['comment']))
             {
             ?>
-                <label for="comments"><strong>Comment:</strong></label><br>
+                <label for="comments"><strong>Comment</strong></label><br>
 
             <?php echo nl2br(htmlspecialchars($question['comment'])); ?>
                 
@@ -430,7 +430,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if($_SESSION['type'] == 'Applicant' && !empty($question['comment']))
             {
             ?>
-                <label for="comments"><strong>Comment:</strong></label><br>
+                <label for="comments"><strong>Comment</strong></label><br>
 
             <?php echo nl2br(htmlspecialchars($question['comment'])); ?>
                 
