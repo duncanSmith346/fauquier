@@ -221,6 +221,13 @@ function add_comment($comment, $question_number, $application_id) {
 
     $success = mysqli_stmt_execute($stmt);
 
+
+    $sql = "UPDATE dbApplication SET reviewStatus = 1 WHERE id = ?";
+
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "s", $application_id);
+
+    $success = mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
     mysqli_close($con);
 

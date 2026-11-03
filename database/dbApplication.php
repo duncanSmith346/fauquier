@@ -507,3 +507,36 @@ function submit_saved_draft($application_id) {
 
     return $success;
 }
+
+function Admin_list($page) {
+    $con = connect();
+
+    $sql = "SELECT CONCAT(dbPersons.first_name, ' ', dbPersons.last_name) AS fullname, 
+            dbApplication.id AS appid, 
+            dbCommitment.commitment_id AS commitment, 
+            dbCommitment.submittedDate,
+            dbApplication.submittedAt,
+            dbApplication.decisionStatus AS decisionStatus,
+            dbApplication.reviewStatus AS reviewStatus,
+            dbApplication.paymentStatus AS applicationFee,
+            dbCommitment.tuitionStatus AS tuition
+            FROM dbPersons
+            LEFT JOIN dbApplication ON dbApplication.applicant_id=dbPersons.id
+            LEFT JOIN dbCohort ON dbCohort.person_id=dbPersons.id
+            LEFT JOIN dbCommitment ON dbCohort.id=dbCommitment.cohort_id
+            WHERE dbPersons.type='applicant' OR dbPersons.type='cohort'
+            LIMIT 10 OFFSET ?";
+    
+    $stmt = mysqli_prepare($con, $sql);
+    $lines = 10 * $page;
+    mysqli_stmt_bind_param($stmt, "i", $lines);
+
+    mysqli_stmt_execute($stmt);
+
+    $result = mysqli_stmt_get_result($stmt);
+    $answers = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+    return $answers;
+}

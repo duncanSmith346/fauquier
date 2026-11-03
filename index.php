@@ -183,8 +183,11 @@
                     </div>
                     <div class='application_list'>
                         <?php
-                            $results = retrieve_undecided_applicantions_names();
-                            $reviewers = get_cms();
+                            if (isset($_GET['page'])) {
+                                $results = admin_list($_GET['page']);
+                            } else {
+                                $results = admin_list(0);
+                            }
                         ?>
                         <table class='admin_applicatin_table'>
                             <tr class='admin_applicatin_table'>
@@ -198,19 +201,70 @@
                                 <th class='admin_applicatin_table'>Tuition</th>
                                 <th class='admin_applicatin_table'>Onboarding</th>
                             </tr>
-                            <?php foreach($results as $result) : 
-                                $applicaition = retrieve_application($result['id']); ?>
+                            <?php foreach($results as $result) : ?>
                             <tr class='admin_applicatin_table'>
-                                <td class='admin_applicatin_table'><a href='Application.php?id=<?= urldecode($result['id'])?>' class='href_application_card'>
-                                    <?php echo $result['answer1'];?></a></td>
-                                <td class='admin_applicatin_table'>Application</td>
-                                <td class='admin_applicatin_table'>Documents</td>
-                                <td class='admin_applicatin_table'>Application Fee</td>
-                                <td class='admin_applicatin_table'><?php echo $applicaition['reviewStatus'] ?></td>
-                                <td class='admin_applicatin_table'><?php echo $applicaition['decisionStatus'] ?></td>
-                                <td class='admin_applicatin_table'>Commitment</td>
-                                <td class='admin_applicatin_table'>Tuition</td>
-                                <td class='admin_applicatin_table'>Onboarding</td>
+                                <!--Applicant-->
+                                <td class='admin_applicatin_table'>
+                                    <?php if ($result['appid'] !== NULL):?>
+                                    <a href='Application.php?id=<?= urldecode($result['appid'])?>' class='href_application_card'>
+                                    <?php echo $result['fullname'];?></a>
+                                    <?php 
+                                    else: 
+                                        echo $result['fullname'];
+                                    endif;
+                                    ?>
+                                </td>
+                                <!--Application-->
+                                <td class='admin_applicatin_table'>
+                                    <?php 
+                                    if ($result['appid'] == NULL): echo 'missing';
+                                    elseif ($result['submittedAt'] === NULL): echo 'in progress';
+                                    else: echo 'complete';
+                                    endif;
+                                    ?>
+                                </td>
+                                <!--Documents-->
+                                <td class='admin_applicatin_table'>unfinished</td>
+                                <!--Appllication Fee-->
+                                <td class='admin_applicatin_table'>
+                                    <?php
+                                    if ($result['applicationFee'] === 1) echo 'Paid';
+                                    else echo 'Unpaid';
+                                    ?>
+                                </td>
+                                <!--Review Status-->
+                                <td class='admin_applicatin_table'>
+                                    <?php
+                                    if ($result['reviewStatus'] === 1) echo 'Reviewed';
+                                    else echo 'Not Reviewed';
+                                    ?>
+                                </td>
+                                <!--Decision Status-->
+                                <td class='admin_applicatin_table'>
+                                    <?php 
+                                    if ($result['decisionStatus'] === NULL) echo 'undecided';
+                                    else echo $result['decisionStatus']; 
+                                    ?>
+                                </td>
+                                <!--Commitment Status-->
+                                <td class='admin_applicatin_table'>
+                                    <?php 
+                                    if ($result['commitment'] === NULL) echo 'missing';
+                                    elseif ($result['dbCommitment.submittedDate'] === NULL) echo 'in progress';
+                                    else echo 'complete';  
+                                    ?>
+                                </td>
+                                <!--Tuition Status-->
+                                <td class='admin_applicatin_table'>
+                                    <?php 
+                                    if ($result['tuition'] === 1) echo 'Paid';
+                                    else echo 'Unpaid'; 
+                                    ?>
+                                </td>
+                                <!--Onboarding Status-->
+                                <td class='admin_applicatin_table'>
+                                    unfinished
+                                </td>
                             </tr>
                             <?php endforeach; ?>
                         </table>             

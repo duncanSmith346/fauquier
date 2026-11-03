@@ -38,6 +38,7 @@ DROP TABLE IF EXISTS `dbanswers`;
 DROP TABLE IF EXISTS `dbapplication`;
 DROP TABLE IF EXISTS `dbpersons`;
 DROP TABLE IF EXISTS `dbscholarships`
+DROP TABLE IF EXISTS `dbcommitment`;
 
 DROP TABLE IF EXISTS `dbCourses`;
 DROP TABLE IF EXISTS `dbEventMedia`;
@@ -53,7 +54,8 @@ DROP TABLE IF EXISTS `dbQuestions`;
 DROP TABLE IF EXISTS `dbAnswers`;
 DROP TABLE IF EXISTS `dbApplication`;
 DROP TABLE IF EXISTS `dbPersons`;
-DROP TABLE IF EXISTS `dbScholarships`
+DROP TABLE IF EXISTS `dbScholarships`;
+DROP TABLE IF EXISTS `dbCommitment`;
 
 SET FOREIGN_KEY_CHECKS = 1;
 
@@ -360,6 +362,27 @@ CREATE TABLE `dbScholarships` (
   `submittedDate` date,
   `decisionStatus` boolean,
   `amountAwarded` int,
+  `cycle_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Table structure for table `dbCommitment`
+--
+
+CREATE TABLE `dbCommitment` (
+  `commitment_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `cohort_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `commitmentStatus` text,
+  `submittedDate` date,
+  `tuitionStatus` boolean,
+  `createdAt` date,
+  `participationConfirmed` boolean,
+  `shirtSize` text,
+  `emergencyContactName` text,
+  `emergencyContactPhone` text,
+  `allergyInformation` text,
+  `selfAssessmentSubmittedAt` date,
+  `biography` text,
   `cycle_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
