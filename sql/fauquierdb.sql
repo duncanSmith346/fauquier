@@ -37,7 +37,7 @@ DROP TABLE IF EXISTS `dbquestions`;
 DROP TABLE IF EXISTS `dbanswers`;
 DROP TABLE IF EXISTS `dbapplication`;
 DROP TABLE IF EXISTS `dbpersons`;
-DROP TABLE IF EXISTS `dbscholarships`
+DROP TABLE IF EXISTS `dbscholarships`;
 DROP TABLE IF EXISTS `dbcommitment`;
 
 DROP TABLE IF EXISTS `dbCourses`;
