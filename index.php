@@ -283,12 +283,33 @@
                     </div>
                     <div class='application_list'>
                         <?php
-                            $results = retrieve_undecided_applicantions_names();
-                            $reviewers = get_cms();
-                            foreach($results as $result) : 
+                            if (isset($_GET['assignedOnly'])):
+                                $results = get_assigned_applications();
+                        ?>
+                        <form action="index.php">
+                            <button type='submit'>View All Applications</button>
+                        </form>
+                        <?php
+                            else: 
+                                $results = retrieve_undecided_applicantions_names();
+                        ?>
+                        <form action="index.php" method='GET'>
+                            <button type='submit' name='assignedOnly' value='True'>View Only Assigned</button>
+                        </form>
+                        <?php
+                            endif;
+                            foreach($results as $result) :
+                                var_dump($result); 
                         ?>
                             <div class="application_card">
-                                <a href='Application.php?id=<?= urldecode($result['id'])?>' class='href_application_card'> Applicant Name: <?php echo $result['answer1'];?>  </a>|  Committee Member: 
+                                <a href='Application.php?id=<?= urldecode($result['id'])?>' class='href_application_card'> 
+                                    Applicant Name: <?php echo $result['answer1'];?>  
+                                </a>
+                                  | Committee Member: 
+                                <?
+                                    if ($result['reviewer_id'] === NULL) echo 'undecided';
+                                    else echo get_name_from_id($result['reviewer_id']);
+                                ?>
                             </div>
                         <?php endforeach; ?>
                     </div>

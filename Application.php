@@ -146,7 +146,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $success = 0;
         $id = $_GET['id'] ?? null;
         $choice = null;
-
+        $application_id = $_GET['id'];
+        if (isset($_GET['CM'])) {
+            $reviewer_id = $_GET['CM'];
+            if ($reviewer_id === 'Unselected'){
+                $reviewer_id = NULL;
+            }
+            $reviewersuccess = update_reviewer($reviewer_id, $application_id);
+        }
         if (isset($_GET['reject'])) {
             $choice = 'reject';
         } elseif (isset($_GET['accept'])) {
@@ -303,6 +310,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </p>
 <?php endforeach; ?>
     <p>reviewer: <?php echo $result['reviewer_id'] ?></p>
+    <form action="Application.php" method='GET'>
+        <select name="CM" id="CM" class='application_list_select'>
+            <?php $reviewers = get_cms();
+            if ($result['reviewer_id'] == NULL): ?>
+            <option value="Unselected" class='application_list_option'>Unselected</option>
+            <?php foreach ($reviewers as $reviewer): ?>
+            <option value="<?php echo $reviewer['id'] ?>" class="application_list_option">
+                <?= htmlspecialchars(($reviewer['first_name'] ?? '') . ' ' . ($reviewer['last_name'] ?? '')) ?>
+            </option>                                       
+            <?php endforeach; 
+            else:
+                $reviewer = get_name_from_id($result['reviewer_id']);
+            ?>  
+            <option value="<?php echo $result['reviewer_id'] ?>"class="application_list_option">
+                <?= htmlspecialchars(($reviewer['first_name'] ?? '') . ' ' . ($reviewer['last_name'] ?? '')) ?>
+            </option>
+            <option value="Unselected" class='application_list_option'>Unselected</option>
+            <?php foreach ($reviewers as $reviewer): 
+                if (!($result['reviewer_id'] === $reviewer['id'])):
+            ?>
+            <option value="<?php echo $reviewer['id'] ?>"class="application_list_option">
+                <?= htmlspecialchars(($reviewer['first_name'] ?? '') . ' ' . ($reviewer['last_name'] ?? '')) ?>
+            </option>
+            <?php
+                endif;
+                endforeach;    
+                endif;
+            ?>
+        </select>
+        <hidden name='id' value=<?php echo $_GET['id'];?>/>
+        <button type='submit'>Update Reviewer</button>
+    </form>
+    <br>
     <p>decision Status: <?php echo $result['decisionStatus'] ?></p>
     <form action="Application.php" method="GET">
         <input type='hidden' name='id' value='<?php echo $result['id'] ?>' />
