@@ -309,8 +309,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         comment: <?php echo htmlspecialchars($answer['comment']); ?>
     </p>
 <?php endforeach; ?>
-    <p>reviewer: <?php echo $result['reviewer_id'] ?></p>
     <form action="Application.php" method='GET'>
+        <label for="CM">Reviewer:</label>
         <select name="CM" id="CM" class='application_list_select'>
             <?php $reviewers = get_cms();
             if ($result['reviewer_id'] == NULL): ?>
@@ -339,8 +339,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 endif;
             ?>
         </select>
-        <hidden name='id' value=<?php echo $_GET['id'];?>/>
-        <button type='submit'>Update Reviewer</button>
+        <input type='hidden' name='id' value='<?= htmlspecialchars($_GET['id']);?>'/>
+           <button type='submit'>Update Reviewer</button>
     </form>
     <br>
     <p>decision Status: <?php echo $result['decisionStatus'] ?></p>

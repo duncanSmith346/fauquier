@@ -36,6 +36,8 @@
         $success = update_reviewer($reviewer_id, $application_id);
         
     }
+    if (isset($_GET['page'])) $page = $_GET['page'];
+    else $page = 0;
 
 ?>
 <!DOCTYPE html>
@@ -182,13 +184,7 @@
                         
                     </div>
                     <div class='application_list'>
-                        <?php
-                            if (isset($_GET['page'])) {
-                                $results = admin_list($_GET['page']);
-                            } else {
-                                $results = admin_list(0);
-                            }
-                        ?>
+                        <?php $results = admin_list($page);?>
                         <table class='admin_applicatin_table'>
                             <tr class='admin_applicatin_table'>
                                 <th class='admin_applicatin_table'>Applicant</th>
@@ -267,7 +263,15 @@
                                 </td>
                             </tr>
                             <?php endforeach; ?>
-                        </table>             
+                        </table>
+                        <form action="index.php">
+                            <?php $lesspage = (int)$page - 1;
+                            $greaterpage = (int)$page + 1;
+                            if ($lesspage >= 0): ?>
+                            <button type='submit' name='page' value='<?php echo $lesspage;?>'><?php echo $lesspage;?></button>
+                            <?php endif;?>
+                            <button type='submit' name='page' value='<?php echo $greaterpage;?>'><?php echo $greaterpage;?></button>
+                        </form>             
                     </div>
                 </div>
             <?php endif ?>
@@ -284,34 +288,48 @@
                     <div class='application_list'>
                         <?php
                             if (isset($_GET['assignedOnly'])):
-                                $results = get_assigned_applications();
+                                $results = get_assigned_applications($_SESSION['_id'],$page);
                         ?>
                         <form action="index.php">
                             <button type='submit'>View All Applications</button>
                         </form>
                         <?php
                             else: 
-                                $results = retrieve_undecided_applicantions_names();
+                                $results = retrieve_undecided_applicantions_names($page);
                         ?>
                         <form action="index.php" method='GET'>
                             <button type='submit' name='assignedOnly' value='True'>View Only Assigned</button>
                         </form>
                         <?php
                             endif;
-                            foreach($results as $result) :
-                                var_dump($result); 
+                            foreach($results as $result) : 
                         ?>
                             <div class="application_card">
                                 <a href='Application.php?id=<?= urldecode($result['id'])?>' class='href_application_card'> 
                                     Applicant Name: <?php echo $result['answer1'];?>  
                                 </a>
-                                  | Committee Member: 
-                                <?
-                                    if ($result['reviewer_id'] === NULL) echo 'undecided';
-                                    else echo get_name_from_id($result['reviewer_id']);
+                                | Committee Member: 
+                                <?php if ($result['reviewer_id'] === NULL) echo 'undecided';
+                                    else {
+                                        $name = get_name_from_id($result['reviewer_id']);
+                                        echo $name['first_name'];
+                                        echo ' '; 
+                                        echo $name['last_name'];
+                                    }
                                 ?>
                             </div>
                         <?php endforeach; ?>
+                        <form action="index.php">
+                            <?php if (isset($_GET['assignedOnly'])):?>
+                                <input type='hidden' name='assignedOnly' value='True'/>
+                            <?php endif;?>
+                            <?php $lesspage = (int)$page - 1;
+                            $greaterpage = (int)$page + 1;
+                            if ($lesspage >= 0): ?>
+                            <button type='submit' name='page' value='<?php echo $lesspage;?>'><?php echo $lesspage;?></button>
+                            <?php endif;?>
+                            <button type='submit' name='page' value='<?php echo $greaterpage;?>'><?php echo $greaterpage;?></button>
+                        </form>
                     </div>
                 </div>
              <?php endif ?>
