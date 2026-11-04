@@ -90,7 +90,7 @@ function get_applicant_scholarship($application_id, $cycle_id) {
 }
 
 // Retrieve undecided applications and their assigned reviewers
-function retrieve_undecided_applicantions_names() {
+function retrieve_undecided_applicantions_names($page) {
     $con = connect();
 
    $sql = "SELECT
@@ -100,9 +100,42 @@ function retrieve_undecided_applicantions_names() {
         FROM dbApplication
         INNER JOIN dbPersons
             ON dbApplication.applicant_id = dbPersons.id
-        WHERE decisionStatus = 'undecided'";
+        WHERE decisionStatus = 'undecided'
+        LIMIT 10 OFFSET ?";
 
     $stmt = mysqli_prepare($con, $sql);
+
+    $lines = 10 * $page;
+
+    mysqli_stmt_bind_param($stmt, "i", $lines);
+    mysqli_stmt_execute($stmt);
+
+    $results = mysqli_stmt_get_result($stmt);
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+
+    return $results ?: null;
+}
+
+function get_assigned_applications($reviewer_id,$page) {
+    $con = connect();
+
+   $sql = "SELECT
+            CONCAT(dbPersons.first_name, ' ', dbPersons.last_name) AS answer1,
+            dbApplication.id,
+            reviewer_id
+        FROM dbApplication
+        INNER JOIN dbPersons
+            ON dbApplication.applicant_id = dbPersons.id
+        WHERE decisionStatus = 'undecided' AND reviewer_id=?
+        LIMIT 10 OFFSET ?";
+
+    $stmt = mysqli_prepare($con, $sql);
+
+    $lines = 10*$page;
+
+    mysqli_stmt_bind_param($stmt, "si", $reviewer_id, $lines);
     mysqli_stmt_execute($stmt);
 
     $results = mysqli_stmt_get_result($stmt);
