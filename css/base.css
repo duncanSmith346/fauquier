@@ -913,7 +913,7 @@ div {
 div.navigation {
     display: flex;
     flex-direction: column;
-    width: 300px;
+    width: 250px;
     position: relative;
     right: 5rem;
 }
@@ -928,7 +928,7 @@ a.navigation_button {
     border-radius: var(--button-border-radius);
     color: var(--button-font-color);
     background-color: var(--main-color);
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.5rem;
 }
 
 div.application_list {
@@ -955,8 +955,6 @@ select.application_list_select {
 div.forms_dashboard {
     display: flex;
     flex-direction: row;
-    position: relative;
-    left: 150px;
 }
 
 div.form_dashboard-item {
@@ -993,7 +991,6 @@ a.href_application_card {
     text-decoration: none;
 }
 
-
 div.question_list {
     display: flex;
     flex-direction: column;
@@ -1002,12 +999,24 @@ div.question_list {
 }
 
 div.question_card {
+    width: 700px;
     padding: var(--button-padding);
     border-radius: var(--button-border-radius);
     color: var(--button-font-color);
     background-color: var(--main-color);
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
     border-color: black;
+}
+
+.question-container {
+    width: 800px;
+    margin: 0 auto;
+}
+
+@media only screen and (max-width: 780px) {
+    .question-container {
+        width: 400px;
+    }
 }
 
 a.remove_answer_link {

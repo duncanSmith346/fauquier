@@ -84,7 +84,7 @@
 <html>
     <head>
         <?php require_once('universal.inc') ?>
-        <title>Leadership Fauquier | Log In</title>
+        <title>Log In - Leadership Fauquier</title>
     </head>
     <body>
         <?php require_once('header.php') ?>

@@ -42,7 +42,7 @@
 <html>
     <head>
         <?php require('universal.inc'); ?>
-        <title>Leadership Fauquier | Dashboard</title>
+        <title>Dashboard - Leadership Fauquier</title>
     </head>
     <body>
         <?php require('header.php'); ?>
@@ -53,8 +53,8 @@
             <?php elseif (isset($_GET['registerSuccess'])): ?>
                 <div class="happy-toast">Volunteer registered successfully!</div>
             <?php endif ?>
-            <p>Welcome back, <?php echo $person->get_first_name() ?>!</p>
-            <p>Today is <?php echo date('l, F j, Y'); ?>.</p>            
+<!--            <p>Welcome back, <?php echo $person->get_first_name() ?>!</p> -->
+<!--            <p>Today is <?php echo date('l, F j, Y'); ?>.</p>       -->     
              
 <!-- Original page code for empowerhouse -->
 
@@ -169,7 +169,7 @@
             </div>
             <?php endif ?>
 
-            <!-- Bellow here we shall add the code for each version of index acording to how Ryan wrote the if Admin section. -->
+            <!-- Below here we shall add the code for each version of index acording to how Ryan wrote the if Admin section. -->
             <!-- Dashboard for if Admin -->
 
             <?php if ($admin):?>
@@ -178,8 +178,7 @@
                         <a href="Forms.php" class="navigation_button"> Forms</a>
                         <a href="index.php" class="navigation_button"> Committee Members</a>
                         <a href="personSearch.php" class="navigation_button"> Person Search</a>
-                        <a href="logout.php" class="navigation_button"> logout</a>
-                        
+                        <a href="logout.php" class="navigation_button"> Log out</a>
                     </div>
                     <div class='application_list'>
                         <?php
@@ -361,11 +360,11 @@
             <?php if ($applicant): ?>
             <div id="dashboard">
                 <div class="dashboard-item" data-link="Application.php">
-                    <img src="images/create-report.svg">
+                    <img src="images/document.svg">
                     <span style="text-align:center;">Manage Application</span>
                 </div>
                 <div class="dashboard-item" data-link="Scholarship.php">
-                    <img src="images/create-report.svg">
+                    <img src="images/document.svg">
                     <span style="text-align:center;">Manage Scholarship</span>
                 </div>        
             </div>    
