@@ -38,7 +38,7 @@
             <div class="admin_dashboard">
                 <div class="navigation">
                     <a href="index.php" class="navigation_button"> Home</a>
-                    <a href="index.php" class="navigation_button"> Committee Members</a>
+                    <a href="manageCommitteeMembers.php" class="navigation_button"> Committee Members</a>
                     <a href="personSearch.php" class="navigation_button"> Person Search</a>
                     <a href="logout.php" class="navigation_button"> Log out</a>          
                 </div>
