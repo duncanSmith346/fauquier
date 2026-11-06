@@ -53,10 +53,9 @@
     <body>
         <h1>Add Committee Member</h1>
         <main>
-            <?php if ($success):
-                echo $password;?>
-            
-            <a href="index.php" class="navigation_button"> Home</a>
+            <?php if ($success):?>
+                <div class="new-password"><?php echo $password ?></div>
+                <a href="index.php" class="navigation_button"> Home</a>
             <?php else:?>
             <div class="question-container">
                 <form action='addCommitteeMember.php' method='POST'>
