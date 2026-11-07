@@ -1033,6 +1033,7 @@ td.admin_applicatin_table {
     border-color: var(white);
     color: white;
     background-color: var(--main-color);
+    padding: .25rem;
 }
 
 th.admin_applicatin_table {
@@ -1040,4 +1041,17 @@ th.admin_applicatin_table {
     border-color: var(white);
     color: white;
     background-color: var(--main-color);
+    padding: .25rem;
+}
+
+button.dashboardPaging {
+    align-items: center;
+    width: 4rem;
+    align-content: center;
+}
+
+div.paging {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

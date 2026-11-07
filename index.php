@@ -263,14 +263,21 @@
                             </tr>
                             <?php endforeach; ?>
                         </table>
-                        <form action="index.php">
-                            <?php $lesspage = (int)$page - 1;
-                            $greaterpage = (int)$page + 1;
-                            if ($lesspage >= 0): ?>
-                            <button type='submit' name='page' value='<?php echo $lesspage;?>'><?php echo $lesspage;?></button>
-                            <?php endif;?>
-                            <button type='submit' name='page' value='<?php echo $greaterpage;?>'><?php echo $greaterpage;?></button>
-                        </form>             
+                        <div class='paging'>
+                            <form action="index.php">
+                                <?php  $count = get_count_admin_list()["count(dbapplication.id)"]/10;
+                                $i = 0;
+                                while ($i < $count): 
+                                    $n = $i +1;
+                                    ?>
+                                <button class='dashboardPaging' type='submit' name='page' value='<?php echo $i;?>'><?php echo $n;?></button>
+
+                                <?php 
+                                $i = $i + 1; 
+                                endwhile;
+                                ?>
+                            </form>
+                        </div>             
                     </div>
                 </div>
             <?php endif ?>
@@ -318,17 +325,24 @@
                                 ?>
                             </div>
                         <?php endforeach; ?>
-                        <form action="index.php">
-                            <?php if (isset($_GET['assignedOnly'])):?>
-                                <input type='hidden' name='assignedOnly' value='True'/>
-                            <?php endif;?>
-                            <?php $lesspage = (int)$page - 1;
-                            $greaterpage = (int)$page + 1;
-                            if ($lesspage >= 0): ?>
-                            <button type='submit' name='page' value='<?php echo $lesspage;?>'><?php echo $lesspage;?></button>
-                            <?php endif;?>
-                            <button type='submit' name='page' value='<?php echo $greaterpage;?>'><?php echo $greaterpage;?></button>
-                        </form>
+                        <div class='paging'>
+                            <form action="index.php">
+                                <?php if (isset($_GET['assignedOnly'])):?>
+                                    <input type='hidden' name='assignedOnly' value='True'/>
+                                <?php endif;?>
+                                <?php  $count = get_count_admin_list()["count(dbapplication.id)"]/10;
+                                $i = 0;
+                                while ($i < $count): 
+                                    $n = $i +1;
+                                    ?>
+                                <button class='dashboardPaging' type='submit' name='page' value='<?php echo $i;?>'><?php echo $n;?></button>
+
+                                <?php 
+                                $i = $i + 1; 
+                                endwhile;
+                                ?>
+                            </form>
+                        </div>
                     </div>
                 </div>
              <?php endif ?>
