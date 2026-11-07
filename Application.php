@@ -183,14 +183,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/x-icon" href="https://leadershipfauquier.org/wp-content/uploads/2022/09/LeadershipFauquierLogo-404x236-1.png">
         <title>Manage Application - Leadership Fauquier</title>
     </head>
     <body>
-        <h1>Leadership Fauquier Application</h1>
+        <h1>COHORT APPLICATION</h1>
         <?php
             if ($applicant || $cohort) :
             if (isset($error)):
@@ -201,176 +202,175 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </p>
         <?php endif; ?>
 
-    <?php if ($existing_application && $existing_application['submittedAt'] !== null): ?>
+        <?php if ($existing_application && $existing_application['submittedAt'] !== null): ?>
+            <!-- Show the status of an existing application. -->
+            <h2>Application Status</h2>
 
-        <!-- Show the status of an existing application. -->
-        <h2>Application Status</h2>
-
-        <?php
-        // Get the decision recorded in the database.
-        $status = $existing_application['decisionStatus'];
-
-        // Translate database values into readable statuses.
-        if ($status === 'accept') {
-            echo "<p>Accepted</p>";
-        } elseif ($status === 'reject') {
-            echo "<p>Rejected</p>";
-        } else {
-            echo "<p>Pending Review</p>";
-        }
-        ?>
-
-        <?php else: ?>
-
-        <!-- No application exists yet, so show the form. -->
-
-        <form method="POST">
             <?php
-        // Display each question currently defined by the administrator.
-            while ($question = mysqli_fetch_assoc($questions)):
+            // Get the decision recorded in the database.
+            $status = $existing_application['decisionStatus'];
+
+            // Translate database values into readable statuses.
+            if ($status === 'accept') {
+                echo "<p>Accepted</p>";
+            } elseif ($status === 'reject') {
+                echo "<p>Rejected</p>";
+            } else {
+                echo "<p>Pending Review</p>";
+            }
             ?>
-                <label for="question_<?php echo $question['number']; ?>">
-                <?php echo htmlspecialchars($question['question']); ?>
-                </label>
 
-            <?php if ($question['type'] === 'textarea'): ?>
-                <textarea
-                    id="question_<?php echo $question['number']; ?>"
-                    name="answers[<?php echo $question['number']; ?>]"
-                    rows="4"
-                    required
-                ><?php echo htmlspecialchars($saved_answers[$question['number']] ?? ''); ?></textarea>
-
-            <?php elseif($question['type'] === 'checkbox'): 
-                $ans = getAnswers($question['number'],'sampleapplicatio');
-            ?>   
-                <input type="hidden" name="answers[<?php echo $question['number']; ?>][]" value="">
-            <?php foreach($ans as $an):
-                ?>
-                    <br>
-                    <input type="checkbox"
-                        id="question_<?php echo $question['number']; ?>"
-                        name="answers[<?php echo $question['number']; ?>][]"
-                        value="<?php echo htmlspecialchars($an['answer']); ?>"
-                        <?php echo in_array($an['answer'], explode(', ', $saved_answers[$question['number']] ?? '')) ? 'checked' : ''; ?>>
-                    <?php echo htmlspecialchars($an['answer']); ?>
-
-                <?php endforeach; ?>
-            <?php elseif($question['type'] === 'multipleChoice'):
-                $ans = getAnswers($question['number'],'sampleapplicatio'); ?>
-                <Select id="question_<?php echo $question['number']; ?>" name="answers[<?php echo $question['number']; ?>]">
-                    <?php foreach($ans as $an): ?>
-                        <option value="<?php echo htmlspecialchars($an['answer']); ?>"
-                                 <?php echo (($saved_answers[$question['number']] ?? '') === $an['answer']) ? 'selected' : ''; ?>>
-                                 <?php echo htmlspecialchars($an['answer']); ?>
-                        </option>
-                    <?php endforeach; ?>
-                </Select>
             <?php else: ?>
-                <input type="<?php echo $question['type'];?>" 
-                id="question_<?php echo $question['number'];?>"
-                name="answers[<?php echo $question['number'];?>]"
-                value="<?php echo htmlspecialchars($saved_answers[$question['number']] ?? '');?>"
-                ></input>
-            <?php endif; ?>
-            <br><br>
-        <?php endwhile; ?>
-        <br><br>
 
-        <button type="submit" name="action" value="save" formnovalidate>
-              Save Application
-        </button>
+            <!-- No application exists yet, so show the form. -->
 
-        <button type="submit" name="action" value="submit">
-              Submit Application
-        </button>
-    </form>
- <?php 
-    endif;
-    elseif($admin):
-        $id = $_GET['id'];
-        $result = retrieve_application($id);
+            <form method="POST">
+                <?php
+            // Display each question currently defined by the administrator.
+                while ($question = mysqli_fetch_assoc($questions)):
+                ?>
+                    <label for="question_<?php echo $question['number']; ?>">
+                    <?php echo htmlspecialchars($question['question']); ?>
+                    </label>
 
-    ?>
-        
-        <?php
-        $answers = getQuestions($id);
+                <?php if ($question['type'] === 'textarea'): ?>
+                    <textarea
+                        id="question_<?php echo $question['number']; ?>"
+                        name="answers[<?php echo $question['number']; ?>]"
+                        rows="4"
+                        required
+                    ><?php echo htmlspecialchars($saved_answers[$question['number']] ?? ''); ?></textarea>
 
-    foreach ($answers as $answer):
-?>
-    <p>
-        Question <?php echo htmlspecialchars($answer['number']); ?>:
-        <?php echo htmlspecialchars($answer['question']); ?>
-    </p>
-    <p>
-        <?php echo htmlspecialchars($answer['answer']); ?>
-    </p>
-    <p> 
-        comment: <?php echo htmlspecialchars($answer['comment']); ?>
-    </p>
-<?php endforeach; ?>
-    <form action="Application.php" method='GET'>
-        <label for="CM">Reviewer:</label>
-        <select name="CM" id="CM" class='application_list_select'>
-            <?php $reviewers = get_cms();
-            if ($result['reviewer_id'] == NULL): ?>
-            <option value="Unselected" class='application_list_option'>Unselected</option>
-            <?php foreach ($reviewers as $reviewer): ?>
-            <option value="<?php echo $reviewer['id'] ?>" class="application_list_option">
-                <?= htmlspecialchars(($reviewer['first_name'] ?? '') . ' ' . ($reviewer['last_name'] ?? '')) ?>
-            </option>                                       
-            <?php endforeach; 
-            else:
-                $reviewer = get_name_from_id($result['reviewer_id']);
-            ?>  
-            <option value="<?php echo $result['reviewer_id'] ?>"class="application_list_option">
-                <?= htmlspecialchars(($reviewer['first_name'] ?? '') . ' ' . ($reviewer['last_name'] ?? '')) ?>
-            </option>
-            <option value="Unselected" class='application_list_option'>Unselected</option>
-            <?php foreach ($reviewers as $reviewer): 
-                if (!($result['reviewer_id'] === $reviewer['id'])):
+                <?php elseif($question['type'] === 'checkbox'): 
+                    $ans = getAnswers($question['number'],'sampleapplicatio');
+                ?>   
+                    <input type="hidden" name="answers[<?php echo $question['number']; ?>][]" value="">
+                <?php foreach($ans as $an):
+                    ?>
+                        <br>
+                        <input type="checkbox"
+                            id="question_<?php echo $question['number']; ?>"
+                            name="answers[<?php echo $question['number']; ?>][]"
+                            value="<?php echo htmlspecialchars($an['answer']); ?>"
+                            <?php echo in_array($an['answer'], explode(', ', $saved_answers[$question['number']] ?? '')) ? 'checked' : ''; ?>>
+                        <?php echo htmlspecialchars($an['answer']); ?>
+
+                    <?php endforeach; ?>
+                <?php elseif($question['type'] === 'multipleChoice'):
+                    $ans = getAnswers($question['number'],'sampleapplicatio'); ?>
+                    <Select id="question_<?php echo $question['number']; ?>" name="answers[<?php echo $question['number']; ?>]">
+                        <?php foreach($ans as $an): ?>
+                            <option value="<?php echo htmlspecialchars($an['answer']); ?>"
+                                    <?php echo (($saved_answers[$question['number']] ?? '') === $an['answer']) ? 'selected' : ''; ?>>
+                                    <?php echo htmlspecialchars($an['answer']); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </Select>
+                <?php else: ?>
+                    <input type="<?php echo $question['type'];?>" 
+                    id="question_<?php echo $question['number'];?>"
+                    name="answers[<?php echo $question['number'];?>]"
+                    value="<?php echo htmlspecialchars($saved_answers[$question['number']] ?? '');?>"
+                    ></input>
+                <?php endif; ?>
+                <br><br>
+                <?php endwhile; ?>
+                <br><br>
+
+                <button type="submit" name="action" value="save" formnovalidate>
+                    Save Application
+                </button>
+
+                <button type="submit" name="action" value="submit">
+                    Submit Application
+                </button>
+            </form>
+            <?php 
+                endif;
+                elseif($admin):
+                    $id = $_GET['id'];
+                    $result = retrieve_application($id);
+
             ?>
-            <option value="<?php echo $reviewer['id'] ?>"class="application_list_option">
-                <?= htmlspecialchars(($reviewer['first_name'] ?? '') . ' ' . ($reviewer['last_name'] ?? '')) ?>
-            </option>
+                
+                <?php
+                $answers = getQuestions($id);
+
+            foreach ($answers as $answer):
+            ?>
+                <p>
+                    Question <?php echo htmlspecialchars($answer['number']); ?>:
+                    <?php echo htmlspecialchars($answer['question']); ?>
+                </p>
+                <p>
+                    <?php echo htmlspecialchars($answer['answer']); ?>
+                </p>
+                <p> 
+                    comment: <?php echo htmlspecialchars($answer['comment']); ?>
+                </p>
+            <?php endforeach; ?>
+            <form action="Application.php" method='GET'>
+                <label for="CM">Reviewer:</label>
+                <select name="CM" id="CM" class='application_list_select'>
+                    <?php $reviewers = get_cms();
+                    if ($result['reviewer_id'] == NULL): ?>
+                    <option value="Unselected" class='application_list_option'>Unselected</option>
+                    <?php foreach ($reviewers as $reviewer): ?>
+                    <option value="<?php echo $reviewer['id'] ?>" class="application_list_option">
+                        <?= htmlspecialchars(($reviewer['first_name'] ?? '') . ' ' . ($reviewer['last_name'] ?? '')) ?>
+                    </option>                                       
+                    <?php endforeach; 
+                    else:
+                        $reviewer = get_name_from_id($result['reviewer_id']);
+                    ?>  
+                    <option value="<?php echo $result['reviewer_id'] ?>"class="application_list_option">
+                        <?= htmlspecialchars(($reviewer['first_name'] ?? '') . ' ' . ($reviewer['last_name'] ?? '')) ?>
+                    </option>
+                    <option value="Unselected" class='application_list_option'>Unselected</option>
+                    <?php foreach ($reviewers as $reviewer): 
+                        if (!($result['reviewer_id'] === $reviewer['id'])):
+                    ?>
+                    <option value="<?php echo $reviewer['id'] ?>"class="application_list_option">
+                        <?= htmlspecialchars(($reviewer['first_name'] ?? '') . ' ' . ($reviewer['last_name'] ?? '')) ?>
+                    </option>
+                    <?php
+                        endif;
+                        endforeach;    
+                        endif;
+                    ?>
+                </select>
+                <input type='hidden' name='id' value='<?= htmlspecialchars($_GET['id']);?>'/>
+                <button type='submit'>Update Reviewer</button>
+            </form>
+            <br>
+            <p>decision Status: <?php echo $result['decisionStatus'] ?></p>
+            <form action="Application.php" method="GET">
+                <input type='hidden' name='id' value='<?php echo $result['id'] ?>' />
+                <button type='submit' name='reject' value='reject'>Reject</button>
+                <button type='submit' name='accept' value='accept'>Accept</button>
+            </form>
             <?php
-                endif;
-                endforeach;    
-                endif;
+                $scholarship = get_applicant_scholarship($result['id'], $cycle_id);
+                if ($scholarship !== NULL): 
             ?>
-        </select>
-        <input type='hidden' name='id' value='<?= htmlspecialchars($_GET['id']);?>'/>
-           <button type='submit'>Update Reviewer</button>
-    </form>
-    <br>
-    <p>decision Status: <?php echo $result['decisionStatus'] ?></p>
-    <form action="Application.php" method="GET">
-        <input type='hidden' name='id' value='<?php echo $result['id'] ?>' />
-        <button type='submit' name='reject' value='reject'>Reject</button>
-        <button type='submit' name='accept' value='accept'>Accept</button>
-    </form>
-    <?php
-        $scholarship = get_applicant_scholarship($result['id'], $cycle_id);
-        if ($scholarship !== NULL): 
-    ?>
-    <form action='Scholarship.php' method='GET'>
-        <button type='submit' name='id' value='<?php echo $scholarship['scholarship_id'] ?>'>view Scholarship</button>
-    </form>
+            <form action='Scholarship.php' method='GET'>
+                <button type='submit' name='id' value='<?php echo $scholarship['scholarship_id'] ?>'>view Scholarship</button>
+            </form>
 
-<?php     
-        endif;
-    elseif($cm):
-        $id = 0;
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $id = $_POST['application_id'];
-        } else {
-            $id = $_GET['id'];
-        }
-        $result = retrieve_application($id);
-        $questions = getQuestions($id);
+        <?php     
+                endif;
+            elseif($cm):
+                $id = 0;
+                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    $id = $_POST['application_id'];
+                } else {
+                    $id = $_GET['id'];
+                }
+                $result = retrieve_application($id);
+                $questions = getQuestions($id);
 
-        if ($result['reviewer_id'] == $_SESSION['_id']):
-    ?>
+                if ($result['reviewer_id'] == $_SESSION['_id']):
+            ?>
         <!-- Display each question currently defined by the administrator. -->
         <form action="Application.php" method='POST'>
         <?php while ($question = mysqli_fetch_assoc($questions)):
@@ -441,46 +441,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ?>
         </form>
         
-        <?php else:?>
-            <?php while ($question = mysqli_fetch_assoc($questions)):
-            ?>
-                <p><?php echo htmlspecialchars($question['question']) . ": ".  htmlspecialchars($question['answer']); ?> </p>
-            
-            <p>Comment: <?php echo $question['comment']; ?> </p>
-            <!-- <h3><?php echo htmlspecialchars($question['question']); ?></h3> -->
-
-            <?php
-            /*
-            if (isset($result[$answerField])) {
-            echo "<p>" . nl2br(htmlspecialchars($result[$answerField])) . "</p>";
-            }
-            */
+            <?php else:?>
+                <?php while ($question = mysqli_fetch_assoc($questions)):
                 ?>
-
+                    <p><?php echo htmlspecialchars($question['question']) . ": ".  htmlspecialchars($question['answer']); ?> </p>
+                
+                <p>Comment: <?php echo $question['comment']; ?> </p>
+                <!-- <h3><?php echo htmlspecialchars($question['question']); ?></h3> -->
 
                 <?php
-            if($_SESSION['type'] == 'cm' || $_SESSION['type'] == 'Admin')
-            {
-            ?>
-            <?php
-            }
-            ?>
+                /*
+                if (isset($result[$answerField])) {
+                echo "<p>" . nl2br(htmlspecialchars($result[$answerField])) . "</p>";
+                }
+                */
+                    ?>
 
-            <?php
-            if($_SESSION['type'] == 'Applicant' && !empty($question['comment']))
-            {
-            ?>
-                <label for="comments"><strong>Comment</strong></label><br>
 
-            <?php echo nl2br(htmlspecialchars($question['comment'])); ?>
-                
-            <?php
-            }
-            ?>
-            <?php endwhile; ?>
+                    <?php
+                if($_SESSION['type'] == 'cm' || $_SESSION['type'] == 'Admin')
+                {
+                ?>
+                <?php
+                }
+                ?>
+
+                <?php
+                if($_SESSION['type'] == 'Applicant' && !empty($question['comment']))
+                {
+                ?>
+                    <label for="comments"><strong>Comment</strong></label><br>
+
+                <?php echo nl2br(htmlspecialchars($question['comment'])); ?>
+                    
+                <?php
+                }
+                ?>
+                <?php endwhile; ?>
+            <?php endif;?>
         <?php endif;?>
-    <?php endif;?>
         <p><a href="index.php">Back to Dashboard</a></p>
-
     </body>
 </html>
