@@ -1109,7 +1109,7 @@ function get_cms() {
     return $results;
 }
 
-function add_cm($firstname, $lastname, $email, $phone) {
+function add_cm($firstname, $lastname, $email, $phone, $hash) {
 
     $con = connect();
 

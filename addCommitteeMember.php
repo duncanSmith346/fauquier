@@ -38,7 +38,7 @@
         $lastname = $_POST['lastname'];
         $email = $_POST['email'];
         $phone = $_POST['phone'];
-        $success = add_cm($firstname, $lastname, $email, $phone);
+        $success = add_cm($firstname, $lastname, $email, $phone, $hash);
     }
 
 
