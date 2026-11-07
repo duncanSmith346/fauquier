@@ -25,6 +25,9 @@
     }
     require_once('database/dbPersons.php');
     require_once('database/dbQuestions.php');
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $success = removeCM($_POST['id']);
+    }
 ?>
 <!DOCTYPE html>
 <html>
@@ -40,7 +43,7 @@
                     <a href="addCommitteeMember.php" class='navigation_button'> Add Committee Member</a>
                     <a href='index.php' class='navigation_button'> Home</a>
                     <a href="Forms.php" class="navigation_button"> Forms</a>
-                    <a href="index.php" class="navigation_button"> Committee Members</a>
+                    <a href="manageCommitteeMembers.php" class="navigation_button"> Committee Members</a>
                     <a href="personSearch.php" class="navigation_button"> Person Search</a>
                     <a href="logout.php" class="navigation_button"> Log out</a>
                 </div>
@@ -52,10 +55,9 @@
                             echo $cm['first_name'];
                             echo " ";
                             echo $cm['last_name'];
-                        ?>                            ]
-                        <form action="removeCM.php" Method='GET'>
-                            <input type='hidden' name='form' value='sampleapplicatio'/>
-                            <button type='submit' name='number' value='<?php echo $cm['id']?>'>Remove</button>
+                        ?>
+                        <form action="manageCommitteeMembers.php" Method='POST'>
+                            <button type='submit' name='id' value='<?php echo $cm['id']?>'>Remove</button>
                         </form>
                     </div>
                 <?php endforeach ?>

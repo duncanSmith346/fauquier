@@ -1137,3 +1137,24 @@ function add_cm($firstname, $lastname, $email, $phone) {
 
     return $success;
 }
+
+function removeCM($id) {
+    $con=connect();
+    $sql = "DELETE FROM dbPersons WHERE id=?";
+
+    $stmt = mysqli_prepare($con, $sql);
+
+        mysqli_stmt_bind_param(
+        $stmt,
+        "s",
+        $id
+    );
+    mysqli_stmt_execute($stmt);
+
+    $success = mysqli_stmt_get_result($stmt);
+    
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+
+    return $success;
+}
