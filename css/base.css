@@ -1041,3 +1041,21 @@ th.admin_applicatin_table {
     color: white;
     background-color: var(--main-color);
 }
+
+.nav_application {
+    background-color: #31763f;
+    height: 2rem;
+}
+
+.application_header {
+    text-align: center;
+}
+
+.application_back {
+    width: 100%;
+    background-color: d9d9d9;
+}
+
+.application_main {
+    width: 960px;
+}
