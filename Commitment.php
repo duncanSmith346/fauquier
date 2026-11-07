@@ -29,7 +29,7 @@ $questions = getQuestions('samplecommitment');
 
 // Check whether this user already has an application for this cycle.
 $applicant_id = $_SESSION['_id'];
-if ($applicant) {
+if ($cohort) {
     $existing_commitment = get_applicant_commitment(
     $_SESSION['_id'],  // ID of the logged-in user.
     $cycle_id         // Program cycle being checked.
@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     } else {
         // Read the submitted form fields.
-        if ($applicant) {
+        if ($cohort) {
             $answers = $_POST['answers'] ?? [];
 
             // Make sure the applicant answered the questions.
@@ -98,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <h1>Leadership Fauquier Application</h1>
     <?php
-        if ($applicant) :
+        if ($cohort) :
         if (isset($error)):
     ?>
      <!-- Display an error if the application could not be submitted. -->
@@ -109,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php if ($existing_commitment): ?>
 
     <!-- Show the status of an existing application. -->
-     <h2>Application Status</h2>
+     <h2>Cohort Status</h2>
      <p>submitted</p>
 
     <?php else: ?>

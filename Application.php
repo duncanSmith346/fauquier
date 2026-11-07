@@ -97,9 +97,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $error = "Please complete the application.";
 
             } elseif (count(array_filter($answers, function ($answer) {
-                return is_string($answer) && trim($answer) !== '';
+                if (is_array($answer)) {
+                    return count(array_filter($answer, function ($value) {
+                        return trim((string) $value) !== '';
+                })) > 0;
+            }   
+            return is_string($answer) && trim($answer) !== '';
             })) !== count($answers)) {
-                $error = "Please answer every question.";
+            $error = "Please answer every question.";
 
             } else {
                 // Create a unique ID for this application.
@@ -277,14 +282,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php endwhile; ?>
         <br><br>
 
-        <button type="submit" name="action" value="save" formnovalidate>
-              Save Application
+        <button type="submit" name="action" value="save" formnovalidate
+            <?php if (isset($_GET['saved']) && $_GET['saved'] === '1'): ?>
+                style="background-color: green; color: white;"
+            <?php endif; ?>>
+             Save Application
         </button>
 
         <button type="submit" name="action" value="submit">
               Submit Application
         </button>
     </form>
+
+<script>
+    const form = document.querySelector('form[method="POST"]');
+    const saveButton = form.querySelector('button[value="save"]');
+
+    form.addEventListener('input', function () {
+        saveButton.style.backgroundColor = '';
+        saveButton.style.color = '';
+    });
+
+    form.addEventListener('change', function () {
+        saveButton.style.backgroundColor = '';
+        saveButton.style.color = '';
+    });
+</script>
+
  <?php 
     endif;
     elseif($admin):
@@ -306,7 +330,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php echo htmlspecialchars($answer['answer']); ?>
     </p>
     <p> 
-        comment: <?php echo htmlspecialchars($answer['comment']); ?>
+        comment: <?php echo htmlspecialchars($answer['comment'] ?? ''); ?>
     </p>
 <?php endforeach; ?>
     <form action="Application.php" method='GET'>
