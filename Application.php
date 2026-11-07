@@ -97,9 +97,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $error = "Please complete the application.";
 
             } elseif (count(array_filter($answers, function ($answer) {
-                return is_string($answer) && trim($answer) !== '';
+                if (is_array($answer)) {
+                    return count(array_filter($answer, function ($value) {
+                        return trim((string) $value) !== '';
+                })) > 0;
+            }   
+            return is_string($answer) && trim($answer) !== '';
             })) !== count($answers)) {
-                $error = "Please answer every question.";
+            $error = "Please answer every question.";
 
             } else {
                 // Create a unique ID for this application.
@@ -277,85 +282,104 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php endwhile; ?>
                 <br><br>
 
-                <button type="submit" name="action" value="save" formnovalidate>
-                    Save Application
-                </button>
+        <button type="submit" name="action" value="save" formnovalidate
+            <?php if (isset($_GET['saved']) && $_GET['saved'] === '1'): ?>
+                style="background-color: green; color: white;"
+            <?php endif; ?>>
+             Save Application
+        </button>
 
-                <button type="submit" name="action" value="submit">
-                    Submit Application
-                </button>
-            </form>
-            <?php 
-                endif;
-                elseif($admin):
-                    $id = $_GET['id'];
-                    $result = retrieve_application($id);
+        <button type="submit" name="action" value="submit">
+              Submit Application
+        </button>
+    </form>
+
+<script>
+    const form = document.querySelector('form[method="POST"]');
+    const saveButton = form.querySelector('button[value="save"]');
+
+    form.addEventListener('input', function () {
+        saveButton.style.backgroundColor = '';
+        saveButton.style.color = '';
+    });
+
+    form.addEventListener('change', function () {
+        saveButton.style.backgroundColor = '';
+        saveButton.style.color = '';
+    });
+</script>
+
+ <?php 
+    endif;
+    elseif($admin):
+        $id = $_GET['id'];
+        $result = retrieve_application($id);
 
             ?>
                 
                 <?php
                 $answers = getQuestions($id);
 
-            foreach ($answers as $answer):
+    foreach ($answers as $answer):
+?>
+    <p>
+        Question <?php echo htmlspecialchars($answer['number']); ?>:
+        <?php echo htmlspecialchars($answer['question']); ?>
+    </p>
+    <p>
+        <?php echo htmlspecialchars($answer['answer']); ?>
+    </p>
+    <p> 
+        comment: <?php echo htmlspecialchars($answer['comment'] ?? ''); ?>
+    </p>
+<?php endforeach; ?>
+    <form action="Application.php" method='GET'>
+        <label for="CM">Reviewer:</label>
+        <select name="CM" id="CM" class='application_list_select'>
+            <?php $reviewers = get_cms();
+            if ($result['reviewer_id'] == NULL): ?>
+            <option value="Unselected" class='application_list_option'>Unselected</option>
+            <?php foreach ($reviewers as $reviewer): ?>
+            <option value="<?php echo $reviewer['id'] ?>" class="application_list_option">
+                <?= htmlspecialchars(($reviewer['first_name'] ?? '') . ' ' . ($reviewer['last_name'] ?? '')) ?>
+            </option>                                       
+            <?php endforeach; 
+            else:
+                $reviewer = get_name_from_id($result['reviewer_id']);
+            ?>  
+            <option value="<?php echo $result['reviewer_id'] ?>"class="application_list_option">
+                <?= htmlspecialchars(($reviewer['first_name'] ?? '') . ' ' . ($reviewer['last_name'] ?? '')) ?>
+            </option>
+            <option value="Unselected" class='application_list_option'>Unselected</option>
+            <?php foreach ($reviewers as $reviewer): 
+                if (!($result['reviewer_id'] === $reviewer['id'])):
             ?>
-                <p>
-                    Question <?php echo htmlspecialchars($answer['number']); ?>:
-                    <?php echo htmlspecialchars($answer['question']); ?>
-                </p>
-                <p>
-                    <?php echo htmlspecialchars($answer['answer']); ?>
-                </p>
-                <p> 
-                    comment: <?php echo htmlspecialchars($answer['comment']); ?>
-                </p>
-            <?php endforeach; ?>
-            <form action="Application.php" method='GET'>
-                <label for="CM">Reviewer:</label>
-                <select name="CM" id="CM" class='application_list_select'>
-                    <?php $reviewers = get_cms();
-                    if ($result['reviewer_id'] == NULL): ?>
-                    <option value="Unselected" class='application_list_option'>Unselected</option>
-                    <?php foreach ($reviewers as $reviewer): ?>
-                    <option value="<?php echo $reviewer['id'] ?>" class="application_list_option">
-                        <?= htmlspecialchars(($reviewer['first_name'] ?? '') . ' ' . ($reviewer['last_name'] ?? '')) ?>
-                    </option>                                       
-                    <?php endforeach; 
-                    else:
-                        $reviewer = get_name_from_id($result['reviewer_id']);
-                    ?>  
-                    <option value="<?php echo $result['reviewer_id'] ?>"class="application_list_option">
-                        <?= htmlspecialchars(($reviewer['first_name'] ?? '') . ' ' . ($reviewer['last_name'] ?? '')) ?>
-                    </option>
-                    <option value="Unselected" class='application_list_option'>Unselected</option>
-                    <?php foreach ($reviewers as $reviewer): 
-                        if (!($result['reviewer_id'] === $reviewer['id'])):
-                    ?>
-                    <option value="<?php echo $reviewer['id'] ?>"class="application_list_option">
-                        <?= htmlspecialchars(($reviewer['first_name'] ?? '') . ' ' . ($reviewer['last_name'] ?? '')) ?>
-                    </option>
-                    <?php
-                        endif;
-                        endforeach;    
-                        endif;
-                    ?>
-                </select>
-                <input type='hidden' name='id' value='<?= htmlspecialchars($_GET['id']);?>'/>
-                <button type='submit'>Update Reviewer</button>
-            </form>
-            <br>
-            <p>decision Status: <?php echo $result['decisionStatus'] ?></p>
-            <form action="Application.php" method="GET">
-                <input type='hidden' name='id' value='<?php echo $result['id'] ?>' />
-                <button type='submit' name='reject' value='reject'>Reject</button>
-                <button type='submit' name='accept' value='accept'>Accept</button>
-            </form>
+            <option value="<?php echo $reviewer['id'] ?>"class="application_list_option">
+                <?= htmlspecialchars(($reviewer['first_name'] ?? '') . ' ' . ($reviewer['last_name'] ?? '')) ?>
+            </option>
             <?php
-                $scholarship = get_applicant_scholarship($result['id'], $cycle_id);
-                if ($scholarship !== NULL): 
+                endif;
+                endforeach;    
+                endif;
             ?>
-            <form action='Scholarship.php' method='GET'>
-                <button type='submit' name='id' value='<?php echo $scholarship['scholarship_id'] ?>'>view Scholarship</button>
-            </form>
+        </select>
+        <input type='hidden' name='id' value='<?= htmlspecialchars($_GET['id']);?>'/>
+           <button type='submit'>Update Reviewer</button>
+    </form>
+    <br>
+    <p>decision Status: <?php echo $result['decisionStatus'] ?></p>
+    <form action="Application.php" method="GET">
+        <input type='hidden' name='id' value='<?php echo $result['id'] ?>' />
+        <button type='submit' name='reject' value='reject'>Reject</button>
+        <button type='submit' name='accept' value='accept'>Accept</button>
+    </form>
+    <?php
+        $scholarship = get_applicant_scholarship($result['id'], $cycle_id);
+        if ($scholarship !== NULL): 
+    ?>
+    <form action='Scholarship.php' method='GET'>
+        <button type='submit' name='id' value='<?php echo $scholarship['scholarship_id'] ?>'>view Scholarship</button>
+    </form>
 
         <?php     
                 endif;
