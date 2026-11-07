@@ -1041,6 +1041,7 @@ th.admin_applicatin_table {
     border-color: var(white);
     color: white;
     background-color: var(--main-color);
+    padding: .25rem;
 }
 
 .nav_application {
@@ -1072,4 +1073,13 @@ div.paging {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+
+a.adminlist_applicationName {
+    color: var(--button-font-color);
+    text-decoration: none;
+}
+a.adminlist_applicationName:hover {
+    color: green;   
 }
