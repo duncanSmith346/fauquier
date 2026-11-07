@@ -310,7 +310,8 @@ CREATE TABLE `dbQuestions` (
 CREATE TABLE `dbAnswers` (
   `number` int(11) NOT NULL, 
   `answer` text, 
-  `isSample` boolean
+  `isSample` boolean,
+  `application_id`  varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --

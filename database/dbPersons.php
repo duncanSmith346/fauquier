@@ -1108,3 +1108,53 @@ function get_cms() {
 
     return $results;
 }
+
+function add_cm($firstname, $lastname, $email, $phone, $hash) {
+
+    $con = connect();
+
+    $sql = "INSERT INTO dbPersons
+            (id, first_name, last_name, type, email, phone1, password, force_password_change)
+            VALUES (?, ?, ?, 'cm', ?, ?, ?, '1')";
+
+    $stmt = mysqli_prepare($con, $sql);
+
+    mysqli_stmt_bind_param(
+        $stmt,
+        "ssssss",
+        $email,
+        $firstname,
+        $lastname,
+        $email,
+        $phone,
+        $hash
+    );
+
+    $success = mysqli_stmt_execute($stmt);
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+
+    return $success;
+}
+
+function removeCM($id) {
+    $con=connect();
+    $sql = "DELETE FROM dbPersons WHERE id=?";
+
+    $stmt = mysqli_prepare($con, $sql);
+
+        mysqli_stmt_bind_param(
+        $stmt,
+        "s",
+        $id
+    );
+    mysqli_stmt_execute($stmt);
+
+    $success = mysqli_stmt_get_result($stmt);
+    
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+
+    return $success;
+}

@@ -588,3 +588,25 @@ function Admin_list($page) {
     mysqli_close($con);
     return $answers;
 }
+
+function get_count_admin_list() {
+    $con = connect();
+
+    $sql = "SELECT count(dbapplication.id)
+            FROM dbPersons
+            LEFT JOIN dbApplication ON dbApplication.applicant_id=dbPersons.id
+            LEFT JOIN dbCohort ON dbCohort.person_id=dbPersons.id
+            LEFT JOIN dbCommitment ON dbCohort.id=dbCommitment.cohort_id
+            WHERE dbPersons.type='applicant' OR dbPersons.type='cohort'";
+    
+    $stmt = mysqli_prepare($con, $sql);
+
+    mysqli_stmt_execute($stmt);
+
+    $result = mysqli_stmt_get_result($stmt);
+    $number = mysqli_fetch_assoc($result);
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+    return $number;
+}

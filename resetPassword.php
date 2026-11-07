@@ -56,7 +56,7 @@
 <html>
     <head>
         <?php require_once('universal.inc') ?>
-        <title>Empowerhouse VMS | Reset Password</title>
+        <title>Fauquier Leadership | Reset Password</title>
     </head>
     <body>
         <?php require_once('header.php') ?>
