@@ -252,7 +252,14 @@ function submit_application_with_answers($id, $applicant_id, $cycle_id, $answers
 
         foreach ($answers as $number => $answer) {
             $number = (int) $number;
-            $answer = trim($answer);
+            if (is_array($answer)) {
+                $answer = implode(", ", array_filter($answer, function ($value) {
+                return $value !== ''; 
+                }));
+            }
+
+            $answer = trim((string) $answer);
+            
             $question = getQuestion('sampleapplicatio', $number);
             $sql = "INSERT INTO dbQuestions (number, application_id, answer, question, type)
                 VALUES (?, ?, ?, ?, ?)";
@@ -312,7 +319,15 @@ function submit_Scholarship_with_answers($scholarship_id, $application_id, $cycl
 
         foreach ($answers as $number => $answer) {
             $number = (int) $number;
-            $answer = trim($answer);
+            
+            if (is_array($answer)) {
+                $answer = implode(", ", array_filter($answer, function ($value) {
+                return $value !== ''; 
+                }));
+            }
+
+$answer = trim((string) $answer);
+
             $question = getQuestion('samplescholarshi', $number);
             $sql = "INSERT INTO dbQuestions (number, application_id, answer, question, type)
                 VALUES (?, ?, ?, ?, ?)";
