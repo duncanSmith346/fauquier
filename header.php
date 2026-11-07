@@ -30,6 +30,9 @@
             </ul>
         </nav>';
     } else if ($_SESSION['logged_in']) {
+        if (isset($_SESSION['_id'])) {
+            $person = retrieve_person($_SESSION['_id']);
+        }
 
         /*         * Set our permission array.
          * anything a guest can do, a volunteer and manager can also do
@@ -125,14 +128,14 @@
             echo('<a class="navbar-brand" id="vms-logo">Fauquier Leadership</a></span><img id="menu-toggle" src="images/menu.png"></span>');
             echo('<ul>');
             //echo " <br><b>"."Gwyneth's Gift Homebase"."</b>|"; //changed: 'Homebase' to 'Gwyneth's Gift Homebase'
-	        if ($_SESSION['access_level'] >= 1) {
+	        if ($_SESSION['access_level'] >= 1 && !$admin) {
                 echo('<li><a class="nav-link active" aria-current="page" href="' . $path . 'index.php">Home</a></li>');
                 // echo('<li class="nav-item"><a class="nav-link active" aria-current="page" href="' . $path . 'about.php">About</a></li>');
                 // echo('<li class="nav-item"><a class="nav-link active" aria-current="page" href="' . $path . 'help.php?helpPage=' . $current_page . '" target="_BLANK">Help</a></li>');
                 echo('<span class="nav-divider">|</span>');
                 echo('<span class="navbar-brand">Events</span>');
                 echo('<li class="sub-item"><a class="nav-link active" aria-current="page" href="' . $path . 'calendar.php">Calendar</a></li>');
-		echo('<li class="sub-item"><a class="nav-link active" aria-current="page" href="' . $path . 'CourseEval.php">Course Evaluation</a></li>');
+		        echo('<li class="sub-item"><a class="nav-link active" aria-current="page" href="' . $path . 'CourseEval.php">Course Evaluation</a></li>');
                 echo('<li class="sub-item"><a class="nav-link active" aria-current="page" href="' . $path . 'eventSearch.php">Search</a></li>');
                 //echo('<button type="button" class="btn btn-link"><a href="' . $path . 'index.php" class="link-primary">home</a></button>');
 	        	//echo(' | <button type="button" class="btn btn-link"><a href="' . $path . 'about.php">about</a></button>');
@@ -140,7 +143,7 @@
 	            //echo(' | calendars: <a href="' . $path . 'calendar.php?venue=bangor'.''.'">Bangor, </a>');
 	            //echo(' | <button type="button" class="btn btn-link"><a href="' . $path . 'calendar.php?venue=portland'.''.'">calendar</a></button>'); //added before '<a': |, changed: 'Portland' to 'calendar'
 	        }
-	        if ($_SESSION['access_level'] >= 2) {
+	        if ($_SESSION['access_level'] >= 2 && !$admin) {
 	            //echo('<br>master schedules: <a href="' . $path . 'viewSchedule.php?venue=portland'."".'">Portland, </a>');
 	            //echo('<a href="' . $path . 'viewSchedule.php?venue=bangor'."".'">Bangor</a>');
 		    echo('<li class="sub-item"><a class="nav-link active" aria-current="page" href="' . $path . 'verify.php">Verify</a></li>');
@@ -152,8 +155,10 @@
 			        <li class="sub-item"><a class="nav-link active" aria-current="page" href="register.php">Add Volunteer</a></li>'); 
 	            echo('<li class="sub-item"><a class="nav-link active" aria-current="page" href="' . $path . 'report.php">Reports</a></li>');
 	        }
-	        echo('<li><a class="nav-link active" aria-current="page" href="' . $path . 'logout.php">Log out</a></li>');
-            echo '</ul></nav>';
+            if (!$admin) {
+                echo('<li><a class="nav-link active" aria-current="page" href="' . $path . 'logout.php">Log out</a></li>');
+                echo '</ul></nav>';
+            }
         }
         
     }

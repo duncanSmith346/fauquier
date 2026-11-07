@@ -1034,18 +1034,23 @@ td.admin_applicatin_table {
     color: white;
     background-color: var(--main-color);
     padding: .25rem;
+    text-align: center;
+    border-radius: .3rem;
 }
 
 th.admin_applicatin_table {
     border: 1px solid;
     border-color: var(white);
     color: white;
-    background-color: var(--main-color);
+    background-color: var(--accent-color);
     padding: .25rem;
+    border-radius: .3rem;
+    text-align: center;
+    font-size: 21px;
 }
 
 .nav_application {
-    background-color: #31763f;
+    background-color: var(--accent-color);
     height: 2rem;
 }
 
@@ -1067,12 +1072,16 @@ button.dashboardPaging {
     align-items: center;
     width: 4rem;
     align-content: center;
+    text-align: center;
 }
 
 div.paging {
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: .5rem;
+    position: relative;
+    right: 25px;
 }
 
 
