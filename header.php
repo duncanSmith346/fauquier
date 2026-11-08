@@ -30,8 +30,11 @@
             </ul>
         </nav>';
     } else if ($_SESSION['logged_in']) {
+        include_once('database/dbPersons.php');
+        $admin = 0;
         if (isset($_SESSION['_id'])) {
             $person = retrieve_person($_SESSION['_id']);
+            $admin = $person->get_type()[0] == 'admin';
         }
 
         /*         * Set our permission array.
