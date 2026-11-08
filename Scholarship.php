@@ -91,95 +91,102 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Application - Leadership Fauquier</title>
-</head>
-<body>
-
-    <h1>Leadership Fauquier Application</h1>
-    <?php
-        if ($applicant) :
-        if (isset($error)):
-    ?>
-     <!-- Display an error if the application could not be submitted. -->
-     <p style="color: red;">
-        <?php echo htmlspecialchars($error); ?>
-     </p>
-    <?php endif; ?>
-    <?php if ($existing_Scholarship): ?>
-
-    <!-- Show the status of an existing application. -->
-     <h2>Application Status</h2>
-     <p>submitted</p>
-
-    <?php else: ?>
-
-    <!-- No application exists yet, so show the form. -->
-
-    <form method="POST">
-        <?php
-       // Display each question currently defined by the administrator.
-        while ($question = mysqli_fetch_assoc($questions)):
-        ?>
-            <label for="question_<?php echo $question['number']; ?>">
-               <?php echo htmlspecialchars($question['question']); ?>
-            </label>
-
-            <?php if ($question['type'] === 'textarea'): ?>
-                <textarea
-                    id="question_<?php echo $question['number']; ?>"
-                    name="answers[<?php echo $question['number']; ?>]"
-                    rows="4"
-                    required
-                ></textarea>
-            <?php elseif($question['type'] === 'checkbox'): 
-                $ans = getAnswers($question['number'],'samplescholarshi');
-                foreach($ans as $an):
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/base.css" type="text/css" />
+        <link rel="icon" type="image/x-icon" href="https://leadershipfauquier.org/wp-content/uploads/2022/09/LeadershipFauquierLogo-404x236-1.png">
+        <title>Manage Scholarship - Leadership Fauquier</title>
+    </head>
+    <body>
+        <nav class="nav_application"></nav>
+        <h2 class="application_header">
+            <img src="https://leadershipfauquier.org/wp-content/uploads/2022/09/LeadershipFauquierLogo-404x236-1.png" alt="leadership fauquier" class="application_header_img"> COHORT SCHOLARSHIP
+        </h2>
+        <main>
+            <div class="application_main">
+                <?php
+                    if ($applicant) :
+                    if (isset($error)):
                 ?>
-                    <br>
-                    <input type="checkbox" id="question_<?php echo $question['number']; ?>" name="answers[<?php echo $question['number']; ?>]" value='<?php echo $an['answer'];?>'><?php echo $an['answer'];?>
+                <!-- Display an error if the application could not be submitted. -->
+                <p style="color: red;">
+                    <?php echo htmlspecialchars($error); ?>
+                </p>
+                <?php endif; ?>
+                <?php if ($existing_Scholarship): ?>
+
+                <!-- Show the status of an existing application. -->
+                <h2>Application Status</h2>
+                <p>submitted</p>
+
+                <?php else: ?>
+
+                <!-- No application exists yet, so show the form. -->
+
+                <form method="POST">
+                    <?php
+                // Display each question currently defined by the administrator.
+                    while ($question = mysqli_fetch_assoc($questions)):
+                    ?>
+                        <label for="question_<?php echo $question['number']; ?>">
+                        <?php echo htmlspecialchars($question['question']); ?>
+                        </label>
+
+                        <?php if ($question['type'] === 'textarea'): ?>
+                            <textarea
+                                id="question_<?php echo $question['number']; ?>"
+                                name="answers[<?php echo $question['number']; ?>]"
+                                rows="4"
+                                required
+                            ></textarea>
+                        <?php elseif($question['type'] === 'checkbox'): 
+                            $ans = getAnswers($question['number'],'samplescholarshi');
+                            foreach($ans as $an):
+                            ?>
+                                <br>
+                                <input type="checkbox" id="question_<?php echo $question['number']; ?>" name="answers[<?php echo $question['number']; ?>]" value='<?php echo $an['answer'];?>'><?php echo $an['answer'];?>
+                            <?php endforeach; ?>
+                        <?php elseif($question['type'] === 'multipleChoice'):
+                            $ans = getAnswers($question['number'],'samplescholarshi'); ?>
+                            <Select id="question_<?php echo $question['number']; ?>" name="answers[<?php echo $question['number']; ?>]">
+                                <?php foreach($ans as $an): ?>
+                                    <option type="select" id="question_<?php echo $question['number']; ?>" value='<?php echo $an['answer'];?>'><?php echo $an['answer'];?></option>
+                                <?php endforeach; ?>
+                            </Select>
+                        <?php else: ?>
+                            <input type="<?php echo $question['type']; ?>" id="question_<?php echo $question['number']; ?>" name="answers[<?php echo $question['number']; ?>]"></input>
+                        <?php endif; ?>
+                        <br><br>
+                    <?php endwhile; ?>
+                    <br><br>
+
+                    <button class="application_buttons" type="submit">Submit Application</button>
+                </form>
+                <?php 
+                    endif;
+                    elseif($admin):
+                        $id = $_GET['id'];
+
+                ?>
+                
+                <?php
+                $answers = getQuestions($id);
+
+                foreach ($answers as $answer):
+                ?>
+                <p>
+                    Question <?php echo htmlspecialchars($answer['number']); ?>:
+                    <?php echo htmlspecialchars($answer['question']); ?>
+                </p>
+                <p>
+                    <?php echo htmlspecialchars($answer['answer']); ?>
+                </p>
+
                 <?php endforeach; ?>
-            <?php elseif($question['type'] === 'multipleChoice'):
-                $ans = getAnswers($question['number'],'samplescholarshi'); ?>
-                <Select id="question_<?php echo $question['number']; ?>" name="answers[<?php echo $question['number']; ?>]">
-                    <?php foreach($ans as $an): ?>
-                        <option type="select" id="question_<?php echo $question['number']; ?>" value='<?php echo $an['answer'];?>'><?php echo $an['answer'];?></option>
-                    <?php endforeach; ?>
-                </Select>
-            <?php else: ?>
-                <input type="<?php echo $question['type']; ?>" id="question_<?php echo $question['number']; ?>" name="answers[<?php echo $question['number']; ?>]"></input>
-            <?php endif; ?>
-            <br><br>
-        <?php endwhile; ?>
-        <br><br>
-
-        <button type="submit">Submit Application</button>
-    </form>
- <?php 
-    endif;
-    elseif($admin):
-        $id = $_GET['id'];
-
-?>
-    
-    <?php
-    $answers = getQuestions($id);
-
-    foreach ($answers as $answer):
-?>
-    <p>
-        Question <?php echo htmlspecialchars($answer['number']); ?>:
-        <?php echo htmlspecialchars($answer['question']); ?>
-    </p>
-    <p>
-        <?php echo htmlspecialchars($answer['answer']); ?>
-    </p>
-
-<?php endforeach; ?>
-<?php endif; ?>
-    <p><a href="index.php">Back to Dashboard</a></p>
-
-</body>
+                <?php endif; ?>
+                <p><a href="index.php">Back to Dashboard</a></p>
+            </div>
+        </main>
+    </body>
 </html>

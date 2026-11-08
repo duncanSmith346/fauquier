@@ -105,6 +105,11 @@ header > img {
     height: 5rem;
 }
 
+h2 > img {
+    max-width: 10%;
+    height: auto;
+}
+
 nav {
     font-size: 2rem;
     display: flex;
@@ -1044,12 +1049,16 @@ th.admin_applicatin_table {
 }
 
 .nav_application {
-    background-color: #31763f;
+    background-color: var(--accent-color);
     height: 2rem;
 }
 
 .application_header {
     text-align: center;
+    display: block;
+}
+.application_header_img {
+    vertical-align:middle;
 }
 
 .application_back {
@@ -1059,8 +1068,28 @@ th.admin_applicatin_table {
 
 .application_main {
     width: 960px;
-    padding: .25rem;
+    margin: auto;
 }
+
+.application_responses {
+    border: 3px solid var(--main-color);
+    margin: 0px;
+    padding: 7px;
+}
+
+.application_labels {
+    display: block;
+    text-align: center;
+}
+
+.application_buttons {
+    display: block;
+    margin: auto;
+    width: 450px;
+    margin-bottom: 1rem;
+}
+
+
 
 button.dashboardPaging {
     align-items: center;

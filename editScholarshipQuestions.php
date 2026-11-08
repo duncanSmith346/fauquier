@@ -51,9 +51,9 @@
                     <div class='question_card'>
                         <?php
                         echo $question['number'];
-                        echo " ";
+                        echo ". ";
                         echo $question['question'];
-                        echo " ";
+                        echo " -- ";
                         echo $question['type'];
                         if ($question['type'] === "multipleChoice" || $question['type'] === "checkbox"):
                         ?>
