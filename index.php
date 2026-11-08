@@ -201,7 +201,7 @@
                                 <!--Applicant-->
                                 <td class='admin_applicatin_table'>
                                     <?php if ($result['appid'] !== NULL):?>
-                                    <a href='Application.php?id=<?= urldecode($result['appid'])?>' class='href_application_card'>
+                                    <a href='Application.php?id=<?= urldecode($result['appid'])?>' class='adminlist_applicationName'>
                                     <?php echo $result['fullname'];?></a>
                                     <?php 
                                     else: 
