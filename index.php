@@ -245,8 +245,10 @@
                                 <td class='admin_applicatin_table'>
                                     <?php 
                                     if ($result['commitment'] === NULL) echo 'missing';
-                                    elseif ($result['dbCommitment.submittedDate'] === NULL) echo 'in progress';
-                                    else echo 'complete';  
+                                    elseif ($result['submittedDate'] === NULL) echo 'in progress'; 
+                                    else echo '<a href="Commitment.php?id=' .
+                                         urlencode($result['commitment']) .
+                                         '" class="adminlist_applicationName">complete</a>';
                                     ?>
                                 </td>
                                 <!--Tuition Status-->
@@ -370,7 +372,7 @@
                     <img src="images/view-calendar.svg">
                     <span>View Calendar</span>
                 </div>
-                <div class="dashboard-item" data-link="documents.php">
+                <div class="dashboard-item" data-link="Commitment.php">
                     <img src="images/create-report.svg">
                     <span>Commitment Form</span>
                 </div>
@@ -409,19 +411,31 @@
             </div>
             <?php endif ?>
 
-            <!-- Dashboard for if Applicant -->
-            <?php if ($applicant): ?>
-            <div id="dashboard">
-                <div class="dashboard-item" data-link="Application.php">
-                    <img src="images/document.svg">
-                    <span style="text-align:center;">Manage Application</span>
-                </div>
-                <div class="dashboard-item" data-link="Scholarship.php">
-                    <img src="images/document.svg">
-                    <span style="text-align:center;">Manage Scholarship</span>
-                </div>        
-            </div>    
-            <?php endif; ?>    
+            <!-- <!-- Dashboard for if Applicant -->
+<?php if ($applicant): ?>
+    <?php
+        $application = get_applicant_application($_SESSION['_id'], '2026');
+    ?>
+
+    <div id="dashboard">
+        <div class="dashboard-item" data-link="Application.php">
+            <img src="images/document.svg">
+            <span style="text-align:center;">Manage Application</span>
+        </div>
+
+        <?php if ($application): ?>
+            <div class="dashboard-item" data-link="Scholarship.php">
+                <img src="images/document.svg">
+                <span style="text-align:center;">Manage Scholarship</span>
+            </div>
+        <?php else: ?>
+            <div class="dashboard-item" style="opacity: 0.4; cursor: not-allowed;">
+                <img src="images/document.svg">
+                <span style="text-align:center;">Manage Scholarship</span>
+            </div>
+        <?php endif; ?>
+    </div>
+<?php endif; ?> 
 
         </main>
     </body>

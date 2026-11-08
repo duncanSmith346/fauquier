@@ -31,9 +31,16 @@ $questions = getQuestions('samplescholarshi');
 $applicant_id = $_SESSION['_id'];
 if ($applicant) {
     $application_id = get_applicant_application($applicant_id, $cycle_id);
+
+    // Require an application before accessing scholarships.
+    if (!$application_id) {
+        header("Location: index.php");
+        exit;
+    }
+
     $existing_Scholarship = get_applicant_scholarship(
-        $application_id['id'],  // ID of the logged-in user.
-        $cycle_id         // Program cycle being checked.
+        $application_id['id'],
+        $cycle_id
     );
 }
 

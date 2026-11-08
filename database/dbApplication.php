@@ -190,6 +190,59 @@ function update_choice($choice, $application_id) {
     return $success;
 }
 
+//ties an application_id to a cohort.
+function create_cohort($application_id) {
+    $application = retrieve_application($application_id);
+
+    if (!$application) {
+        return false;
+    }
+
+    $con = connect();
+
+    // Check whether this application already has a cohort record.
+    $sql = "SELECT id FROM dbCohort WHERE Application_id = ?";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "s", $application_id);
+    mysqli_stmt_execute($stmt);
+
+    $result = mysqli_stmt_get_result($stmt);
+    $existing = mysqli_fetch_assoc($result);
+
+    mysqli_stmt_close($stmt);
+
+    if ($existing) {
+       mysqli_close($con);
+       return true;
+    }
+
+    $cohort_id = bin2hex(random_bytes(16));
+
+    $sql = "INSERT INTO dbCohort
+           (id, person_id, Application_id, dateAccepted,
+           onboardingAppointment_id, Cycle_id)
+           VALUES (?, ?, ?, CURRENT_DATE, NULL, ?)";
+
+    $stmt = mysqli_prepare($con, $sql);
+
+    mysqli_stmt_bind_param(
+        $stmt,
+        "ssss",
+        $cohort_id,
+        $application['applicant_id'],
+        $application_id,
+        $application['cycle_id']
+    );
+
+    $success = mysqli_stmt_execute($stmt);
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+
+    return $success;
+}
+
+
 // Save an applicant's answers to dynamic questions
 function save_application_answers($application_id, $answers) {
     $con = connect();
@@ -609,4 +662,128 @@ function get_count_admin_list() {
     mysqli_stmt_close($stmt);
     mysqli_close($con);
     return $number;
+}
+
+function get_applicant_commitment($person_id, $cycle_id) {
+    $con = connect();
+
+    $sql = "SELECT dbCommitment.*
+            FROM dbCommitment
+            INNER JOIN dbCohort
+                ON dbCommitment.cohort_id = dbCohort.id
+            WHERE dbCohort.person_id = ?
+              AND dbCommitment.cycle_id = ?";
+
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "ss", $person_id, $cycle_id);
+    mysqli_stmt_execute($stmt);
+
+    $result = mysqli_stmt_get_result($stmt);
+    $commitment = mysqli_fetch_assoc($result);
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+
+    return $commitment ?: null;
+}
+
+
+// Submit a cohort commitment form and its answers.
+function submit_commitment_with_answers($commitment_id, $person_id, $cycle_id, $answers) {
+    $con = connect();
+
+    try {
+        mysqli_begin_transaction($con);
+
+        // Find this person's cohort record for the current cycle.
+        $sql = "SELECT id FROM dbCohort
+                WHERE person_id = ? AND Cycle_id = ?
+                LIMIT 1";
+
+        $stmt = mysqli_prepare($con, $sql);
+        mysqli_stmt_bind_param($stmt, "ss", $person_id, $cycle_id);
+        mysqli_stmt_execute($stmt);
+
+        $result = mysqli_stmt_get_result($stmt);
+        $cohort = mysqli_fetch_assoc($result);
+        mysqli_stmt_close($stmt);
+
+        if (!$cohort) {
+            throw new Exception("No cohort record found.");
+        }
+
+        $cohort_id = $cohort['id'];
+
+        // Create the commitment record.
+        $sql = "INSERT INTO dbCommitment
+                (commitment_id, cohort_id, commitmentStatus,
+                 submittedDate, createdAt, cycle_id)
+                VALUES (?, ?, 'submitted', CURRENT_DATE,
+                        CURRENT_DATE, ?)";
+
+        $stmt = mysqli_prepare($con, $sql);
+        mysqli_stmt_bind_param(
+            $stmt, "sss", $commitment_id, $cohort_id, $cycle_id
+        );
+
+        if (!mysqli_stmt_execute($stmt)) {
+            throw new Exception(mysqli_stmt_error($stmt));
+        }
+
+        mysqli_stmt_close($stmt);
+
+        // Save each answer.
+        foreach ($answers as $number => $answer) {
+            $number = (int) $number;
+
+            if (is_array($answer)) {
+                $answer = implode(", ", array_filter(
+                    $answer,
+                    static function ($value) {
+                        return is_scalar($value)
+                            && trim((string) $value) !== '';
+                    }
+                ));
+            }
+
+            $answer = trim((string) $answer);
+            $question = getQuestion('samplecommitment', $number);
+
+            if (!$question) {
+                throw new Exception("Question not found: " . $number);
+            }
+
+            $sql = "INSERT INTO dbQuestions
+                    (number, application_id, answer, question, type)
+                    VALUES (?, ?, ?, ?, ?)";
+
+            $stmt = mysqli_prepare($con, $sql);
+            mysqli_stmt_bind_param(
+                $stmt,
+                "issss",
+                $number,
+                $commitment_id,
+                $answer,
+                $question['question'],
+                $question['type']
+            );
+
+            if (!mysqli_stmt_execute($stmt)) {
+                throw new Exception(mysqli_stmt_error($stmt));
+            }
+
+            mysqli_stmt_close($stmt);
+        }
+
+        mysqli_commit($con);
+        mysqli_close($con);
+        return true;
+
+    } catch (Throwable $e) {
+        mysqli_rollback($con);
+        mysqli_close($con);
+
+        error_log("Commitment submission failed: " . $e->getMessage());
+        return false;
+    }
 }

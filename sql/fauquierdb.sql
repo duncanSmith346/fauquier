@@ -270,9 +270,10 @@ CREATE TABLE `dbCohort` (
   `person_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `Application_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `dateAccepted` date not NULL,
-  `onboardingAppointment_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `onboardingAppointment_id` varchar(256) DEFAULT NULL,
   `Cycle_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `acceptanceConfirmedAt` date
+  `acceptanceConfirmedAt` date,
+  UNIQUE KEY `unique_cohort_application` (`Application_id`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -371,8 +372,8 @@ CREATE TABLE `dbScholarships` (
 --
 
 CREATE TABLE `dbCommitment` (
-  `commitment_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
-  `cohort_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `commitment_id` varchar(256) NOT NULL,
+  `cohort_id` varchar(256) NOT NULL,
   `commitmentStatus` text,
   `submittedDate` date,
   `tuitionStatus` boolean,
@@ -384,7 +385,9 @@ CREATE TABLE `dbCommitment` (
   `allergyInformation` text,
   `selfAssessmentSubmittedAt` date,
   `biography` text,
-  `cycle_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
+  `cycle_id` varchar(256) NOT NULL,
+  PRIMARY KEY (`commitment_id`),
+  UNIQUE KEY `unique_commitment_cohort` (`cohort_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --

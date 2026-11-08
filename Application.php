@@ -170,9 +170,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ($choice == 'accept') {
                 $application = retrieve_application($id);
-                update_type($application['applicant_id'], 'cohort');
+                if (create_cohort($id)) {
+                     update_type($application['applicant_id'], 'cohort');
+                } else {
+                     $success = false;
+                }
             }
-            
         }
         if ($success) {
             header("Location: index.php");
