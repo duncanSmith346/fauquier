@@ -108,7 +108,7 @@
         		<label for="password">Password</label>
                 <input type="password" name="password" placeholder="Enter your password" required>
                 <input type="submit" name="login" value="Log in">
-                <p>Or <a href="register.php">register as a new volunteer</a>!</p>
+                <p>Or <a href="register.php">register as a new applicant</a>!</p>
             </form>
         </main>
     </body>

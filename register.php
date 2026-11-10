@@ -1,6 +1,7 @@
 <?php
     // Author: Lauren Knight
     // Description: Registration page for new volunteers
+    // Edited for LFQ by Alexander Lech
     session_cache_expire(30);
     session_start();
     
@@ -30,7 +31,7 @@
 <html>
 <head>
     <?php require_once('universal.inc'); ?>
-    <title>Empowerhouse VMS | Register <?php if ($loggedIn) echo ' New Volunteer' ?></title>
+    <title>Register - Leadership Fauquier <?php if ($loggedIn) echo ' New Cohort' ?></title>
 </head>
 <body>
     <?php
@@ -53,7 +54,7 @@
                 'first-name', 'last-name', 'birthdate',
                 'address', 'city', 'state', 'zip', 
                 'email', 'phone', 'phone-type', 'contact-when', 'contact-method',
-                'start-date', 'shirt-size', 'password', 'gender', 'role'
+                'start-date', 'shirt-size', 'password', 'gender', 'type'
             );
             $errors = false;
             if (!wereRequiredFieldsSubmitted($args, $required)) {
@@ -125,8 +126,8 @@
             }
 
             // Wade - adding the role to the person here.
-            $role = $args['role-type'];
-            if (!valueConstrainedTo($role, ['Volunteer', 'Admin', 'Trainer'])) {
+            $type = $args['role-type'];
+            if (!valueConstrainedTo($type, ['Applicant', 'Admin', "Committee Member"])) {
                 $errors = true;
                 echo 'bad role';
             }
@@ -232,7 +233,7 @@
             // I am not doing this currently because I think it if I do I will need to modify the PersonDB (31OCT2023)
 
             // need to incorporate availability here
-            if($role == "Volunteer"){
+            if($type == "Applicant"){
                 $newperson = new Person($first, $last, 'portland', 
                     $address, $city, $state, $zipcode, "",
                     $phone, $phoneType, null, null,
@@ -246,7 +247,7 @@
                     $saturdaysStart, $saturdaysEnd, 0, $gender
                 );
             }
-            elseif ($role == "Trainer") {
+            elseif ($type == "Trainer") {
                 $newperson = new Person($first, $last, 'portland', 
                     $address, $city, $state, $zipcode, "",
                     $phone, $phoneType, null, null,
@@ -260,7 +261,7 @@
                     $saturdaysStart, $saturdaysEnd, 0, $gender
                 );
             }
-            elseif ($role == "Admin") {
+            elseif ($type == "Admin") {
                 $newperson = new Person($first, $last, 'portland', 
                     $address, $city, $state, $zipcode, "",
                     $phone, $phoneType, null, null,
