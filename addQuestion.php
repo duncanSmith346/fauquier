@@ -65,6 +65,7 @@
                         <option value='email'>Email</option>
                         <option value='tel'>Phone Number</option>
                         <option value='number'>number</option>
+                        <option value='file'>file upload</option>
                     </select>
                     <input type='hidden' name='form' value='<?= htmlspecialchars($_GET['form']) ?>'/>
                     <button type='submit'>Add Question</button>
