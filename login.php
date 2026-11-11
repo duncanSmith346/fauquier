@@ -92,7 +92,7 @@
             <h1>Cohort Management System</h1>
             <?php if (isset($_GET['registerSuccess'])): ?>
                 <div class="happy-toast">
-                    Your registration was successful! Please log in below.
+                    Your account is successfully created! Please log in below.
                 </div>
             <?php else: ?>
             <p>Welcome! Please log in below.</p>

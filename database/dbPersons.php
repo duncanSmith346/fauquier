@@ -30,7 +30,7 @@ function add_person($person) {
     $result = mysqli_query($con,$query);
     //if there's no entry for this id, add it
     if ($result == null || mysqli_num_rows($result) == 0) {
-        mysqli_query($con,'INSERT INTO dbPersons VALUES("' .
+        mysqli_query($con,'INSERT INTO dbPersons (id, start_date, venue, first_name, last_name, address, city, state, zip, phone1, phone1type, phone2, phone2type, birthday, email, shirt_size, computer, camera, transportation, contact_name, contact_num, relation, contact_time, cMethod, position, credithours, howdidyouhear, commitment, motivation, specialties, convictions, type, status, completedTraining, availability, schedule, hours, notes, password, sundays_start, sundays_end, mondays_start, mondays_end, tuesdays_start, tuesdays_end, wednesdays_start, wednesdays_end, thursdays_start, thursdays_end, fridays_start, fridays_end, saturdays_start, saturdays_end, profile_pic, force_password_change, gender) VALUES("' .
             $person->get_id() . '","' .
             $person->get_start_date() . '","' .
             $person->get_venue() . '","' .
@@ -64,6 +64,7 @@ function add_person($person) {
             $person->get_convictions() . '","' . 
             implode(',', $person->get_type()) . '","' .
             $person->get_status() . '","' .
+            'False' . '","' .
             implode(',', $person->get_availability()) . '","' .
             implode(',', $person->get_schedule()) . '","' .
             implode(',', $person->get_hours()) . '","' .
