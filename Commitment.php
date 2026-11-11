@@ -5,6 +5,37 @@ require_once('database/dbPersons.php');
 require_once('database/dbApplication.php');
 require_once('database/dbQuestions.php');
 
+
+
+function get_uploaded_files($field = 'files') {
+    $out = [];
+    if (empty($_FILES[$field]['name']) || !is_array($_FILES[$field]['name'])) {
+        return $out;
+    }
+    foreach ($_FILES[$field]['name'] as $number => $name) {
+        $out[(int) $number] = [
+            'name'     => $name,
+            'tmp_name' => $_FILES[$field]['tmp_name'][$number],
+            'error'    => $_FILES[$field]['error'][$number],
+            'size'     => $_FILES[$field]['size'][$number],
+        ];
+    }
+    return $out;
+} 
+
+// True if any required file question has neither a new upload nor a saved file.
+function missing_required_file($files, $saved_answers) {
+    foreach (getQuestions('samplecommitment') as $q) {
+        if ($q['type'] !== 'file') continue;
+        $n = (int) $q['number'];
+        $hasNew   = isset($files[$n]) && $files[$n]['error'] === UPLOAD_ERR_OK;
+        $hasSaved = !empty($saved_answers[$n]);
+        if (!$hasNew && !$hasSaved) return true;
+    }
+    return false;
+}
+
+
 if (!isset($_SESSION['_id'])) {
     header('Location: login.php');
     exit;
@@ -38,12 +69,15 @@ if ($cohort && !$admin) {
     $questions = getQuestions('samplecommitment');
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $files = get_uploaded_files();
         if ($existing_commitment) {
             $error = 'You have already submitted a commitment form for this cycle.';
         } else {
             $answers = $_POST['answers'] ?? [];
             if (!is_array($answers) || empty($answers)) {
                 $error = 'Please complete the commitment form.';
+            } elseif (missing_required_file($files, [])) {
+                $error = "Please upload all required files.";
             } else {
                 $valid = true;
                 foreach ($answers as $answer) {
@@ -71,7 +105,8 @@ if ($cohort && !$admin) {
                         $commitment_id,
                         $_SESSION['_id'],
                         $cycle_id,
-                        $answers
+                        $answers,
+                        $files
                     );
                     if ($success) {
                         header('Location: Commitment.php?submitted=1');
@@ -137,7 +172,13 @@ function commitment_escape($value) {
                     <p><strong>Submitted:</strong> <?= commitment_escape($admin_commitment['submittedDate'] ?? '') ?></p>
                     <?php foreach ($admin_answers as $answer): ?>
                         <p><strong><?= commitment_escape($answer['question'] ?? ('Question ' . $answer['number'])) ?></strong></p>
-                        <p class="application_responses"><?= nl2br(commitment_escape($answer['answer'] ?? '')) ?></p>
+                        <p class="application_responses">
+                            <?php if (($answer['type'] ?? '') === 'file' && $answer['answer'] !== ''): ?>
+                                <a href="downloadFile.php?file=<?php echo urlencode($answer['answer']); ?>">Download file</a>
+                            <?php else: ?>
+                                <?= nl2br(commitment_escape($answer['answer'] ?? '')) ?>
+                            <?php endif; ?>
+                        </p>
                         <br>
                     <?php endforeach; ?>
                 <?php elseif (!$error): ?>
@@ -147,7 +188,7 @@ function commitment_escape($value) {
                 <h2 style="text-align:center;">Commitment Status</h2>
                 <p style="text-align:center;">Submitted</p>
             <?php else: ?>
-                <form method="POST" action="Commitment.php">
+                <form method="POST" action="Commitment.php" enctype='multipart/form-data'>
                     <?php while ($question = mysqli_fetch_assoc($questions)): ?>
                         <?php $number = (int) $question['number']; ?>
                         <label for="question_<?= $number ?>"><?= commitment_escape($question['question']) ?></label>
@@ -172,6 +213,14 @@ function commitment_escape($value) {
                                     <option value="<?= commitment_escape($option['answer']) ?>" <?= (($answers[$number] ?? '') === $option['answer']) ? 'selected' : '' ?>><?= commitment_escape($option['answer']) ?></option>
                                 <?php endforeach; ?>
                             </select>
+                        <?php elseif ($question['type'] === 'file'): ?>
+                            <input type="file"
+                                id="question_<?php echo $question['number']; ?>"
+                                name="files[<?php echo $question['number']; ?>]"
+                                accept=".jpg,.jpeg,.png,.pdf,.docx">
+                            <?php if (!empty($saved_answers[$question['number']])): ?>
+                                <br><small>A file is already saved. Choose a new one only to replace it.</small>
+                            <?php endif; ?>
                         <?php else: ?>
                             <?php $type = in_array($question['type'], ['text', 'email', 'tel', 'date', 'number'], true) ? $question['type'] : 'text'; ?>
                             <input type="<?= commitment_escape($type) ?>" id="question_<?= $number ?>" name="answers[<?= $number ?>]" value="<?= commitment_escape($answers[$number] ?? '') ?>" required>

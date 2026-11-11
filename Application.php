@@ -11,6 +11,35 @@ if (!isset($_SESSION['_id'])) {
     exit;
 }
 
+function get_uploaded_files($field = 'files') {
+    $out = [];
+    if (empty($_FILES[$field]['name']) || !is_array($_FILES[$field]['name'])) {
+        return $out;
+    }
+    foreach ($_FILES[$field]['name'] as $number => $name) {
+        $out[(int) $number] = [
+            'name'     => $name,
+            'tmp_name' => $_FILES[$field]['tmp_name'][$number],
+            'error'    => $_FILES[$field]['error'][$number],
+            'size'     => $_FILES[$field]['size'][$number],
+        ];
+    }
+    return $out;
+} 
+
+// True if any required file question has neither a new upload nor a saved file.
+function missing_required_file($files, $saved_answers) {
+    foreach (getQuestions('sampleapplicatio') as $q) {
+        if ($q['type'] !== 'file') continue;
+        $n = (int) $q['number'];
+        $hasNew   = isset($files[$n]) && $files[$n]['error'] === UPLOAD_ERR_OK;
+        $hasSaved = !empty($saved_answers[$n]);
+        if (!$hasNew && !$hasSaved) return true;
+    }
+    return false;
+}
+
+
 $person = retrieve_person($_SESSION['_id']);
 
 $notRoot = $person->get_id() != 'vmsroot';
@@ -51,6 +80,8 @@ $success = NULL;
 // Process the application when the form is submitted.
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+    $files = get_uploaded_files();
+
         // Save an applicant's draft without submitting it
     if ($applicant && ($_POST['action'] ?? '') === 'save') {
         $answers = $_POST['answers'] ?? [];       
@@ -58,7 +89,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $success = save_draft_application(
             $_SESSION['_id'],
             $cycle_id,
-            $answers
+            $answers,
+            $files
         );
 
         if ($success) {
@@ -80,7 +112,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($existing_application && $existing_application['submittedAt'] === null) {
         $answers = $_POST['answers'] ?? [];
 
-        if (save_draft_application($_SESSION['_id'], $cycle_id, $answers)
+        if (missing_required_file($files, $saved_answers)) {
+            $error = "Please upload all required files.";
+        } elseif(save_draft_application($_SESSION['_id'], $cycle_id, $answers,$files)
             && submit_saved_draft($existing_application['id'])) {
             header("Location: Application.php?submitted=1");
             exit;
@@ -106,6 +140,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             })) !== count($answers)) {
             $error = "Please answer every question.";
 
+            } elseif (missing_required_file($files, [])) {
+                $error = "Please upload all required files.";
             } else {
                 // Create a unique ID for this application.
                 $application_id = bin2hex(random_bytes(16));
@@ -116,7 +152,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $application_id,
                     $applicant_id,
                     $cycle_id,
-                    $answers
+                    $answers,
+                    $files
                 );
 
                 if ($success) {
@@ -234,11 +271,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                     ?>
 
-                    <?php else: ?>
+                <?php else: ?>
 
                     <!-- No application exists yet, so show the form. -->
 
-                    <form method="POST">
+                    <form method="POST" enctype='multipart/form-data'>
                         <?php
                     // Display each question currently defined by the administrator.
                         while ($question = mysqli_fetch_assoc($questions)):
@@ -280,6 +317,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     </option>
                                 <?php endforeach; ?>
                             </Select>
+                        <?php elseif ($question['type'] === 'file'): ?>
+                            <input type="file"
+                                id="question_<?php echo $question['number']; ?>"
+                                name="files[<?php echo $question['number']; ?>]"
+                                accept=".jpg,.jpeg,.png,.pdf,.docx">
+                            <?php if (!empty($saved_answers[$question['number']])): ?>
+                                <br><small>A file is already saved. Choose a new one only to replace it.</small>
+                            <?php endif; ?>
                         <?php else: ?>
                             <input type="<?php echo $question['type'];?>" 
                             id="question_<?php echo $question['number'];?>"
@@ -334,7 +379,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php echo htmlspecialchars($answer['question']); ?>
                     </strong></p>
                     <p class="application_responses">
-                        <?php echo htmlspecialchars($answer['answer']); ?>
+                        <?php if (($answer['type'] ?? '') === 'file' && $answer['answer'] !== ''): ?>
+                            <a href="downloadFile.php?file=<?php echo urlencode($answer['answer']); ?>">Download file</a>
+                        <?php else: ?>
+                            <?php echo htmlspecialchars($answer['answer']); ?>
+                        <?php endif; ?>
                     </p>
                     <p> 
                         Comment: <?php echo htmlspecialchars($answer['comment'] ?? ''); ?>
@@ -408,7 +457,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php while ($question = mysqli_fetch_assoc($questions)):
                         ?>
                             <p><strong><?php echo htmlspecialchars($question['question']); ?></strong></p>
-                            <p class="application_responses"><?php echo htmlspecialchars($question['answer']); ?></p>
+                            <p class="application_responses">
+                                <?php if (($answer['type'] ?? '') === 'file' && $answer['answer'] !== ''): ?>
+                                    <a href="downloadFile.php?file=<?php echo urlencode($answer['answer']); ?>">Download file</a>
+                                <?php else: ?>
+                                    <?php echo htmlspecialchars($answer['answer']); ?>
+                                <?php endif; ?>
+                            </p>
                             <label for="question_<?php echo $question['number']; ?>">
                             Comment:
                             </label>

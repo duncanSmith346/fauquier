@@ -3,6 +3,20 @@
 
 require_once('dbinfo.php');
 
+define('UPLOAD_DIR', dirname(__DIR__) . '/fileUploads/');
+define('UPLOAD_MAX_BYTES', 5 * 1024 * 1024);
+
+function upload_allowed_types() {
+    return [
+        'jpg'  => ['image/jpeg'],
+        'jpeg' => ['image/jpeg'],
+        'png'  => ['image/png'],
+        'pdf'  => ['application/pdf'],
+        'docx' => ['application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                   'application/zip'],
+    ];
+}
+
 // Find an application by its ID
 function retrieve_application($id) {
     $con = connect();
@@ -273,8 +287,10 @@ function save_application_answers($application_id, $answers) {
 
 
  // Save the application and all its answers together
-function submit_application_with_answers($id, $applicant_id, $cycle_id, $answers) {
+function submit_application_with_answers($id, $applicant_id, $cycle_id, $answers, $files) {
     $con = connect();
+    $new_files = [];
+    $old_files = [];
 
     mysqli_begin_transaction($con);
 
@@ -314,6 +330,7 @@ function submit_application_with_answers($id, $applicant_id, $cycle_id, $answers
             $answer = trim((string) $answer);
             
             $question = getQuestion('sampleapplicatio', $number);
+            if ($question['type'] === 'file') continue;
             $sql = "INSERT INTO dbQuestions (number, application_id, answer, question, type)
                 VALUES (?, ?, ?, ?, ?)";
 
@@ -324,6 +341,8 @@ function submit_application_with_answers($id, $applicant_id, $cycle_id, $answers
                 throw new Exception(mysqli_stmt_error($stmt));
             }
         }
+
+        save_uploaded_files($con, $id, $files, $new_files, $old_files, 'sampleapplicatio');
 
         mysqli_stmt_close($stmt);
 
@@ -340,8 +359,10 @@ function submit_application_with_answers($id, $applicant_id, $cycle_id, $answers
         return false;
     }
 }
-function submit_Scholarship_with_answers($scholarship_id, $application_id, $cycle_id, $answers) {
+function submit_Scholarship_with_answers($scholarship_id, $application_id, $cycle_id, $answers, $files) {
     $con = connect();
+    $new_files = [];
+    $old_files = [];
 
     mysqli_begin_transaction($con);
 
@@ -378,10 +399,10 @@ function submit_Scholarship_with_answers($scholarship_id, $application_id, $cycl
                 return $value !== ''; 
                 }));
             }
-
-$answer = trim((string) $answer);
+            $answer = trim((string) $answer);
 
             $question = getQuestion('samplescholarshi', $number);
+            if ($question['type'] === 'file') continue;
             $sql = "INSERT INTO dbQuestions (number, application_id, answer, question, type)
                 VALUES (?, ?, ?, ?, ?)";
 
@@ -392,6 +413,8 @@ $answer = trim((string) $answer);
                 throw new Exception(mysqli_stmt_error($stmt));
             }
         }
+
+        save_uploaded_files($con, $scholarship_id, $files, $new_files, $old_files, 'samplescholarshi');
 
         mysqli_stmt_close($stmt);
 
@@ -434,9 +457,11 @@ function get_application_answers($application_id) {
 }
 
 // Save an application without submitting it
-function save_draft_application($applicant_id, $cycle_id, $answers) {
+function save_draft_application($applicant_id, $cycle_id, $answers, $files) {
     $con = connect();
     mysqli_begin_transaction($con);
+    $new_files = [];
+    $old_files = [];
 
     try {
         // Check whether the applicant already has an application
@@ -517,7 +542,7 @@ function save_draft_application($applicant_id, $cycle_id, $answers) {
             if (!$question) {
                 throw new Exception("Question not found: " . $number);
             }
-
+            if ($question['type'] === 'file') continue;
             // Check whether this answer already exists
             $sql = "SELECT number
                     FROM dbQuestions
@@ -571,6 +596,8 @@ function save_draft_application($applicant_id, $cycle_id, $answers) {
 
             mysqli_stmt_close($stmt);
         }
+
+        save_uploaded_files($con, $id, $files, $new_files, $old_files, 'sampleapplicatio');
 
         // Commit all changes together
         mysqli_commit($con);
@@ -689,8 +716,10 @@ function get_applicant_commitment($person_id, $cycle_id) {
 
 
 // Submit a cohort commitment form and its answers.
-function submit_commitment_with_answers($commitment_id, $person_id, $cycle_id, $answers) {
+function submit_commitment_with_answers($commitment_id, $person_id, $cycle_id, $answers, $files) {
     $con = connect();
+    $new_files = [];
+    $old_files = [];
 
     try {
         mysqli_begin_transaction($con);
@@ -748,6 +777,7 @@ function submit_commitment_with_answers($commitment_id, $person_id, $cycle_id, $
 
             $answer = trim((string) $answer);
             $question = getQuestion('samplecommitment', $number);
+            if ($question['type'] === 'file') continue;
 
             if (!$question) {
                 throw new Exception("Question not found: " . $number);
@@ -775,6 +805,8 @@ function submit_commitment_with_answers($commitment_id, $person_id, $cycle_id, $
             mysqli_stmt_close($stmt);
         }
 
+        save_uploaded_files($con, $commitment_id, $files, $new_files, $old_files, 'samplecommitment');
+
         mysqli_commit($con);
         mysqli_close($con);
         return true;
@@ -785,5 +817,83 @@ function submit_commitment_with_answers($commitment_id, $person_id, $cycle_id, $
 
         error_log("Commitment submission failed: " . $e->getMessage());
         return false;
+    }
+}
+
+// Validates and stores one upload. Returns the stored filename, or null if no file was chosen.
+// Throws on any problem so the caller's transaction rolls back.
+function process_file_upload(array $file) {
+    if ($file['error'] === UPLOAD_ERR_NO_FILE) return null;
+    if ($file['error'] !== UPLOAD_ERR_OK) {
+        throw new Exception("Upload failed with error code " . $file['error']);
+    }
+    if ($file['size'] > UPLOAD_MAX_BYTES) throw new Exception("File is too large (max 5MB).");
+    if (!is_uploaded_file($file['tmp_name'])) throw new Exception("Invalid upload.");
+
+    $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+    $allowed = upload_allowed_types();
+    if (!isset($allowed[$ext])) throw new Exception("Invalid file type: " . $ext);
+
+    // Check the real content, not just the extension.
+    $mime = (new finfo(FILEINFO_MIME_TYPE))->file($file['tmp_name']);
+    if (!in_array($mime, $allowed[$ext], true)) throw new Exception("File content does not match type: " . $mime);
+
+    if (!is_dir(UPLOAD_DIR) && !mkdir(UPLOAD_DIR, 0755, true)) {
+        throw new Exception("Could not create upload directory.");
+    }
+
+    $stored = bin2hex(random_bytes(16)) . '.' . $ext;
+    if (!move_uploaded_file($file['tmp_name'], UPLOAD_DIR . $stored)) {
+        throw new Exception("Could not store uploaded file.");
+    }
+    return $stored;
+}
+
+// Inserts or updates the dbQuestions row for a file answer.
+// Returns the previously stored filename ('' if none) so the caller can delete it after commit.
+function save_file_answer($con, $id, $number, $question, $stored) {
+    $stmt = mysqli_prepare($con,
+        "SELECT answer FROM dbQuestions WHERE application_id = ? AND number = ?");
+    mysqli_stmt_bind_param($stmt, "si", $id, $number);
+    mysqli_stmt_execute($stmt);
+    $row = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
+    mysqli_stmt_close($stmt);
+
+    if ($row) {
+        $stmt = mysqli_prepare($con,
+            "UPDATE dbQuestions SET answer = ? WHERE application_id = ? AND number = ?");
+        mysqli_stmt_bind_param($stmt, "ssi", $stored, $id, $number);
+    } else {
+        $stmt = mysqli_prepare($con,
+            "INSERT INTO dbQuestions (number, application_id, answer, question, type)
+             VALUES (?, ?, ?, ?, ?)");
+        mysqli_stmt_bind_param($stmt, "issss", $number, $id, $stored,
+            $question['question'], $question['type']);
+    }
+    if (!mysqli_stmt_execute($stmt)) {
+        $err = mysqli_stmt_error($stmt);
+        mysqli_stmt_close($stmt);
+        throw new Exception($err);
+    }
+    mysqli_stmt_close($stmt);
+
+    return $row['answer'] ?? '';
+}
+
+// Handles every uploaded file for an application. Fills $new_files / $old_files for cleanup.
+function save_uploaded_files($con, $id, array $files, array &$new_files, array &$old_files, $form) {
+    foreach ($files as $number => $file) {
+        $number = (int) $number;
+        $question = getQuestion($form, $number);
+        if (!$question || $question['type'] !== 'file') {
+            throw new Exception("Not a file question: " . $number);
+        }
+
+        $stored = process_file_upload($file);
+        if ($stored === null) continue;          // nothing chosen: keep any saved file
+        $new_files[] = $stored;
+
+        $old = save_file_answer($con, $id, $number, $question, $stored);
+        if ($old !== '') $old_files[] = $old;
     }
 }
