@@ -58,7 +58,7 @@
 <!--            <p>Welcome back, <?php echo $person->get_first_name() ?>!</p> -->
 <!--            <p>Today is <?php echo date('l, F j, Y'); ?>.</p>       -->     
              
-<!-- Original page code for empowerhouse -->
+<!-- Original page code from empowerhouse -->
 
             <?php if (!$admin && !$applicant && !$cm && !$cohort): ?>
             <div id="dashboard">
@@ -351,92 +351,90 @@
 
             <!-- Dashboard for if Cohort -->
             <?php if ($cohort): ?> 
-            <div id="dashboard">
-                <?php
-                    require_once('database/dbMessages.php');
-                    $unreadMessageCount = get_user_unread_count($person->get_id());
-                    $inboxIcon = 'inbox.svg';
-                    if ($unreadMessageCount) {
-                        $inboxIcon = 'inbox-unread.svg';
-                    }
-                ?>
-                <div class="dashboard-item" data-link="inbox.php">
-                    <img src="images/<?php echo $inboxIcon ?>">
-                    <span>Notifications<?php 
-                        if ($unreadMessageCount > 0) {
-                            echo ' (' . $unreadMessageCount . ')';
+                <div id="dashboard">
+                    <?php
+                        require_once('database/dbMessages.php');
+                        $unreadMessageCount = get_user_unread_count($person->get_id());
+                        $inboxIcon = 'inbox.svg';
+                        if ($unreadMessageCount) {
+                            $inboxIcon = 'inbox-unread.svg';
                         }
-                    ?></span>
+                    ?>
+                    <div class="dashboard-item" data-link="inbox.php">
+                        <img src="images/<?php echo $inboxIcon ?>">
+                        <span>Notifications<?php 
+                            if ($unreadMessageCount > 0) {
+                                echo ' (' . $unreadMessageCount . ')';
+                            }
+                        ?></span>
+                    </div>
+                    <div class="dashboard-item" data-link="calendar.php">
+                        <img src="images/view-calendar.svg">
+                        <span>View Calendar</span>
+                    </div>
+                    <div class="dashboard-item" data-link="Commitment.php">
+                        <img src="images/create-report.svg">
+                        <span>Commitment Form</span>
+                    </div>
+                    <div class="dashboard-item" data-link="documents.php">
+                        <img src="images/create-report.svg">
+                        <span>Pay Tuition</span>
+                    </div>
+                    <div class="dashboard-item" data-link="documents.php">
+                        <img src="images/create-report.svg">
+                        <span>Self-Assessment</span>
+                    </div>
+                    <div class="dashboard-item" data-link="documents.php">
+                        <img src="images/create-report.svg">
+                        <span>Emergency Contact</span>
+                    </div>
+                    <div class="dashboard-item" data-link="documents.php">
+                        <img src="images/create-report.svg">
+                        <span>Allergy Information</span>
+                    </div>
+                    <div class="dashboard-item" data-link="documents.php">
+                        <img src="images/document.svg">
+                        <span>View Forms</span>
+                    </div>
+                    <div class="dashboard-item" data-link="changePassword.php">
+                        <img src="images/change-password.svg">
+                        <span>Change Password</span>
+                    </div>
+                    <div class="dashboard-item" data-link="TShirtSize.php">
+                        <img src="images/t-shirt.svg">
+                        <span>Change T-Shirt Size</span>
+                    </div>
+                    <div class="dashboard-item" data-link="logout.php">
+                        <img src="images/logout.svg">
+                        <span>Log out</span>
+                    </div>
                 </div>
-                <div class="dashboard-item" data-link="calendar.php">
-                    <img src="images/view-calendar.svg">
-                    <span>View Calendar</span>
-                </div>
-                <div class="dashboard-item" data-link="Commitment.php">
-                    <img src="images/create-report.svg">
-                    <span>Commitment Form</span>
-                </div>
-                <div class="dashboard-item" data-link="documents.php">
-                    <img src="images/create-report.svg">
-                    <span>Pay Tuition</span>
-                </div>
-                <div class="dashboard-item" data-link="documents.php">
-                    <img src="images/create-report.svg">
-                    <span>Self-Assessment</span>
-                </div>
-                <div class="dashboard-item" data-link="documents.php">
-                    <img src="images/create-report.svg">
-                    <span>Emergency Contact</span>
-                </div>
-                <div class="dashboard-item" data-link="documents.php">
-                    <img src="images/create-report.svg">
-                    <span>Allergy Information</span>
-                </div>
-                <div class="dashboard-item" data-link="documents.php">
-                    <img src="images/document.svg">
-                    <span>View Forms</span>
-                </div>
-                <div class="dashboard-item" data-link="changePassword.php">
-                    <img src="images/change-password.svg">
-                    <span>Change Password</span>
-                </div>
-                <div class="dashboard-item" data-link="TShirtSize.php">
-                    <img src="images/t-shirt.svg">
-                    <span>Change T-Shirt Size</span>
-                </div>
-                <div class="dashboard-item" data-link="logout.php">
-                    <img src="images/logout.svg">
-                    <span>Log out</span>
-                </div>
-            </div>
             <?php endif ?>
 
-            <!-- <!-- Dashboard for if Applicant -->
-<?php if ($applicant): ?>
-    <?php
-        $application = get_applicant_application($_SESSION['_id'], '2026');
-    ?>
+            <!-- Dashboard for if Applicant -->
+            <?php if ($applicant): ?>
+                <?php
+                    $application = get_applicant_application($_SESSION['_id'], '2026');
+                ?>
+                <div id="dashboard">
+                    <div class="dashboard-item" data-link="Application.php">
+                        <img src="images/document.svg">
+                        <span style="text-align:center;">Manage Application</span>
+                    </div>
 
-    <div id="dashboard">
-        <div class="dashboard-item" data-link="Application.php">
-            <img src="images/document.svg">
-            <span style="text-align:center;">Manage Application</span>
-        </div>
-
-        <?php if ($application): ?>
-            <div class="dashboard-item" data-link="Scholarship.php">
-                <img src="images/document.svg">
-                <span style="text-align:center;">Manage Scholarship</span>
-            </div>
-        <?php else: ?>
-            <div class="dashboard-item" style="opacity: 0.4; cursor: not-allowed;">
-                <img src="images/document.svg">
-                <span style="text-align:center;">Manage Scholarship</span>
-            </div>
-        <?php endif; ?>
-    </div>
-<?php endif; ?> 
-
+                    <?php if ($application): ?>
+                        <div class="dashboard-item" data-link="Scholarship.php">
+                            <img src="images/document.svg">
+                            <span style="text-align:center;">Manage Scholarship</span>
+                        </div>
+                    <?php else: ?>
+                        <div class="dashboard-item" style="opacity: 0.4; cursor: not-allowed;">
+                            <img src="images/document.svg">
+                            <span style="text-align:center;">Manage Scholarship</span>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?> 
         </main>
     </body>
 </html>

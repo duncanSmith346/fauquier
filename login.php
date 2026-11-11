@@ -92,7 +92,7 @@
             <h1>Cohort Management System</h1>
             <?php if (isset($_GET['registerSuccess'])): ?>
                 <div class="happy-toast">
-                    Your registration was successful! Please log in below.
+                    Your account is successfully created! Please log in below.
                 </div>
             <?php else: ?>
             <p>Welcome! Please log in below.</p>
@@ -108,7 +108,7 @@
         		<label for="password">Password</label>
                 <input type="password" name="password" placeholder="Enter your password" required>
                 <input type="submit" name="login" value="Log in">
-                <p>Or <a href="register.php">register as a new volunteer</a>!</p>
+                <p>Or <a href="register.php">register as a new applicant</a>!</p>
             </form>
         </main>
     </body>

@@ -64,6 +64,7 @@ class Person {
 	private $type;       // array of "volunteer", "weekendmgr", "sub", "guestchef", "events", "projects", "manager"
 	private $access_level;
 	private $status;     // a person may be "active" or "inactive"
+	private $completedTraining;
 	private $availability; // array of day:hours:venue triples; e.g., Mon:9-12:bangor, Sat:afternoon:portland
 	private $schedule;     // array of scheduled shift ids; e.g., 15-01-05:9-12:bangor
 	private $hours;        // array of actual hours logged; e.g., 15-01-05:0930-1300:portland:3.5
