@@ -58,7 +58,7 @@
 <!--            <p>Welcome back, <?php echo $person->get_first_name() ?>!</p> -->
 <!--            <p>Today is <?php echo date('l, F j, Y'); ?>.</p>       -->     
              
-<!-- Original page code for empowerhouse -->
+<!-- Original page code from empowerhouse -->
 
             <?php if (!$admin && !$applicant && !$cm && !$cohort): ?>
             <div id="dashboard">

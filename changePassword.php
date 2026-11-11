@@ -69,7 +69,7 @@
 <html>
     <head>
         <?php require_once('universal.inc') ?>
-        <title>Empowerhouse VMS | Change Password</title>
+        <title>Change Password - Leadership Fauquier</title>
     </head>
     <body>
         <?php require_once('header.php') ?>
