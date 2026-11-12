@@ -56,14 +56,6 @@ function buildSelect($name, $disabled=false, $selected=null) {
             <label for="last-name"><em>* </em>Last Name</label>
             <input type="text" id="last-name" name="last-name" required placeholder="Enter your last name">
 
-            <label for="gender"><em>* </em>Gender</label>
-            <select id="gender" name="gender" required>
-                <option value="">Choose an option</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-            </select>
-
             <label for="birthdate"><em>* </em>Date of Birth</label>
             <input type="date" id="birthdate" name="birthdate" required placeholder="Choose your birthday" max="<?php echo date('Y-m-d'); ?>">
 
@@ -137,7 +129,7 @@ function buildSelect($name, $disabled=false, $selected=null) {
         
         <fieldset>
             <legend>Login Credentials</legend>
-            <p>You will use the following information to log in to the MS.</p>
+            <p>You will use the following information to log in to the system.</p>
 
             <label for="email"><em>* </em>E-mail</label>
             <p>This will serve as your username when logging in.</p>
@@ -150,7 +142,7 @@ function buildSelect($name, $disabled=false, $selected=null) {
             <input type="password" id="password-reenter" name="password-reenter" placeholder="Re-enter password" required>
             <p id="password-match-error" class="error hidden">Passwords do not match!</p>
         </fieldset>
-        <p>By pressing Submit below, you are agreeing to volunteer for the organization.</p>
+        <p>By pressing Submit below, you are agreeing to apply for the program.</p>
         <input type="submit" name="registration-form" value="Submit">
     </form>
     <?php if ($loggedIn): ?>
