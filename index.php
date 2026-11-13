@@ -28,13 +28,42 @@
     $cohort = in_array('cohort', $person->get_type(), true);
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $application_id = $_POST['application_id'];
-        $reviewer_id = $_POST['CM'];
-        if ($reviewer_id === 'Unselected'){
+
+        if ($admin && ($_POST['action'] ?? '') === 'application_payment') {
+
+            $application_id = $_POST['application_id'] ?? '';
+            $status = $_POST['payment_status'] ?? '';
+
+            if ($application_id !== '' && in_array($status, ['0', '1'], true)) {
+                update_application_payment($application_id, (int)$status);
+            }
+
+            header('Location: index.php');
+            exit;
+
+            } elseif ($admin && ($_POST['action'] ?? '') === 'tuition_payment') {
+
+                $commitment_id = $_POST['commitment_id'] ?? '';
+                $status = $_POST['payment_status'] ?? '';
+
+                if ($commitment_id !== '' && in_array($status, ['0', '1'], true)) {
+                    update_tuition_payment($commitment_id, (int)$status);
+                }
+
+                header('Location: index.php');
+                exit;    
+
+        } elseif ($admin && isset($_POST['application_id'], $_POST['CM'])) {
+
+            $application_id = $_POST['application_id'];
+            $reviewer_id = $_POST['CM'];
+
+            if ($reviewer_id === 'Unselected') {
             $reviewer_id = NULL;
+            }
+
+            $success = update_reviewer($reviewer_id, $application_id);
         }
-        $success = update_reviewer($reviewer_id, $application_id);
-        
     }
     if (isset($_GET['page'])) $page = $_GET['page'];
     else $page = 0;
@@ -220,12 +249,25 @@
                                 </td>
                                 <!--Documents-->
                                 <td class='admin_applicatin_table'>unfinished</td>
-                                <!--Appllication Fee-->
+                                <!--Application Fee-->
                                 <td class='admin_applicatin_table'>
-                                    <?php
-                                    if ($result['applicationFee'] === 1) echo 'Paid';
-                                    else echo 'Unpaid';
-                                    ?>
+                                   <?php if ($result['appid'] !== NULL): ?>
+                                       <form method="POST" action="index.php">
+                                         <input type="hidden" name="application_id"
+                                             value="<?= htmlspecialchars($result['appid']) ?>">
+
+                                         <input type="hidden" name="action" value="application_payment">
+
+                                         <input type="hidden" name="payment_status"
+                                              value="<?= (int)$result['applicationFee'] === 1 ? 0 : 1 ?>">
+
+                                         <button type="submit" class="payment-toggle">
+                                             <?= (int)$result['applicationFee'] === 1 ? 'Paid' : 'Unpaid' ?>
+                                         </button>
+                                      </form>
+                                  <?php else: ?>
+                                        N/A
+                                  <?php endif; ?>
                                 </td>
                                 <!--Review Status-->
                                 <td class='admin_applicatin_table'>
@@ -253,10 +295,23 @@
                                 </td>
                                 <!--Tuition Status-->
                                 <td class='admin_applicatin_table'>
-                                    <?php 
-                                    if ($result['tuition'] === 1) echo 'Paid';
-                                    else echo 'Unpaid'; 
-                                    ?>
+                                    <?php if ($result['commitment'] !== NULL): ?>
+                                        <form method="POST" action="index.php">
+                                            <input type="hidden" name="commitment_id"
+                                                value="<?= htmlspecialchars($result['commitment']) ?>">
+
+                                            <input type="hidden" name="action" value="tuition_payment">
+
+                                            <input type="hidden" name="payment_status"
+                                                    value="<?= (int)$result['tuition'] === 1 ? 0 : 1 ?>">
+
+                                            <button type="submit" class="payment-toggle">
+                                                <?= (int)$result['tuition'] === 1 ? 'Paid' : 'Unpaid' ?>
+                                            </button>
+                                        </form>
+                                    <?php else: ?>
+                                        N/A
+                                    <?php endif; ?>
                                 </td>
                                 <!--Onboarding Status-->
                                 <td class='admin_applicatin_table'>
@@ -376,10 +431,13 @@
                         <img src="images/create-report.svg">
                         <span>Commitment Form</span>
                     </div>
-                    <div class="dashboard-item" data-link="documents.php">
-                        <img src="images/create-report.svg">
-                        <span>Pay Tuition</span>
-                    </div>
+                    <a class="dashboard-item"
+                        href="https://www.youtube.com/watch?v=uE-1RPDqJAY"
+                        target="_blank"
+                        rel="noopener noreferrer">
+                            <span class="payment-icon" style="font-size: 6rem !important; line-height: 6rem;">$</span>
+                            <span>Pay Tuition</span>
+                    </a>
                     <div class="dashboard-item" data-link="documents.php">
                         <img src="images/create-report.svg">
                         <span>Self-Assessment</span>
@@ -433,6 +491,14 @@
                             <span style="text-align:center;">Manage Scholarship</span>
                         </div>
                     <?php endif; ?>
+
+                    <a class="dashboard-item"
+                        href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                        target="_blank"
+                        rel="noopener noreferrer">
+                            <span class="payment-icon" style="font-size: 6rem !important; line-height: 6rem;">$</span>
+                            <span style="text-align:center;">Pay Application Fee</span>
+                    </a>
                 </div>
             <?php endif; ?> 
         </main>

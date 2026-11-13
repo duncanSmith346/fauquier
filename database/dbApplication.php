@@ -636,6 +636,42 @@ function submit_saved_draft($application_id) {
     return $success;
 }
 
+function update_application_payment($application_id, $status) {
+    $con = connect();
+
+    $sql = "UPDATE dbApplication
+            SET paymentStatus = ?
+            WHERE id = ?";
+
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "is", $status, $application_id);
+
+    $success = mysqli_stmt_execute($stmt);
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+
+    return $success;
+}
+
+function update_tuition_payment($commitment_id, $status) {
+    $con = connect();
+
+    $sql = "UPDATE dbCommitment
+            SET tuitionStatus = ?
+            WHERE commitment_id = ?";
+
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "is", $status, $commitment_id);
+
+    $success = mysqli_stmt_execute($stmt);
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+
+    return $success;
+}
+
 function Admin_list($page) {
     $con = connect();
 

@@ -1121,3 +1121,22 @@ a.adminlist_applicationName {
 a.adminlist_applicationName:hover {
     color: green;   
 }
+
+.payment-icon {
+    font-size: 8rem;
+    font-weight: 600;
+    line-height: 8rem;
+    color: white;
+}
+.payment-toggle {
+    background: none;
+    border: none;
+    padding: 0;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+}
+
+.payment-toggle:hover {
+    text-decoration: underline;
+}
