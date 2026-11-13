@@ -52,7 +52,7 @@
             $required = array(
                 'first-name', 'last-name', 'birthdate',
                 'address', 'city', 'state', 'zip', 
-                'email', 'password', 'password-reenter', 'gender'
+                'email', 'password', 'password-reenter'
             );
             $errors = false;
             if (!wereRequiredFieldsSubmitted($args, $required)) {
@@ -63,7 +63,7 @@
             $dateOfBirth = validateDate($args['birthdate']);
             if (!$dateOfBirth) {
                 $errors = true;
-                echo 'bad dob';
+                echo 'bad date of birth';
             }
 
             $address = $args['address'];
@@ -101,11 +101,7 @@
 
             $startDate = null;
             
-            $gender = $args['gender'];
-            if (!valueConstrainedTo($gender, ['Male', 'Female', 'Other'])) {
-                $errors = true;
-                echo 'bad gender';
-            }
+            $gender = '';
 
             // every new account is an applicant
             $type = 'applicant';
@@ -171,7 +167,7 @@
                     null, null, null, null,
                     null, null, null, null,
                     null, null, null, null,
-                    null, null, 0, $gender
+                    null, null, 0, ''
                 );
             }
             /*elseif ($type == "Trainer") {
