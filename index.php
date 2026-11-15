@@ -206,7 +206,7 @@
             <?php if ($admin):?>
                 <div class="admin_dashboard">
                     <div class="navigation">
-                        <a href="Forms.php" class="navigation_button"> Forms</a>
+                        <a href="forms.php" class="navigation_button"> Forms</a>
                         <a href="manageCommitteeMembers.php" class="navigation_button"> Committee Members</a>
                         <a href="personSearch.php" class="navigation_button"> Person Search</a>
                         <a href="logout.php" class="navigation_button"> Log out</a>
