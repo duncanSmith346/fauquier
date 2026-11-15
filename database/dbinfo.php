@@ -20,10 +20,10 @@ function connect() {
     $database = "fauquierdb";
     $user = "fauquierdb";
     $pass = "fauquierdb";
-    if ($_SERVER['SERVER_NAME'] == 'jenniferp231.sg-host.com') {
-        $user = '';
-        $database = '';
-        $pass = '';
+    if ($_SERVER['SERVER_NAME'] == 'jenniferp254.sg-host.com') {
+        $user = 'uh0sixgzapkqw';
+        $database = 'db1ctbne4zlhlv';
+        $pass = 'byfklpdl1tgi';
     } 
     $con = mysqli_connect($host,$user,$pass,$database);
     if (!$con) { echo "not connected to server"; return mysqli_error($con);}
