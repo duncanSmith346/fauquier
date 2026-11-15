@@ -458,10 +458,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         ?>
                             <p><strong><?php echo htmlspecialchars($question['question']); ?></strong></p>
                             <p class="application_responses">
-                                <?php if (($answer['type'] ?? '') === 'file' && $answer['answer'] !== ''): ?>
-                                    <a href="downloadFile.php?file=<?php echo urlencode($answer['answer']); ?>">Download file</a>
+                                <?php if (($question['type'] ?? '') === 'file' && $question['answer'] !== ''): ?>
+                                    <a href="downloadFile.php?file=<?php echo urlencode($question['answer']); ?>">Download file</a>
                                 <?php else: ?>
-                                    <?php echo htmlspecialchars($answer['answer']); ?>
+                                    <?php echo htmlspecialchars($question['answer']); ?>
                                 <?php endif; ?>
                             </p>
                             <label for="question_<?php echo $question['number']; ?>">
