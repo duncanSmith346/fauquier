@@ -407,7 +407,6 @@ class Person {
 	}
 
 	function get_access_level() {
-        error_log("DEBUG \$t is: [$t]");
 		return $this->access_level;
 	}
 
