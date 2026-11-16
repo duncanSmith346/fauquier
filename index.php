@@ -387,7 +387,7 @@
                                 <?php if (isset($_GET['assignedOnly'])):?>
                                     <input type='hidden' name='assignedOnly' value='True'/>
                                 <?php endif;?>
-                                <?php  $count = get_count_admin_list()["count(dbapplication.id)"]/10;
+                                <?php  $count = get_count_admin_list()["count(dbApplication.id)"]/10;
                                 $i = 0;
                                 while ($i < $count): 
                                     $n = $i +1;

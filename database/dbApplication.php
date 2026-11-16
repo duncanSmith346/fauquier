@@ -87,7 +87,7 @@ function get_applicant_application($applicant_id, $cycle_id) {
 function get_applicant_scholarship($application_id, $cycle_id) {
     $con = connect();
 
-    $sql = "SELECT * FROM dbscholarships
+    $sql = "SELECT * FROM dbScholarships
             WHERE application_id = ? AND cycle_id = ?";
 
     $stmt = mysqli_prepare($con, $sql);

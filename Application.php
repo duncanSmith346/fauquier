@@ -568,7 +568,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <br>
                         <?php endif;?>
                     <?php endif;?>
-                    <p><a href="index.php">Back to Dashboard</a></p>
+                <p><a href="index.php">Back to Dashboard</a></p>
             </div>
         </main>
     </body>
