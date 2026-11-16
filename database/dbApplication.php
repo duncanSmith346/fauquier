@@ -87,7 +87,7 @@ function get_applicant_application($applicant_id, $cycle_id) {
 function get_applicant_scholarship($application_id, $cycle_id) {
     $con = connect();
 
-    $sql = "SELECT * FROM dbscholarships
+    $sql = "SELECT * FROM dbScholarships
             WHERE application_id = ? AND cycle_id = ?";
 
     $stmt = mysqli_prepare($con, $sql);
@@ -164,7 +164,7 @@ function get_assigned_applications($reviewer_id,$page) {
 function update_reviewer($reviewer_id, $application_id) {
     $con = connect();
 
-    $sql = "UPDATE dbapplication SET reviewer_id = ? WHERE id = ?";
+    $sql = "UPDATE dbApplication SET reviewer_id = ? WHERE id = ?";
 
     $stmt = mysqli_prepare($con, $sql);
 
@@ -182,7 +182,7 @@ function update_reviewer($reviewer_id, $application_id) {
 function update_choice($choice, $application_id) {
     $con = connect();
 
-    $sql = "UPDATE dbapplication SET decisionStatus = ? WHERE id = ?";
+    $sql = "UPDATE dbApplication SET decisionStatus = ? WHERE id = ?";
 
     $stmt = mysqli_prepare($con, $sql);
 
@@ -708,7 +708,7 @@ function Admin_list($page) {
 function get_count_admin_list() {
     $con = connect();
 
-    $sql = "SELECT count(dbapplication.id)
+    $sql = "SELECT count(dbApplication.id)
             FROM dbPersons
             LEFT JOIN dbApplication ON dbApplication.applicant_id=dbPersons.id
             LEFT JOIN dbCohort ON dbCohort.person_id=dbPersons.id

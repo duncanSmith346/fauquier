@@ -206,7 +206,7 @@
             <?php if ($admin):?>
                 <div class="admin_dashboard">
                     <div class="navigation">
-                        <a href="Forms.php" class="navigation_button"> Forms</a>
+                        <a href="forms.php" class="navigation_button"> Forms</a>
                         <a href="manageCommitteeMembers.php" class="navigation_button"> Committee Members</a>
                         <a href="personSearch.php" class="navigation_button"> Person Search</a>
                         <a href="logout.php" class="navigation_button"> Log out</a>
@@ -322,7 +322,7 @@
                         </table>
                         <div class='paging'>
                             <form action="index.php">
-                                <?php  $count = get_count_admin_list()["count(dbapplication.id)"]/10;
+                                <?php  $count = get_count_admin_list()["count(dbApplication.id)"]/10;
                                 $i = 0;
                                 while ($i < $count): 
                                     $n = $i +1;
@@ -387,7 +387,7 @@
                                 <?php if (isset($_GET['assignedOnly'])):?>
                                     <input type='hidden' name='assignedOnly' value='True'/>
                                 <?php endif;?>
-                                <?php  $count = get_count_admin_list()["count(dbapplication.id)"]/10;
+                                <?php  $count = get_count_admin_list()["count(dbApplication.id)"]/10;
                                 $i = 0;
                                 while ($i < $count): 
                                     $n = $i +1;

@@ -1,7 +1,6 @@
-
 <?php
 session_start();
-
+ob_start();
 require_once('database/dbPersons.php');
 require_once('database/dbApplication.php');
 require_once('database/dbQuestions.php');
@@ -125,6 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         if ($cm) {
             header("Location: index.php");
+            exit;
         }
     }
 }
