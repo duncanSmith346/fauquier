@@ -389,6 +389,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </p>
                     <br>
                 <?php endforeach; ?>
+                <?php
+                    $scholarship = get_applicant_scholarship($result['id'], $cycle_id);
+                    if ($scholarship !== NULL): 
+                ?>
+                        <form action='Scholarship.php' method='GET'>
+                            <button class="application_buttons" type='submit' name='id' value='<?php echo $scholarship['scholarship_id'] ?>'>View Scholarship</button>
+                        </form>
+                    <?php endif; ?>
+                <br>
                 <form action="Application.php" method='GET'>
                     <div class="application_labels">
                         <label for="CM">Reviewer:</label>
@@ -431,15 +440,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <button class="application_buttons" type='submit' name='reject' value='reject'>Reject</button>
                     <button class="application_buttons" type='submit' name='accept' value='accept'>Accept</button>
                 </form>
-                <?php
-                    $scholarship = get_applicant_scholarship($result['id'], $cycle_id);
-                    if ($scholarship !== NULL): 
-                ?>
-                <form action='Scholarship.php' method='GET'>
-                    <button type='submit' name='id' value='<?php echo $scholarship['scholarship_id'] ?>'>view Scholarship</button>
-                </form>
-                    <?php endif;
-                        elseif($cm):
+                
+                    <?php elseif($cm):
                             $id = 0;
                             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $id = $_POST['application_id'];
