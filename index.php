@@ -323,7 +323,7 @@
                         </table>
                         <div class='paging'>
                             <form action="index.php">
-                                <?php  $count = get_count_admin_list()["count(dbApplication.id)"]/10;
+                                <?php  $count = get_count_admin_list()["count(dbPersons.id)"]/10;
                                 $i = 0;
                                 while ($i < $count): 
                                     $n = $i +1;

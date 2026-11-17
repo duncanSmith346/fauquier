@@ -708,7 +708,7 @@ function Admin_list($page) {
 function get_count_admin_list() {
     $con = connect();
 
-    $sql = "SELECT count(dbApplication.id)
+    $sql = "SELECT count(dbPersons.id)
             FROM dbPersons
             LEFT JOIN dbApplication ON dbApplication.applicant_id=dbPersons.id
             LEFT JOIN dbCohort ON dbCohort.person_id=dbPersons.id
@@ -725,6 +725,44 @@ function get_count_admin_list() {
     mysqli_stmt_close($stmt);
     mysqli_close($con);
     return $number;
+}
+
+function export_list() {
+    $con = connect();
+
+    $sql = "SELECT CONCAT(dbPersons.first_name, ' ', dbPersons.last_name) AS fullname, 
+            dbPersons.email AS email,
+            dbPersons.phone1 AS phone,
+            dbPersons.shirt_size, 
+            dbApplication.createdAt,
+            dbApplication.cycle_id AS cycle,
+            dbApplication.paymentStatus AS applicationFee,
+            dbApplication.submittedAt,
+            dbApplication.reviewStatus AS reviewStatus,
+            dbApplication.decisionDate,
+            dbApplication.decisionStatus AS decisionStatus,
+            dbScholarships.submittedDate,
+            dbScholarships.scholarshipStatus,
+            dbScholarships.amountAwarded,
+            dbCommitment.tuitionStatus AS tuition,
+            dbCommitment.submittedDate
+            FROM dbPersons
+            LEFT JOIN dbApplication ON dbApplication.applicant_id=dbPersons.id
+            LEFT JOIN dbCohort ON dbCohort.person_id=dbPersons.id
+            LEFT JOIN dbCommitment ON dbCohort.id=dbCommitment.cohort_id
+            LEFT JOIN dbScholarships ON dbApplication.id=dbScholarships.application_id
+            WHERE dbPersons.type='applicant' OR dbPersons.type='cohort'";
+    
+    $stmt = mysqli_prepare($con, $sql);
+    
+    mysqli_stmt_execute($stmt);
+
+    $result = mysqli_stmt_get_result($stmt);
+    
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+    return $result;
 }
 
 function get_applicant_commitment($person_id, $cycle_id) {

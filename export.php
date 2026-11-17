@@ -28,6 +28,10 @@
     use PhpOffice\PhpSpreadsheet\Spreadsheet;
     use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
+    require_once('database/dbPersons.php');
+    require_once('database/dbApplication.php');
+    require_once('database/dbQuestions.php');
+
     // 1. Create a new Spreadsheet object
     $spreadsheet = new Spreadsheet();
     $sheet = $spreadsheet->getActiveSheet();
@@ -35,13 +39,35 @@
     // 2. Write individual cells
     $sheet->setCellValue('A1', 'Name');
     $sheet->setCellValue('B1', 'Email');
+    $sheet->setCellValue('C1', 'Phone');
+    $sheet->setCellValue('D1', 'Shirt Size');
+    $sheet->setCellValue('E1', 'Application Start Date');
+    $sheet->setCellValue('F1', 'Application Cycle');
+    $sheet->setCellValue('G1', 'Application Fee Status');
+    $sheet->setCellValue('H1', 'Application Submitted Date');
+    $sheet->setCellValue('I1', 'Application Review Status');
+    $sheet->setCellValue('J1', 'Application Decision Date');
+    $sheet->setCellValue('K1', 'Application Decision');
+    $sheet->setCellValue('L1', 'Scholarship Submitted Date');
+    $sheet->setCellValue('M1', 'Scholarship Decision');
+    $sheet->setCellValue('N1', 'Scholarship Amount Awarded');
+    $sheet->setCellValue('O1', 'Tuition Status');
+    $sheet->setCellValue('P1', 'Commitment Submitted Date');
+
 
     // 3. Or write an entire array of rows at once
-    $data = [
-        ['Alice Smith', 'alice@example.com'],
-        ['Bob Jones', 'bob@example.com'],
-    ];
+    $basicInfoList = export_list();
+
+    $data = [];
+    while ($result = mysqli_fetch_assoc($basicInfoList)) {
+        $data[] = $result;
+    }
+
     $sheet->fromArray($data, null, 'A2');
+
+    foreach (range('A', 'P') as $col) {
+        $sheet->getColumnDimension($col)->setAutoSize(true);
+    }
 
     // 4. Save to a file on the server
     $writer = new Xlsx($spreadsheet);
