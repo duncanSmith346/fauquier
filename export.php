@@ -73,6 +73,5 @@
     $writer = new Xlsx($spreadsheet);
     $writer->save('export.xlsx');
 
-    #header("location: index.php")
-    echo 'done';
+    header("location: index.php")
 ?>
