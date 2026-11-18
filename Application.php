@@ -570,7 +570,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <br>
                         <?php endif;?>
                     <?php endif;?>
-                <p><a href="index.php">Back to Dashboard</a></p>
+                <div class="application_returnLink">
+                    <p><strong><a href="index.php">Back to Dashboard</a></strong></p>
+                </div>
             </div>
         </main>
     </body>

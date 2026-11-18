@@ -918,14 +918,15 @@ div {
 div.navigation {
     display: flex;
     flex-direction: column;
-    width: 250px;
-    position: relative;
-    right: 5rem;
+    width: 150px;
+    position: absolute;
+    left: 2.5rem;
 }
 
 div.admin_dashboard {
     display: flex;
     flex-direction: row;
+    align-items: center;
 }
 
 a.navigation_button {
@@ -940,7 +941,42 @@ div.application_list {
     display: flex;
     flex-direction: column;
     position: relative;
-    left: 5rem;
+    left: 9rem;
+}
+
+th.admin_applicatin_table {
+    border: 0px solid;
+    border-color: transparent;
+    color: #202328;
+    background-color: transparent;
+    padding: .25rem;
+    border-radius: .3rem;
+    text-align: center;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 20px;
+}
+
+tr:nth-child(even) {background-color: #d7a947;}
+
+td.admin_applicatin_table {
+    border: 2px solid;
+    border-color: white;
+    color: white;
+    background-color: var(--main-color);
+    padding: .25rem;
+    text-align: center;
+    border-radius: .2rem;
+}
+
+a.adminlist_applicationName {
+    color: var(--button-font-color);
+    text-decoration: none;
+}
+a.adminlist_applicationName:hover {
+    color: var(--accent-color);
+    td:hover {
+        background-color: transparent;
+    }
 }
 
 div.application_card {
@@ -1033,27 +1069,6 @@ a.remove_answer_link:hover {
     color: black;   
 }
 
-td.admin_applicatin_table {
-    border: 1px solid;
-    border-color: var(white);
-    color: white;
-    background-color: var(--main-color);
-    padding: .25rem;
-    text-align: center;
-    border-radius: .3rem;
-}
-
-th.admin_applicatin_table {
-    border: 1px solid;
-    border-color: var(white);
-    color: white;
-    background-color: var(--accent-color);
-    padding: .25rem;
-    border-radius: .3rem;
-    text-align: center;
-    font-size: 21px;
-}
-
 .nav_application {
     background-color: var(--accent-color);
     height: 1rem;
@@ -1095,6 +1110,10 @@ th.admin_applicatin_table {
     margin-bottom: 1rem;
 }
 
+.application_returnLink {
+    position: absolute;
+    bottom: 5rem;
+}
 
 
 button.dashboardPaging {
@@ -1111,15 +1130,6 @@ div.paging {
     padding: .5rem;
     position: relative;
     right: 25px;
-}
-
-
-a.adminlist_applicationName {
-    color: var(--button-font-color);
-    text-decoration: none;
-}
-a.adminlist_applicationName:hover {
-    color: green;   
 }
 
 .payment-icon {

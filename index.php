@@ -206,11 +206,11 @@
             <?php if ($admin):?>
                 <div class="admin_dashboard">
                     <div class="navigation">
-                        <a href="forms.php" class="navigation_button"> Forms</a>
-                        <a href="manageCommitteeMembers.php" class="navigation_button"> Committee Members</a>
-                        <a href="export.php" class="navigation_button"> Export</a>
-                        <a href="personSearch.php" class="navigation_button"> Person Search</a>
-                        <a href="logout.php" class="navigation_button"> Log out</a>
+                        <a style="text-align:center;" href="forms.php" class="navigation_button"> Forms</a>
+                        <a style="text-align:center;" href="manageCommitteeMembers.php" class="navigation_button"> Committee Members</a>
+                        <a style="text-align:center;" href="export.php" class="navigation_button"> Export</a>
+                        <a style="text-align:center;" href="personSearch.php" class="navigation_button"> Person Search</a>
+                        <a style="text-align:center;" href="logout.php" class="navigation_button"> Log out</a>
                     </div>
                     <div class='application_list'>
                         <?php $results = admin_list($page);?>
@@ -342,68 +342,68 @@
 
             <!-- Dashboard for if CM -->
 
-             <?php if ($cm): ?>
-                <div class="admin_dashboard">
-                    <div class="navigation">
-                        <a href="index.php" class="navigation_button"> Applications</a>
-                        <a href="logout.php" class="navigation_button"> logout</a>
-                        
-                    </div>
-                    <div class='application_list'>
-                        <?php
-                            if (isset($_GET['assignedOnly'])):
-                                $results = get_assigned_applications($_SESSION['_id'],$page);
-                        ?>
-                        <form action="index.php">
-                            <button type='submit'>View All Applications</button>
-                        </form>
-                        <?php
-                            else: 
-                                $results = retrieve_undecided_applicantions_names($page);
-                        ?>
-                        <form action="index.php" method='GET'>
-                            <button type='submit' name='assignedOnly' value='True'>View Only Assigned</button>
-                        </form>
-                        <?php
-                            endif;
-                            foreach($results as $result) : 
-                        ?>
-                            <div class="application_card">
-                                <a href='Application.php?id=<?= urldecode($result['id'])?>' class='href_application_card'> 
-                                    Applicant Name: <?php echo $result['answer1'];?>  
-                                </a>
-                                | Committee Member: 
-                                <?php if ($result['reviewer_id'] === NULL) echo 'undecided';
-                                    else {
-                                        $name = get_name_from_id($result['reviewer_id']);
-                                        echo $name['first_name'];
-                                        echo ' '; 
-                                        echo $name['last_name'];
-                                    }
-                                ?>
-                            </div>
-                        <?php endforeach; ?>
-                        <div class='paging'>
-                            <form action="index.php">
-                                <?php if (isset($_GET['assignedOnly'])):?>
-                                    <input type='hidden' name='assignedOnly' value='True'/>
-                                <?php endif;?>
-                                <?php  $count = get_count_admin_list()["count(dbApplication.id)"]/10;
-                                $i = 0;
-                                while ($i < $count): 
-                                    $n = $i +1;
-                                    ?>
-                                <button class='dashboardPaging' type='submit' name='page' value='<?php echo $i;?>'><?php echo $n;?></button>
-
-                                <?php 
-                                $i = $i + 1; 
-                                endwhile;
-                                ?>
-                            </form>
+            <?php if ($cm): ?>
+            <div class="admin_dashboard">
+                <div class="navigation">
+                    <a href="index.php" class="navigation_button"> Applications</a>
+                    <a href="logout.php" class="navigation_button"> logout</a>
+                    
+                </div>
+                <div class='application_list'>
+                    <?php
+                        if (isset($_GET['assignedOnly'])):
+                            $results = get_assigned_applications($_SESSION['_id'],$page);
+                    ?>
+                    <form action="index.php">
+                        <button type='submit'>View All Applications</button>
+                    </form>
+                    <?php
+                        else: 
+                            $results = retrieve_undecided_applicantions_names($page);
+                    ?>
+                    <form action="index.php" method='GET'>
+                        <button type='submit' name='assignedOnly' value='True'>View Only Assigned</button>
+                    </form>
+                    <?php
+                        endif;
+                        foreach($results as $result) : 
+                    ?>
+                        <div class="application_card">
+                            <a href='Application.php?id=<?= urldecode($result['id'])?>' class='href_application_card'> 
+                                Applicant Name: <?php echo $result['answer1'];?>  
+                            </a>
+                            | Committee Member: 
+                            <?php if ($result['reviewer_id'] === NULL) echo 'undecided';
+                                else {
+                                    $name = get_name_from_id($result['reviewer_id']);
+                                    echo $name['first_name'];
+                                    echo ' '; 
+                                    echo $name['last_name'];
+                                }
+                            ?>
                         </div>
+                    <?php endforeach; ?>
+                    <div class='paging'>
+                        <form action="index.php">
+                            <?php if (isset($_GET['assignedOnly'])):?>
+                                <input type='hidden' name='assignedOnly' value='True'/>
+                            <?php endif;?>
+                            <?php  $count = get_count_admin_list()["count(dbApplication.id)"]/10;
+                            $i = 0;
+                            while ($i < $count): 
+                                $n = $i +1;
+                                ?>
+                            <button class='dashboardPaging' type='submit' name='page' value='<?php echo $i;?>'><?php echo $n;?></button>
+
+                            <?php 
+                            $i = $i + 1; 
+                            endwhile;
+                            ?>
+                        </form>
                     </div>
                 </div>
-             <?php endif ?>
+            </div>
+            <?php endif ?>
 
             <!-- Dashboard for if Cohort -->
             <?php if ($cohort): ?> 

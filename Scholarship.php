@@ -157,9 +157,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php endif; ?>
                 <?php if ($existing_Scholarship): ?>
 
-                <!-- Show the status of an existing application. -->
-                <h2>Application Status</h2>
-                <p>submitted</p>
+                    <!-- Show the status of an existing application. -->
+                    <h2 style="text-align:center;">Application Status</h2>
+                    <p style="text-align:center;">submitted</p>
 
                 <?php else: ?>
 
@@ -238,7 +238,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <?php endforeach; ?>
                 <?php endif; ?>
-                <p><a href="index.php">Back to Dashboard</a></p>
+                <div class="application_returnLink">
+                    <p><strong><a href="index.php">Back to Dashboard</a></strong></p>
+                </div>
             </div>
         </main>
     </body>
