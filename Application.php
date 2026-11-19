@@ -435,6 +435,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </form>
                 <br>
                 <p style="text-align:center"><strong>Decision Status:</strong> <?php echo $result['decisionStatus'] ?></p>
+                <br>
                 <form action="Application.php" method="GET">
                     <input type='hidden' name='id' value='<?php echo $result['id'] ?>' />
                     <button class="application_buttons" type='submit' name='reject' value='reject'>Reject</button>

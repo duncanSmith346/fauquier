@@ -959,13 +959,15 @@ th.admin_applicatin_table {
 tr:nth-child(even) {background-color: #d7a947;}
 
 td.admin_applicatin_table {
-    border: 2px solid;
-    border-color: white;
+    border: 4px solid;
+    border-color: var(--page-background-color);
     color: white;
     background-color: var(--main-color);
-    padding: .25rem;
+    padding: .3rem;
+    padding-top: 1.5%;
+    padding-bottom: 1.5%;
     text-align: center;
-    border-radius: .2rem;
+    border-radius: .25rem;
 }
 
 a.adminlist_applicationName {
