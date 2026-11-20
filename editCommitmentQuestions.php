@@ -36,12 +36,12 @@
         <main class='dashboard'>
             <div class="forms_dashboard">
                 <div class="navigation">
-                    <a href="addQuestion.php?form=samplecommitment" class='navigation_button'> Add Question</a>
-                    <a href='index.php' class='navigation_button'> Home</a>
-                    <a href="forms.php" class="navigation_button"> Forms</a>
-                    <a href="index.php" class="navigation_button"> Committee Members</a>
-                    <a href="personSearch.php" class="navigation_button"> Person Search</a>
-                    <a href="logout.php" class="navigation_button"> Log out</a>
+                    <a style="text-align:center;" href="addQuestion.php?form=samplecommitment" class='navigation_button'> Add Question</a>
+                    <a style="text-align:center;" href='index.php' class='navigation_button'> Home</a>
+                    <a style="text-align:center;" href="forms.php" class="navigation_button"> Forms</a>
+                    <a style="text-align:center;" href="index.php" class="navigation_button"> Committee Members</a>
+                    <a style="text-align:center;" href="personSearch.php" class="navigation_button"> Person Search</a>
+                    <a style="text-align:center;" href="logout.php" class="navigation_button"> Log out</a>
                 </div>
                 <div class='question_list'>
                     <?php
@@ -51,13 +51,13 @@
                     <div class='question_card'>
                         <?php
                         echo $question['number'];
-                        echo " ";
+                        echo ". ";
                         echo $question['question'];
-                        echo " ";
+                        echo " -- ";
                         echo $question['type'];
                         if ($question['type'] === "multipleChoice" || $question['type'] === "checkbox"):
                         ?>
-                        <p>Possible answers include:</p>
+                        <p><br>Possible answers include:</p>
                         <ul>
                             <?php
                             $answers = getAnswers($question['number'],'samplecommitment');

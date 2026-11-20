@@ -255,21 +255,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php if ($existing_application && $existing_application['submittedAt'] !== null): ?>
                     <!-- Show the status of an existing application. -->
                     <h2 style="text-align:center;">Application Status</h2>
-
+                    <br>
                     <?php
                     // Get the decision recorded in the database.
                     $status = $existing_application['decisionStatus'];
 
                     // Translate database values into readable statuses.
                     if ($status === 'accept') {
-                        echo "<p>Accepted</p>";
+                        echo "<p style=text-align:center;>Accepted</p>";
                     } elseif ($status === 'reject') {
-                        echo "<p>Rejected</p>";
+                        echo "<p style=text-align:center;>Rejected</p>";
                     } else {
                         echo "<p style=text-align:center;>Pending Review</p>";
                     }
-                    ?>
-
+                ?>
+                <br>
                 <?php else: ?>
 
                     <!-- No application exists yet, so show the form. -->
@@ -368,12 +368,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $id = $_GET['id'];
                         $result = retrieve_application($id);
                             ?>
-                                <?php
-                                $answers = getQuestions($id);
+                        <?php
+                        $answers = getQuestions($id);
 
                     foreach ($answers as $answer):
                 ?>
-                    <p><strong>
+                    <p style="padding: 0.3rem;"><strong>
                         Question <?php echo htmlspecialchars($answer['number']); ?>:
                         <?php echo htmlspecialchars($answer['question']); ?>
                     </strong></p>
@@ -384,9 +384,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <?php echo htmlspecialchars($answer['answer']); ?>
                         <?php endif; ?>
                     </p>
-                    <p> 
-                        Comment: <?php echo htmlspecialchars($answer['comment'] ?? ''); ?>
-                    </p>
+
+                    <?php if ($answer['comment'] !== NULL): ?>
+                        <div style="margin-left: 2rem;">
+                            <p style="padding: 0.2rem;">Comment:</p>
+                            <p class="application_comments"><?php echo htmlspecialchars($answer['comment'] ?? ''); ?></p>
+                        </div>
+                    <?php endif; ?>
                     <br>
                 <?php endforeach; ?>
                 <?php

@@ -915,18 +915,20 @@ div {
     display: block;
 }
 
-div.navigation {
-    display: flex;
-    flex-direction: column;
-    width: 150px;
-    position: absolute;
-    left: 2.5rem;
-}
-
 div.admin_dashboard {
     display: flex;
     flex-direction: row;
     align-items: center;
+}
+
+div.navigation {
+    display: flex;
+    flex-direction: column;
+    width: 150px;
+    position: relative;
+    margin-bottom: auto;
+    right: 5rem;
+    top: 1rem;
 }
 
 a.navigation_button {
@@ -941,37 +943,39 @@ div.application_list {
     display: flex;
     flex-direction: column;
     position: relative;
-    left: 9rem;
 }
 
 th.admin_applicatin_table {
     border: 0px solid;
-    border-color: transparent;
-    color: #202328;
-    background-color: transparent;
-    padding: .25rem;
-    border-radius: .3rem;
+    border-color: var(--page-background-color);
+    color: var(--page-background-color);
+    background-color: var(--accent-color);
+    padding: .5rem;
+    padding-top: 1%;
+    padding-bottom: 1%;
     text-align: center;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-size: 20px;
 }
 
-tr:nth-child(even) {background-color: #d7a947;}
-
 td.admin_applicatin_table {
-    border: 4px solid;
-    border-color: var(--page-background-color);
-    color: white;
-    background-color: var(--main-color);
+    border: 0px solid;
     padding: .3rem;
     padding-top: 1.5%;
     padding-bottom: 1.5%;
     text-align: center;
-    border-radius: .25rem;
+    border-top: 4px solid;
+    border-top-color: var(--page-background-color);
+    border-bottom: 4px solid;
+    border-bottom-color: var(--page-background-color);
+    
 }
 
+tr:nth-child(even) {background-color: #2b3379cc; color: var(--page-background-color);}
+tr:nth-child(odd) {background-color: #66687877; color: #0a0a0a;}
+
 a.adminlist_applicationName {
-    color: var(--button-font-color);
+    color: inherit;
     text-decoration: none;
 }
 a.adminlist_applicationName:hover {
@@ -979,6 +983,14 @@ a.adminlist_applicationName:hover {
     td:hover {
         background-color: transparent;
     }
+}
+
+div.cm_application_list {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    left: 7rem;
+    align-items: center;
 }
 
 div.application_card {
@@ -1038,11 +1050,11 @@ div.question_list {
     display: flex;
     flex-direction: column;
     position: relative;
-    left: 5rem;
+    left: 11rem;
 }
 
 div.question_card {
-    width: 700px;
+    width: 500px;
     padding: var(--button-padding);
     border-radius: var(--button-border-radius);
     color: var(--button-font-color);
@@ -1068,7 +1080,8 @@ a.remove_answer_link {
 }
 
 a.remove_answer_link:hover {
-    color: black;   
+    color: rgb(255, 0, 0);
+    text-decoration: line-through;
 }
 
 .nav_application {
@@ -1078,6 +1091,7 @@ a.remove_answer_link:hover {
 
 .application_header {
     text-align: center;
+    color: var(--main-color);
     display: block;
 }
 .application_header_img {
@@ -1100,6 +1114,15 @@ a.remove_answer_link:hover {
     padding: 7px;
 }
 
+.application_comments {
+    border: 1px solid var(--main-color);
+    border-radius: 0.4rem;
+    margin: 0px;
+    width: 100%;
+    padding: 9px;
+    font-size: 95%;
+}
+
 .application_labels {
     display: block;
     text-align: center;
@@ -1108,15 +1131,16 @@ a.remove_answer_link:hover {
 .application_buttons {
     display: block;
     margin: auto;
-    width: 300px;
+    width: 260px;
     margin-bottom: 1rem;
 }
 
 .application_returnLink {
-    position: absolute;
-    bottom: 5rem;
+    position: relative;
+    left: 3rem;
+    margin-top: 3rem;
+    margin-bottom: 2rem;
 }
-
 
 button.dashboardPaging {
     align-items: center;
@@ -1131,7 +1155,6 @@ div.paging {
     align-items: center;
     padding: .5rem;
     position: relative;
-    right: 25px;
 }
 
 .payment-icon {

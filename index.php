@@ -345,28 +345,28 @@
             <?php if ($cm): ?>
             <div class="admin_dashboard">
                 <div class="navigation">
-                    <a href="index.php" class="navigation_button"> Applications</a>
-                    <a href="logout.php" class="navigation_button"> logout</a>
+                    <a style="text-align:center;" href="index.php" class="navigation_button"> Applications </a>
+                    <a style="text-align:center;" href="logout.php" class="navigation_button"> Log out </a>
                     
                 </div>
-                <div class='application_list'>
+                <div class='cm_application_list'>
                     <?php
                         if (isset($_GET['assignedOnly'])):
                             $results = get_assigned_applications($_SESSION['_id'],$page);
-                    ?>
-                    <form action="index.php">
-                        <button type='submit'>View All Applications</button>
-                    </form>
-                    <?php
+                        ?>
+                        <form action="index.php">
+                            <button type='submit'>View All Applications</button>
+                        </form>
+                        <?php
                         else: 
                             $results = retrieve_undecided_applicantions_names($page);
-                    ?>
-                    <form action="index.php" method='GET'>
-                        <button type='submit' name='assignedOnly' value='True'>View Only Assigned</button>
-                    </form>
-                    <?php
-                        endif;
-                        foreach($results as $result) : 
+                        ?>
+                        <form action="index.php" method='GET'>
+                            <button type='submit' name='assignedOnly' value='True'>View Only Assigned</button>
+                        </form>
+                    <?php endif; ?>
+                    <br>
+                    <?php foreach($results as $result) : 
                     ?>
                         <div class="application_card">
                             <a href='Application.php?id=<?= urldecode($result['id'])?>' class='href_application_card'> 
@@ -383,12 +383,13 @@
                             ?>
                         </div>
                     <?php endforeach; ?>
+                    <br>
                     <div class='paging'>
                         <form action="index.php">
                             <?php if (isset($_GET['assignedOnly'])):?>
                                 <input type='hidden' name='assignedOnly' value='True'/>
                             <?php endif;?>
-                            <?php  $count = get_count_admin_list()["count(dbApplication.id)"]/10;
+                            <?php  $count = get_count_admin_list()["count(dbPersons.id)"]/10;
                             $i = 0;
                             while ($i < $count): 
                                 $n = $i +1;

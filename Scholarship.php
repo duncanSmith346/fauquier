@@ -156,10 +156,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </p>
                 <?php endif; ?>
                 <?php if ($existing_Scholarship): ?>
-
                     <!-- Show the status of an existing application. -->
                     <h2 style="text-align:center;">Application Status</h2>
-                    <p style="text-align:center;">submitted</p>
+                    <br>
+                    <p style="text-align:center;">submitted</p><br>
 
                 <?php else: ?>
 
@@ -224,18 +224,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 foreach ($answers as $answer):
                 ?>
-                <p>
+                <p style="padding: 0.3rem;"><strong>
                     Question <?php echo htmlspecialchars($answer['number']); ?>:
                     <?php echo htmlspecialchars($answer['question']); ?>
-                </p>
-                <p>
+                </p></strong>
+                <p class="application_responses">
                     <?php if (($answer['type'] ?? '') === 'file' && $answer['answer'] !== ''): ?>
                         <a href="downloadFile.php?file=<?php echo urlencode($answer['answer']); ?>">Download file</a>
                     <?php else: ?>
                         <?php echo htmlspecialchars($answer['answer']); ?>
                     <?php endif; ?>
                 </p>
-
+                <br>
                 <?php endforeach; ?>
                 <?php endif; ?>
                 <div class="application_returnLink">

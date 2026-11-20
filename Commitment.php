@@ -230,7 +230,9 @@ function commitment_escape($value) {
                     <button class="application_buttons" type="submit">Submit Commitment Form</button>
                 </form>
             <?php endif; ?>
-            <p><a href="index.php">Back to Dashboard</a></p>
+            <div class="application_returnLink">
+                <p><strong><a href="index.php">Back to Dashboard</a></strong></p>
+            </div>
         </div>
     </main>
 </body>
