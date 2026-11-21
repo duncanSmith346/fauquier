@@ -208,7 +208,6 @@
                     <div class="navigation">
                         <a style="text-align:center;" href="forms.php" class="navigation_button"> Forms</a>
                         <a style="text-align:center;" href="manageCommitteeMembers.php" class="navigation_button"> Committee Members</a>
-                        <a style="text-align:center;" href="export.php" class="navigation_button"> Export</a>
                         <a style="text-align:center;" href="personSearch.php" class="navigation_button"> Person Search</a>
                         <a style="text-align:center;" href="logout.php" class="navigation_button"> Log out</a>
                     </div>
