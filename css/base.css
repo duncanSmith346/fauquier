@@ -986,10 +986,11 @@ a.adminlist_applicationName:hover {
 }
 
 div.cm_application_list {
+    width: 100%;
     display: flex;
     flex-direction: column;
     position: relative;
-    left: 7rem;
+    right: 4rem;
     align-items: center;
 }
 
