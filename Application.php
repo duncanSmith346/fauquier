@@ -447,10 +447,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <button class="application_buttons" type='submit' name='reject' value='reject'>Reject</button>
                     <button class="application_buttons" type='submit' name='accept' value='accept'>Accept</button>
                 </form>
-                <form action='export.php' method='POST'>
-                    <input type='hidden' name='id' value='<?php echo $result['id'] ?>' />
-                    <button class="application_buttons" type='submit'>export profile</button>
-                </form>
 
 
                     <?php elseif($cm):

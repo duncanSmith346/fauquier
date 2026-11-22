@@ -99,6 +99,11 @@ $commitment = get_applicant_commitment($person_id, $cycle_id);
 
         <?php endforeach; ?>
 
+        <form action='export.php' method='POST'>
+            <input type='hidden' name='id' value='<?php echo $person_id; ?>' />
+            <button class="application_buttons" type='submit'>export profile</button>
+        </form>
+
     </main>
 </body>
 </html>

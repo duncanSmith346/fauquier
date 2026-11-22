@@ -106,6 +106,7 @@
         $permission_array['takeattendance-2.php'] = 2;
         $permission_array['forms.php'] = 2;
         $permission_array['adminonboarding.php'] = 2;
+        $permission_array['cohortprofile.php'] = 2;
 
         //Check if they're at a valid page for their access level.
 	$current_page = strtolower(basename($_SERVER['PHP_SELF']));
