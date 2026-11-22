@@ -72,9 +72,9 @@
 
     $fromids = formIds($person_id);
 
-    $applicationQuestions = getQuestions($fromids['dbApplication.id']);
-    $scholarshipQuestions = getQuestions($fromids['dbScholarship.id']);
-    $commitmentQuestions = getQuestions($fromids['dbCommitment.id']);
+    $applicationQuestions = getQuestionsExport($fromids['id']);
+    $scholarshipQuestions = getQuestionsExport($fromids['scholarship_id']);
+    $commitmentQuestions = getQuestionsExport($fromids['commitment_id']);
     
     $applicationData = [];
     $scholarshipData = [];
@@ -83,40 +83,50 @@
 
     while ($result = mysqli_fetch_assoc($applicationQuestions)) {
         if ($result['type'] === 'file') {
-            $files[] = $result['answer'];
+            $files[] = 'fileUploads/' . $result['answer'];
         }
         $applicationData[] = $result;
     }
 
     while ($result = mysqli_fetch_assoc($scholarshipQuestions)) {
     if ($result['type'] === 'file') {
-            $files[] = $result['answer'];
+            $files[] = "fileUploads/" . $result['answer'];
         }    
         $scholarshipData[] = $result;
     }
 
     while ($result = mysqli_fetch_assoc($commitmentQuestions)) {
         if ($result['type'] === 'file') {
-            $files[] = $result['answer'];
+            $files[] = 'fileUploads/' . $result['answer'];
         }    
         $commitmentData[] = $result;
     }
+
+    $sheet->setCellValue('A5', 'Application Question');
+    $sheet->setCellValue('B5', 'Application Answer');
+    $sheet->setCellValue('C5', 'Question type');
+    $sheet->setCellValue('E5', 'Scholarship Question');
+    $sheet->setCellValue('F5', 'Scholarship Answer');
+    $sheet->setCellValue('G5', 'Question type');
+    $sheet->setCellValue('I5', 'Commitment Question');
+    $sheet->setCellValue('J5', 'Commitment Answer');
+    $sheet->setCellValue('K5', 'Question type');
 
     $sheet->fromArray($applicationData, null, 'A6');
     $sheet->fromArray($scholarshipData, null, 'D6');
     $sheet->fromArray($commitmentData, null, 'G6');
 
     $sheet->getStyle('B6:B100')->getAlignment()->setWrapText(true);
-    $sheet->getStyle('D6:D100')->getAlignment()->setWrapText(true);
-    $sheet->getStyle('G6:G100')->getAlignment()->setWrapText(true);
+    $sheet->getStyle('E6:D100')->getAlignment()->setWrapText(true);
+    $sheet->getStyle('H6:G100')->getAlignment()->setWrapText(true);
 
     // 4. Save to a file on the server
     $writer = new Xlsx($spreadsheet);
-    $writer->save($basicInfoList['name'] . '.xlsx');
+    $writer->save($basicInfoList['fullname'] . '.xlsx');
 
-    $files[] = $basicInfoList['name'] . '.xlsx';
+    $files[] = $basicInfoList['fullname'] . '.xlsx';
 
-    $zipName = $basicInfoList['name'] . '.zip';
+    $zipName = $basicInfoList['fullname'] . '.zip';
     $zipPath = sys_get_temp_dir() . '/' . $zipName;
     $zip = new ZipArchive();
     if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== TRUE) {

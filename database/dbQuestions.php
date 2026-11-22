@@ -149,7 +149,7 @@ function getQuestions($application_id) {
 function getQuestionsExport($application_id) {
     $con = connect();
 
-    $sql = "SELECT question,answer FROM dbQuestions WHERE application_id=?";
+    $sql = "SELECT question,answer,type FROM dbQuestions WHERE application_id=?";
 
     $stmt = mysqli_prepare($con, $sql);
 

@@ -751,7 +751,7 @@ function export_list($id) {
             LEFT JOIN dbCohort ON dbCohort.person_id=dbPersons.id
             LEFT JOIN dbCommitment ON dbCohort.id=dbCommitment.cohort_id
             LEFT JOIN dbScholarships ON dbApplication.id=dbScholarships.application_id
-            WHERE dbPersons.id=? AND (dbPersons.type='applicant' OR dbPersons.type='cohort')";
+            WHERE dbApplication.id=? AND (dbPersons.type='applicant' OR dbPersons.type='cohort')";
     
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_bind_param($stmt, "s", $id);
@@ -770,13 +770,13 @@ function export_list($id) {
 function formIds($id) {
     $con = connect();
 
-    $sql = "SELECT dbApplication.id, dbScholarship.id, dbCommitment.id 
+    $sql = "SELECT dbApplication.id, dbScholarships.scholarship_id, dbCommitment.commitment_id 
             FROM dbPersons
             LEFT JOIN dbApplication ON dbApplication.applicant_id=dbPersons.id
             LEFT JOIN dbCohort ON dbCohort.person_id=dbPersons.id
             LEFT JOIN dbCommitment ON dbCohort.id=dbCommitment.cohort_id
             LEFT JOIN dbScholarships ON dbApplication.id=dbScholarships.application_id
-            WHERE dbPersons.id=? AND (dbPersons.type='applicant' OR dbPersons.type='cohort')";
+            WHERE dbApplication.id=? AND (dbPersons.type='applicant' OR dbPersons.type='cohort')";
     
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_bind_param($stmt, "s", $id);
