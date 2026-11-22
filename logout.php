@@ -25,7 +25,7 @@ session_start();
     <head>
         <meta HTTP-EQUIV="REFRESH" content="2; url=index.php">
         <title>
-            Empowerhouse VMS | Log out Successful
+            Log out Successful - Leadership Fauquier
         </title>
         <?php require('universal.inc') ?>
     </head>
