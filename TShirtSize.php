@@ -39,7 +39,7 @@ if (isset($_SESSION['_id'])) {
 
 <head>
     <?php require_once('universal.inc') ?>
-    <title>Empowerhouse VMS | Reports</title>
+    <title>TShirt - Leadership Fauquier</title>
         <style>
 table 
             {
@@ -169,7 +169,7 @@ table
 
 <body>
     <?php require_once('header.php') ?>
-    <h1>Volunteer Shirt Size</h1>
+    <h1>Cohort Shirt Size</h1>
 
     <main>
     <?php
@@ -196,7 +196,7 @@ table
 
             //Make row for each person
             while($row = mysqli_fetch_assoc($result)) {
-                $name = $row['first_name'] . $row['last_name'];
+                $name = $row['first_name'] .' '. $row['last_name'];
                 $size = $row['shirt_size'];
                 //Echo a table row with a data cell for name (first and last) and a data cell for shirt size
                 echo

@@ -120,23 +120,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         <?php require('universal.inc'); ?>
         <title>Edit Application Questions | Fauquier Leadership</title>
     </head>
-    <main>
+    <body>
         <h1>Add Answers</h1>
-    </main>
-        <form action='addAnswer.php' method='GET'>
-            <label for="answer1">Answer 1:</label>
-            <input type='text' name="answer1">
-            <label for="answer2">Answer 2:</label>
-            <input type='text' name="answer2">
-            <label for="answer3">Answer 3:</label>
-            <input type='text' name="answer3">
-            <label for="answer4">Answer 4:</label>
-            <input type='text' name="answer4">
-            <label for="answer5">Answer 5:</label>
-            <input type='text' name="answer5">
-            <input type='hidden' name='number' value='<?php echo $question; ?>'/>
-            <input type='hidden' name='form' value='<?php echo $form;?>'/>
-            <button type='submit'>Add Answers</button>
-        </form>
-    </main>
+        <main class='dashboard'>
+            <form action='addAnswer.php' method='GET'>
+                <label for="answer1">Answer 1:</label>
+                <input type='text' name="answer1">
+                <label for="answer2">Answer 2:</label>
+                <input type='text' name="answer2">
+                <label for="answer3">Answer 3:</label>
+                <input type='text' name="answer3">
+                <label for="answer4">Answer 4:</label>
+                <input type='text' name="answer4">
+                <label for="answer5">Answer 5:</label>
+                <input type='text' name="answer5">
+                <input type='hidden' name='number' value='<?php echo $question; ?>'/>
+                <input type='hidden' name='form' value='<?php echo $form;?>'/>
+                <button type='submit'>Add Answers</button>
+            </form>
+        </main>
+    </body>
 </html>

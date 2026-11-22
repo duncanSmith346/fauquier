@@ -32,6 +32,8 @@
     require_once('database/dbApplication.php');
     require_once('database/dbQuestions.php');
 
+    $person_id = $_POST['id'];
+
     // 1. Create a new Spreadsheet object
     $spreadsheet = new Spreadsheet();
     $sheet = $spreadsheet->getActiveSheet();
@@ -56,12 +58,10 @@
 
 
     // 3. Or write an entire array of rows at once
-    $basicInfoList = export_list();
+    $basicInfoList = export_list($person_id);
 
     $data = [];
-    while ($result = mysqli_fetch_assoc($basicInfoList)) {
-        $data[] = $result;
-    }
+    $data[] = $basicInfoList;
 
     $sheet->fromArray($data, null, 'A2');
 
@@ -69,9 +69,96 @@
         $sheet->getColumnDimension($col)->setAutoSize(true);
     }
 
+
+    $fromids = formIds($person_id);
+
+    $applicationQuestions = getQuestionsExport($fromids['id']);
+    $scholarshipQuestions = getQuestionsExport($fromids['scholarship_id']);
+    $commitmentQuestions = getQuestionsExport($fromids['commitment_id']);
+    
+    $applicationData = [];
+    $scholarshipData = [];
+    $commitmentData = [];
+    $files = [];
+
+    while ($result = mysqli_fetch_assoc($applicationQuestions)) {
+        if ($result['type'] === 'file') {
+            $files[] = 'fileUploads/' . $result['answer'];
+        }
+        $applicationData[] = $result;
+    }
+
+    while ($result = mysqli_fetch_assoc($scholarshipQuestions)) {
+    if ($result['type'] === 'file') {
+            $files[] = "fileUploads/" . $result['answer'];
+        }    
+        $scholarshipData[] = $result;
+    }
+
+    while ($result = mysqli_fetch_assoc($commitmentQuestions)) {
+        if ($result['type'] === 'file') {
+            $files[] = 'fileUploads/' . $result['answer'];
+        }    
+        $commitmentData[] = $result;
+    }
+
+    $sheet->setCellValue('A5', 'Application Question');
+    $sheet->setCellValue('B5', 'Application Answer');
+    $sheet->setCellValue('C5', 'Question type');
+    $sheet->setCellValue('E5', 'Scholarship Question');
+    $sheet->setCellValue('F5', 'Scholarship Answer');
+    $sheet->setCellValue('G5', 'Question type');
+    $sheet->setCellValue('I5', 'Commitment Question');
+    $sheet->setCellValue('J5', 'Commitment Answer');
+    $sheet->setCellValue('K5', 'Question type');
+
+    $sheet->fromArray($applicationData, null, 'A6');
+    $sheet->fromArray($scholarshipData, null, 'D6');
+    $sheet->fromArray($commitmentData, null, 'G6');
+
+    $sheet->getStyle('B6:B100')->getAlignment()->setWrapText(true);
+    $sheet->getStyle('E6:D100')->getAlignment()->setWrapText(true);
+    $sheet->getStyle('H6:G100')->getAlignment()->setWrapText(true);
+
     // 4. Save to a file on the server
     $writer = new Xlsx($spreadsheet);
-    $writer->save('export.xlsx');
+    $writer->save($basicInfoList['fullname'] . '.xlsx');
+
+    $files[] = $basicInfoList['fullname'] . '.xlsx';
+
+    $zipName = $basicInfoList['fullname'] . '.zip';
+    $zipPath = sys_get_temp_dir() . '/' . $zipName;
+    $zip = new ZipArchive();
+    if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== TRUE) {
+        exit("Cannot open <$zipPath>\n");
+    }
+    foreach ($files as $file) {
+        if (file_exists($file)) {
+            // basename() prevents full server directory paths from appearing inside the zip
+            $zip->addFile($file, basename($file));
+        }
+    }
+    $zip->close();
+
+    // 5. Force download the file
+    if (file_exists($zipPath)) {
+        // Clear output buffer to prevent corrupted zip files
+        if (ob_get_level()) {
+            ob_end_clean();
+        }
+
+        header('Content-Type: application/zip');
+        header('Content-Disposition: attachment; filename="' . basename($zipName) . '"');
+        header('Content-Length: ' . filesize($zipPath));
+        header('Pragma: no-cache');
+        header('Expires: 0');
+
+        readfile($zipPath);
+
+        // 6. Delete the temporary file from the server after download
+        unlink($zipPath);
+        exit;
+    }
 
     header("location: index.php")
 ?>

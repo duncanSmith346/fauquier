@@ -55,7 +55,6 @@
         <main>
             <?php if ($success):?>
                 <div class="new-password"><?php echo $password ?></div>
-                <a href="index.php" class="navigation_button"> Home</a>
             <?php else:?>
             <div class="question-container">
                 <form action='addCommitteeMember.php' method='POST'>
@@ -69,9 +68,12 @@
                     <input type='tel' id='phone' name='phone'/>
                     <button type='submit'>Add Committee Member</button>
                 </form>
-                <a href="index.php" class="navigation_button"> Home</a>
             </div>
             <?php endif;?>
+            <br><br><br>
+            <div class="question-container">
+                <a href="index.php" class="navigation_button"> Home</a>
+            </div>
         </main>
     </body>
 </html>

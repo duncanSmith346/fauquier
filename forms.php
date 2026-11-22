@@ -35,7 +35,8 @@
         <?php require('header.php'); ?>
         <h1>Forms</h1>
         <main class='dashboard'>
-                <div class="admin_dashboard" style="flex-wrap: wrap;">                <div class="navigation">
+            <div class="admin_dashboard">
+                <div class="navigation">
                     <a href="index.php" class="navigation_button"> Home</a>
                     <a href="manageCommitteeMembers.php" class="navigation_button"> Committee Members</a>
                     <a href="personSearch.php" class="navigation_button"> Person Search</a>

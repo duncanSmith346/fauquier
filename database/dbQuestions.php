@@ -146,6 +146,30 @@ function getQuestions($application_id) {
     return $results ?: null;
 }
 
+function getQuestionsExport($application_id) {
+    $con = connect();
+
+    $sql = "SELECT question,answer,type FROM dbQuestions WHERE application_id=?";
+
+    $stmt = mysqli_prepare($con, $sql);
+
+    mysqli_stmt_bind_param(
+        $stmt,
+        "s",
+        $application_id
+    );
+
+    mysqli_stmt_execute($stmt);
+
+    $results = mysqli_stmt_get_result($stmt);
+    
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+
+    return $results ?: null;
+}
+
 function getQuestion($application_id, $number) {
     $con = connect();
 

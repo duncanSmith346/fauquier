@@ -138,10 +138,10 @@
                 // echo('<li class="nav-item"><a class="nav-link active" aria-current="page" href="' . $path . 'about.php">About</a></li>');
                 // echo('<li class="nav-item"><a class="nav-link active" aria-current="page" href="' . $path . 'help.php?helpPage=' . $current_page . '" target="_BLANK">Help</a></li>');
                 echo('<span class="nav-divider">|</span>');
-                echo('<span class="navbar-brand">Events</span>');
-                echo('<li class="sub-item"><a class="nav-link active" aria-current="page" href="' . $path . 'calendar.php">Calendar</a></li>');
-		        echo('<li class="sub-item"><a class="nav-link active" aria-current="page" href="' . $path . 'CourseEval.php">Course Evaluation</a></li>');
-                echo('<li class="sub-item"><a class="nav-link active" aria-current="page" href="' . $path . 'eventSearch.php">Search</a></li>');
+                //echo('<span class="navbar-brand">Events</span>');
+                //echo('<li class="sub-item"><a class="nav-link active" aria-current="page" href="' . $path . 'calendar.php">Calendar</a></li>');
+		        //echo('<li class="sub-item"><a class="nav-link active" aria-current="page" href="' . $path . 'CourseEval.php">Course Evaluation</a></li>');
+                //echo('<li class="sub-item"><a class="nav-link active" aria-current="page" href="' . $path . 'eventSearch.php">Search</a></li>');
                 //echo('<button type="button" class="btn btn-link"><a href="' . $path . 'index.php" class="link-primary">home</a></button>');
 	        	//echo(' | <button type="button" class="btn btn-link"><a href="' . $path . 'about.php">about</a></button>');
 	            //echo(' | <button type="button" class="btn btn-link"><a href="' . $path . 'help.php?helpPage=' . $current_page . '" target="_BLANK">help</a></button>');
@@ -151,14 +151,14 @@
 	        if ($_SESSION['access_level'] >= 2 && !$admin) {
 	            //echo('<br>master schedules: <a href="' . $path . 'viewSchedule.php?venue=portland'."".'">Portland, </a>');
 	            //echo('<a href="' . $path . 'viewSchedule.php?venue=bangor'."".'">Bangor</a>');
-		    echo('<li class="sub-item"><a class="nav-link active" aria-current="page" href="' . $path . 'verify.php">Verify</a></li>');
-	            echo('<li class="sub-item"><a class="nav-link active" aria-current="page" href="' . $path . 'selectTrainingPeriod.php">Add Training Period</a></li>');
-                echo('<li class="sub-item"><a class="nav-link active" aria-current="page" href="' . $path . 'manageCourses.php">Manage Courses</a></li>');
-	            echo('<span class="nav-divider">|</span>');
-	            echo('<span class="navbar-brand">Volunteers</span>');
-                echo('<li class="sub-item"><a class="nav-link active" aria-current="page" href="' . $path . 'personSearch.php">Search</a></li>
-			        <li class="sub-item"><a class="nav-link active" aria-current="page" href="register.php">Add Volunteer</a></li>'); 
-	            echo('<li class="sub-item"><a class="nav-link active" aria-current="page" href="' . $path . 'report.php">Reports</a></li>');
+		    //echo('<li class="sub-item"><a class="nav-link active" aria-current="page" href="' . $path . 'verify.php">Verify</a></li>');
+	            //echo('<li class="sub-item"><a class="nav-link active" aria-current="page" href="' . $path . 'selectTrainingPeriod.php">Add Training Period</a></li>');
+                //echo('<li class="sub-item"><a class="nav-link active" aria-current="page" href="' . $path . 'manageCourses.php">Manage Courses</a></li>');
+	            //echo('<span class="nav-divider">|</span>');
+	            //echo('<span class="navbar-brand">Volunteers</span>');
+                //echo('<li class="sub-item"><a class="nav-link active" aria-current="page" href="' . $path . 'personSearch.php">Search</a></li>
+			    //    <li class="sub-item"><a class="nav-link active" aria-current="page" href="register.php">Add Volunteer</a></li>'); 
+	            //echo('<li class="sub-item"><a class="nav-link active" aria-current="page" href="' . $path . 'report.php">Reports</a></li>');
 	        }
             if (!$admin) {
                 echo('<li><a class="nav-link active" aria-current="page" href="' . $path . 'logout.php">Log out</a></li>');

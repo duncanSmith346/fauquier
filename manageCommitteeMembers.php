@@ -40,27 +40,27 @@
         <main class='dashboard'>
             <div class="forms_dashboard">
                 <div class="navigation">
-                    <a href="addCommitteeMember.php" class='navigation_button'> Add Committee Member</a>
-                    <a href='index.php' class='navigation_button'> Home</a>
-                    <a href="Forms.php" class="navigation_button"> Forms</a>
-                    <a href="manageCommitteeMembers.php" class="navigation_button"> Committee Members</a>
-                    <a href="personSearch.php" class="navigation_button"> Person Search</a>
-                    <a href="logout.php" class="navigation_button"> Log out</a>
+                    <a style="text-align:center;" href="addCommitteeMember.php" class='navigation_button'> Add Committee Member</a>
+                    <a style="text-align:center;" href='index.php' class='navigation_button'> Home</a>
+                    <a style="text-align:center;" href="Forms.php" class="navigation_button"> Forms</a>
+                    <a style="text-align:center;" href="manageCommitteeMembers.php" class="navigation_button"> Committee Members</a>
+                    <a style="text-align:center;" href="personSearch.php" class="navigation_button"> Person Search</a>
+                    <a style="text-align:center;" href="logout.php" class="navigation_button"> Log out</a>
                 </div>
                 <div class='question_list'>
-                <?php $cms = get_cms(); 
-                foreach($cms as $cm): ?>
-                    <div class='question_card'>
-                        <?php
-                            echo $cm['first_name'];
-                            echo " ";
-                            echo $cm['last_name'];
-                        ?>
-                        <form action="manageCommitteeMembers.php" Method='POST'>
-                            <button type='submit' name='id' value='<?php echo $cm['id']?>'>Remove</button>
-                        </form>
-                    </div>
-                <?php endforeach ?>
+                    <?php $cms = get_cms(); 
+                    foreach($cms as $cm): ?>
+                        <div class='question_card'>
+                            <p style="text-align:center; font-size:x-large;"><?php
+                                echo $cm['first_name'];
+                                echo " ";
+                                echo $cm['last_name'];
+                            ?></p>
+                            <form action="manageCommitteeMembers.php" Method='POST'>
+                                <button type='submit' name='id' value='<?php echo $cm['id']?>'>Remove</button>
+                            </form>
+                        </div>
+                    <?php endforeach ?>
                 </div>
             </div>
         </main>

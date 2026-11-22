@@ -255,21 +255,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php if ($existing_application && $existing_application['submittedAt'] !== null): ?>
                     <!-- Show the status of an existing application. -->
                     <h2 style="text-align:center;">Application Status</h2>
-
+                    <br>
                     <?php
                     // Get the decision recorded in the database.
                     $status = $existing_application['decisionStatus'];
 
                     // Translate database values into readable statuses.
                     if ($status === 'accept') {
-                        echo "<p>Accepted</p>";
+                        echo "<p style=text-align:center;>Accepted</p>";
                     } elseif ($status === 'reject') {
-                        echo "<p>Rejected</p>";
+                        echo "<p style=text-align:center;>Rejected</p>";
                     } else {
                         echo "<p style=text-align:center;>Pending Review</p>";
                     }
-                    ?>
-
+                ?>
+                <br>
                 <?php else: ?>
 
                     <!-- No application exists yet, so show the form. -->
@@ -368,13 +368,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $id = $_GET['id'];
                         $result = retrieve_application($id);
                             ?>
-                                <?php
-                                $answers = getQuestions($id);
+                        <?php
+                        $answers = getQuestions($id);
 
                     foreach ($answers as $answer):
                 ?>
-                    <p><strong>
-                        Question <?php echo htmlspecialchars($answer['number']); ?>:
+                    <p style="padding: 0.3rem;"><strong>
                         <?php echo htmlspecialchars($answer['question']); ?>
                     </strong></p>
                     <p class="application_responses">
@@ -384,9 +383,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <?php echo htmlspecialchars($answer['answer']); ?>
                         <?php endif; ?>
                     </p>
-                    <p> 
-                        Comment: <?php echo htmlspecialchars($answer['comment'] ?? ''); ?>
-                    </p>
+
+                    <?php if ($answer['comment'] !== NULL): ?>
+                        <div style="margin-left: 2rem;">
+                            <p style="padding: 0.2rem;">Comment:</p>
+                            <p class="application_comments"><?php echo htmlspecialchars($answer['comment'] ?? ''); ?></p>
+                        </div>
+                    <?php endif; ?>
                     <br>
                 <?php endforeach; ?>
                 <?php
@@ -405,17 +408,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <?php $reviewers = get_cms();
                             if ($result['reviewer_id'] == NULL): ?>
                             <option value="Unselected" class='application_list_option'>Unselected</option>
+
                             <?php foreach ($reviewers as $reviewer): ?>
                             <option value="<?php echo $reviewer['id'] ?>" class="application_list_option">
                                 <?= htmlspecialchars(($reviewer['first_name'] ?? '') . ' ' . ($reviewer['last_name'] ?? '')) ?>
                             </option>                                       
                             <?php endforeach; 
+
                             else:
                                 $reviewer = get_name_from_id($result['reviewer_id']);
                             ?>  
                             <option value="<?php echo $result['reviewer_id'] ?>"class="application_list_option">
                                 <?= htmlspecialchars(($reviewer['first_name'] ?? '') . ' ' . ($reviewer['last_name'] ?? '')) ?>
                             </option>
+                            
                             <option value="Unselected" class='application_list_option'>Unselected</option>
                             <?php foreach ($reviewers as $reviewer): 
                                 if (!($result['reviewer_id'] === $reviewer['id'])):
@@ -435,12 +441,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </form>
                 <br>
                 <p style="text-align:center"><strong>Decision Status:</strong> <?php echo $result['decisionStatus'] ?></p>
+                <br>
                 <form action="Application.php" method="GET">
                     <input type='hidden' name='id' value='<?php echo $result['id'] ?>' />
                     <button class="application_buttons" type='submit' name='reject' value='reject'>Reject</button>
                     <button class="application_buttons" type='submit' name='accept' value='accept'>Accept</button>
                 </form>
-                
+                <form action='export.php' method='POST'>
+                    <input type='hidden' name='id' value='<?php echo $result['id'] ?>' />
+                    <button class="application_buttons" type='submit'>export profile</button>
+                </form>
+
+
                     <?php elseif($cm):
                             $id = 0;
                             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -457,7 +469,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <form action="Application.php" method='POST'>
                         <?php while ($question = mysqli_fetch_assoc($questions)):
                         ?>
-                            <p><strong><?php echo htmlspecialchars($question['question']); ?></strong></p>
+                            <p style="padding: 0.3rem;"><strong><?php echo htmlspecialchars($question['question']); ?></strong></p>
                             <p class="application_responses">
                                 <?php if (($question['type'] ?? '') === 'file' && $question['answer'] !== ''): ?>
                                     <a href="downloadFile.php?file=<?php echo urlencode($question['answer']); ?>">Download file</a>
@@ -532,9 +544,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php else:?>
                             <?php while ($question = mysqli_fetch_assoc($questions)):
                             ?>
-                            <p><strong><?php echo htmlspecialchars($question['question']); ?></strong></p>
+                            <p style="padding: 0.3rem;"><strong><?php echo htmlspecialchars($question['question']); ?></strong></p>
                             <p class="application_responses"><?php echo htmlspecialchars($question['answer']); ?></p>
-                            <p>Comment:</p><p> <?php echo $question['comment']; ?> </p>
+
+                            <?php if ($question['comment'] !== NULL): ?>
+                            <div style="margin-left: 2rem;">
+                                <p style="padding: 0.2rem;">Comment:</p>
+                                <p class="application_comments"><?php echo $question['comment']; ?></p>
+                            </div>
+                            <?php endif; ?>
                             <br>
                             <!-- <h3><?php echo htmlspecialchars($question['question']); ?></h3> -->
 
@@ -570,7 +588,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <br>
                         <?php endif;?>
                     <?php endif;?>
-                <p><a href="index.php">Back to Dashboard</a></p>
+                <div class="application_returnLink">
+                    <p><strong><a href="index.php">Back to Dashboard</a></strong></p>
+                </div>
             </div>
         </main>
     </body>

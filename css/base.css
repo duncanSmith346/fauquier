@@ -915,17 +915,20 @@ div {
     display: block;
 }
 
-div.navigation {
-    display: flex;
-    flex-direction: column;
-    width: 250px;
-    position: relative;
-    right: 5rem;
-}
-
 div.admin_dashboard {
     display: flex;
     flex-direction: row;
+    align-items: center;
+}
+
+div.navigation {
+    display: flex;
+    flex-direction: column;
+    width: 150px;
+    position: relative;
+    margin-bottom: auto;
+    right: 5rem;
+    top: 1rem;
 }
 
 a.navigation_button {
@@ -940,7 +943,55 @@ div.application_list {
     display: flex;
     flex-direction: column;
     position: relative;
-    left: 5rem;
+}
+
+th.admin_applicatin_table {
+    border: 0px solid;
+    border-color: var(--page-background-color);
+    color: var(--page-background-color);
+    background-color: var(--accent-color);
+    padding: .5rem;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    text-align: center;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 20px;
+}
+
+td.admin_applicatin_table {
+    border: 0px solid;
+    padding: .3rem;
+    padding-top: 1.5%;
+    padding-bottom: 1.5%;
+    text-align: center;
+    border-top: 4px solid;
+    border-top-color: var(--page-background-color);
+    border-bottom: 4px solid;
+    border-bottom-color: var(--page-background-color);
+    
+}
+
+tr:nth-child(even) {background-color: #2b3379cc; color: var(--page-background-color);}
+tr:nth-child(odd) {background-color: #66687877; color: #0a0a0a;}
+
+a.adminlist_applicationName {
+    color: inherit;
+    text-decoration: none;
+}
+a.adminlist_applicationName:hover {
+    color: var(--accent-color);
+    td:hover {
+        background-color: transparent;
+    }
+}
+
+div.cm_application_list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    right: 4rem;
+    align-items: center;
 }
 
 div.application_card {
@@ -1000,11 +1051,11 @@ div.question_list {
     display: flex;
     flex-direction: column;
     position: relative;
-    left: 5rem;
+    left: 11rem;
 }
 
 div.question_card {
-    width: 700px;
+    width: 500px;
     padding: var(--button-padding);
     border-radius: var(--button-border-radius);
     color: var(--button-font-color);
@@ -1030,28 +1081,8 @@ a.remove_answer_link {
 }
 
 a.remove_answer_link:hover {
-    color: black;   
-}
-
-td.admin_applicatin_table {
-    border: 1px solid;
-    border-color: var(white);
-    color: white;
-    background-color: var(--main-color);
-    padding: .25rem;
-    text-align: center;
-    border-radius: .3rem;
-}
-
-th.admin_applicatin_table {
-    border: 1px solid;
-    border-color: var(white);
-    color: white;
-    background-color: var(--accent-color);
-    padding: .25rem;
-    border-radius: .3rem;
-    text-align: center;
-    font-size: 21px;
+    color: rgb(255, 0, 0);
+    text-decoration: line-through;
 }
 
 .nav_application {
@@ -1061,6 +1092,7 @@ th.admin_applicatin_table {
 
 .application_header {
     text-align: center;
+    color: var(--main-color);
     display: block;
 }
 .application_header_img {
@@ -1083,6 +1115,15 @@ th.admin_applicatin_table {
     padding: 7px;
 }
 
+.application_comments {
+    border: 1px solid var(--main-color);
+    border-radius: 0.4rem;
+    margin: 0px;
+    width: 100%;
+    padding: 9px;
+    font-size: 95%;
+}
+
 .application_labels {
     display: block;
     text-align: center;
@@ -1091,11 +1132,16 @@ th.admin_applicatin_table {
 .application_buttons {
     display: block;
     margin: auto;
-    width: 300px;
+    width: 260px;
     margin-bottom: 1rem;
 }
 
-
+.application_returnLink {
+    position: relative;
+    left: 3rem;
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+}
 
 button.dashboardPaging {
     align-items: center;
@@ -1110,16 +1156,6 @@ div.paging {
     align-items: center;
     padding: .5rem;
     position: relative;
-    right: 25px;
-}
-
-
-a.adminlist_applicationName {
-    color: var(--button-font-color);
-    text-decoration: none;
-}
-a.adminlist_applicationName:hover {
-    color: green;   
 }
 
 .payment-icon {
