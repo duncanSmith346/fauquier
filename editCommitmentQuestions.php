@@ -72,7 +72,7 @@
                             </li>
                             <?php endforeach; ?>
                         </ul>
-                        <form action="AddAnswer.php" Method='GET'>
+                        <form action="addAnswer.php" Method='GET'>
                             <input type='hidden' name='form' value='samplecommitment'/>
                             <button type='submit' name='number' value='<?php echo $question['number']; ?>'>Add Answers</button>
                         </form>
