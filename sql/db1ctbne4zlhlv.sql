@@ -1,0 +1,573 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Apr 07, 2024 at 12:45 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+CREATE DATABASE IF NOT EXISTS db1ctbne4zlhlv;
+USE db1ctbne4zlhlv;
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- Drop tables
+DROP TABLE IF EXISTS `dbcourses`;
+DROP TABLE IF EXISTS `dbeventmedia`;
+DROP TABLE IF EXISTS `dbevents`;
+DROP TABLE IF EXISTS `dbeventvolunteers`;
+DROP TABLE IF EXISTS `dbmessages`;
+DROP TABLE IF EXISTS `dbtrainingperiods`;
+DROP TABLE IF EXISTS `dbapplicant`;
+DROP TABLE IF EXISTS `dbcohort`;
+DROP TABLE IF EXISTS `dbadmin`;
+DROP TABLE IF EXISTS `dbcm`; /* this means committee member */
+DROP TABLE IF EXISTS `dbquestions`;
+DROP TABLE IF EXISTS `dbanswers`;
+DROP TABLE IF EXISTS `dbapplication`;
+DROP TABLE IF EXISTS `dbpersons`;
+DROP TABLE IF EXISTS `dbscholarships`;
+DROP TABLE IF EXISTS `dbcommitment`;
+DROP TABLE IF EXISTS `dbcohortforms`;
+DROP TABLE IF EXISTS `dbonboardingappointments`;
+
+DROP TABLE IF EXISTS `dbCourses`;
+DROP TABLE IF EXISTS `dbEventMedia`;
+DROP TABLE IF EXISTS `dbEvents`;
+DROP TABLE IF EXISTS `dbEventVolunteers`;
+DROP TABLE IF EXISTS `dbMessages`;
+DROP TABLE IF EXISTS `dbTrainingPeriods`;
+DROP TABLE IF EXISTS `dbApplicant`;
+DROP TABLE IF EXISTS `dbCohort`;
+DROP TABLE IF EXISTS `dbAdmin`;
+DROP TABLE IF EXISTS `dbCM`; /* this means committee member */
+DROP TABLE IF EXISTS `dbQuestions`;
+DROP TABLE IF EXISTS `dbAnswers`;
+DROP TABLE IF EXISTS `dbApplication`;
+DROP TABLE IF EXISTS `dbPersons`;
+DROP TABLE IF EXISTS `dbScholarships`;
+DROP TABLE IF EXISTS `dbCommitment`;
+DROP TABLE IF EXISTS `dbCohortforms`;
+DROP TABLE IF EXISTS `dbCohortForms`;
+DROP TABLE IF EXISTS `dbOnboardingAppointments`;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+--
+-- Database: `fauquierdb`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `dbCourses`
+--
+
+CREATE TABLE `dbCourses` (
+  `id` int(11) NOT NULL,
+  `name` text NOT NULL,
+  `abbrevName` text NOT NULL,
+  `staffId` text NOT NULL,
+  `eventId` text NOT NULL,
+  `periodId` int(11) NOT NULL,
+  `date` char(10) NOT NULL,
+  `startTime` char(5) NOT NULL,
+  `endTime` char(5) NOT NULL,
+  `description` text NOT NULL,
+  `location` text NOT NULL,
+  `capacity` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `dbEventMedia`
+--
+
+CREATE TABLE `dbEventMedia` (
+  `id` int(11) NOT NULL,
+  `eventID` int(11) NOT NULL,
+  `url` text NOT NULL,
+  `type` text NOT NULL,
+  `format` text NOT NULL,
+  `description` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `dbEvents`
+--
+
+CREATE TABLE `dbEvents` (
+  `id` int(11) NOT NULL,
+  `eventname` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `dbEvents`
+--
+
+INSERT INTO `dbEvents` (`id`, `eventname`) VALUES
+(14, 'Late February Training'),
+(15, 'Spring 2024');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `dbEventVolunteers`
+--
+
+CREATE TABLE `dbEventVolunteers` (
+  `eventID` int(11) NOT NULL,
+  `userID` varchar(256) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `dbMessages`
+--
+
+CREATE TABLE `dbMessages` (
+  `id` int(11) NOT NULL,
+  `senderID` varchar(256) NOT NULL,
+  `recipientID` varchar(256) NOT NULL,
+  `title` varchar(256) NOT NULL,
+  `body` text NOT NULL,
+  `time` varchar(16) NOT NULL,
+  `wasRead` tinyint(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `dbMessages`
+--
+
+INSERT INTO `dbMessages` (`id`, `senderID`, `recipientID`, `title`, `body`, `time`, `wasRead`) VALUES
+(1, 'justin.raze.50@gmail.com', 'vmsroot', 'New User Registered', 'Go Verify or Delete Them', '2023-12-12-14:29', 1),
+(2, 'test@test.com', 'vmsroot', 'New User Registered', 'Go Verify or Delete Them', '2023-12-12-17:06', 1),
+(3, 'testadmin@test.com', 'vmsroot', 'New User Registered', 'Go Verify or Delete Them', '2023-12-12-17:13', 0),
+(4, 'scarlet@gmail.com', 'vmsroot', 'New User Registered', 'Go Verify or Delete Them', '2023-12-12-17:53', 0),
+(5, 'vmsroot', 'justin.raze.50@gmail.com', 'A new event was created!', 'Exciting news!\r\n\r\nThe [](event: 11) event from 5:30 PM to 9:30 PM on Monday, February 12, 2024 was added!\r\nSign up today!', '2023-12-14-19:47', 0),
+(6, 'vmsroot', 'scarlet@gmail.com', 'A new event was created!', 'Exciting news!\r\n\r\nThe [](event: 11) event from 5:30 PM to 9:30 PM on Monday, February 12, 2024 was added!\r\nSign up today!', '2023-12-14-19:47', 0),
+(7, 'vmsroot', 'test@test.com', 'A new event was created!', 'Exciting news!\r\n\r\nThe [](event: 11) event from 5:30 PM to 9:30 PM on Monday, February 12, 2024 was added!\r\nSign up today!', '2023-12-14-19:47', 0),
+(8, 'vmsroot', 'testadmin@test.com', 'A new event was created!', 'Exciting news!\r\n\r\nThe [](event: 11) event from 5:30 PM to 9:30 PM on Monday, February 12, 2024 was added!\r\nSign up today!', '2023-12-14-19:47', 0),
+(9, 'testadmin2@test.com', 'vmsroot', 'New User Registered', 'Go Verify or Delete Them', '2023-12-15-10:51', 1),
+(10, 'polack@umw.edu', 'vmsroot', 'New User Registered', 'Go Verify or Delete Them', '2024-01-09-14:20', 1),
+(11, 'japwahl@gmail.com', 'vmsroot', 'New User Registered', 'Go Verify or Delete Them', '2024-01-09-14:32', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `dbPersons`
+--
+
+CREATE TABLE `dbPersons` (
+  `id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `start_date` text DEFAULT NULL,
+  `venue` text DEFAULT NULL,
+  `first_name` text NOT NULL,
+  `last_name` text DEFAULT NULL,
+  `address` text DEFAULT NULL,
+  `city` text DEFAULT NULL,
+  `state` varchar(2) DEFAULT NULL,
+  `zip` text DEFAULT NULL,
+  `phone1` varchar(12) NOT NULL,
+  `phone1type` text DEFAULT NULL,
+  `phone2` varchar(12) DEFAULT NULL,
+  `phone2type` text DEFAULT NULL,
+  `birthday` text DEFAULT NULL,
+  `email` text DEFAULT NULL,
+  `shirt_size` varchar(3) DEFAULT NULL,
+  `computer` varchar(3) DEFAULT NULL,
+  `camera` varchar(3) NOT NULL,
+  `transportation` varchar(3) NOT NULL,
+  `contact_name` text NOT NULL,
+  `contact_num` varchar(12) NOT NULL,
+  `relation` text NOT NULL,
+  `contact_time` text NOT NULL,
+  `cMethod` text DEFAULT NULL,
+  `position` text DEFAULT NULL, /*needs to be changed to not null when ready*/
+  `credithours` text DEFAULT NULL,
+  `howdidyouhear` text DEFAULT NULL,
+  `commitment` text DEFAULT NULL,
+  `motivation` text DEFAULT NULL,
+  `specialties` text DEFAULT NULL,
+  `convictions` text DEFAULT NULL,
+  `type` text DEFAULT NULL,
+  `status` text DEFAULT NULL,
+  `completedTraining` varchar(100) NOT NULL DEFAULT 'False',
+  `availability` text DEFAULT NULL,
+  `schedule` text DEFAULT NULL,
+  `hours` text DEFAULT NULL,
+  `notes` text DEFAULT NULL,
+  `password` text DEFAULT NULL,
+  `sundays_start` char(5) DEFAULT NULL,
+  `sundays_end` char(5) DEFAULT NULL,
+  `mondays_start` char(5) DEFAULT NULL,
+  `mondays_end` char(5) DEFAULT NULL,
+  `tuesdays_start` char(5) DEFAULT NULL,
+  `tuesdays_end` char(5) DEFAULT NULL,
+  `wednesdays_start` char(5) DEFAULT NULL,
+  `wednesdays_end` char(5) DEFAULT NULL,
+  `thursdays_start` char(5) DEFAULT NULL,
+  `thursdays_end` char(5) DEFAULT NULL,
+  `fridays_start` char(5) DEFAULT NULL,
+  `fridays_end` char(5) DEFAULT NULL,
+  `saturdays_start` char(5) DEFAULT NULL,
+  `saturdays_end` char(5) DEFAULT NULL,
+  `profile_pic` text NOT NULL,
+  `force_password_change` tinyint(1) NOT NULL,
+  `gender` varchar(6) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `dbPersons`
+--
+
+INSERT INTO `dbPersons` (`id`, `start_date`, `venue`, `first_name`, `last_name`, `address`, `city`, `state`, `zip`, `phone1`, `phone1type`, `phone2`, `phone2type`, `birthday`, `email`, `shirt_size`, `computer`, `camera`, `transportation`, `contact_name`, `contact_num`, `relation`, `contact_time`, `cMethod`, `position`, `credithours`, `howdidyouhear`, `commitment`, `motivation`, `specialties`, `convictions`, `type`, `status`, `completedTraining`, `availability`, `schedule`, `hours`, `notes`, `password`, `sundays_start`, `sundays_end`, `mondays_start`, `mondays_end`, `tuesdays_start`, `tuesdays_end`, `wednesdays_start`, `wednesdays_end`, `thursdays_start`, `thursdays_end`, `fridays_start`, `fridays_end`, `saturdays_start`, `saturdays_end`, `profile_pic`, `force_password_change`, `gender`) VALUES
+('japwahl@gmail.com', '2024-01-09', 'portland', 'Jennifer', 'Polack', '15 Wallace Farms Lane', 'Fredericksburg', 'VA', '22406', '5402959700', 'work', '', '', '1970-05-01', 'japwahl@gmail.com', 'S', '1', '1', '1', 'Brianna', '5404550567', 'Sister', 'Evening', 'text', '', '', '', '', '', '', '', 'trainer', 'Active', '0', '', '', '', '', '$2y$10$V044vIzY3Y/soykziVZM5O.xXpK4MVEgCmSTMBBMskiYc9s.VJK8y', '16:00', '21:00', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, 'Female'),
+('scarlet@gmail.com', '2023-12-12', 'portland', 'Karen', 'Scarlet', '6210 Merryvale ct', 'Springfield', 'OR', '22152', '5554446666', 'home', '', '', '1978-07-25', 'scarlet@gmail.com', 'S', '1', '1', '1', 'test', '5000000000', 'test', 'Evenings', 'phone', '', '', '', '', '', '', '', 'admin', 'Active', '0', '', '', '', '', '$2y$10$4Z9ij3hM4W1ejZkZGtUDtuJdhaQK3BIJemYt/zUlHXO36OsQEBdPW', '11:00', '17:00', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, 'Female'),
+('testadmin@test.com', '2023-12-12', 'portland', 'testA', 'testAdmin', '1701 College Avenue, 1920', 'Fredericksburg', 'VA', '22401', '7034866673', 'home', '', '', '1983-02-05', 'testadmin@test.com', 'S', '1', '1', '1', 'test', '6000000000', 'friend', 'days', 'phone', '', '', '', '', '', '', '', 'admin', 'Active', '1', '', '', '', '', '$2y$10$tcmQE.he.BDzKuJ.6YuLt.hsUsOC7vCPE4zjP5sus5qdwyrVpFnOC', '16:00', '18:00', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, 'Male'),
+('vmsroot', 'N/A', 'portland', 'vmsroot', '', 'N/A', 'N/A', 'VA', 'N/A', '', 'N/A', 'N/A', 'N/A', 'N/A', 'vmsroot', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', '', 'N/A', '0', 'N/A', 'N/A', 'N/A', 'N/A', '$2y$10$8GyfE491ix9MD.1UVOgsZ.3PbX0w/AP8xGUNAgORt8nvvXprfHFeC', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '');
+
+
+
+INSERT INTO `dbPersons` (`id`,`email`,`first_name`,`last_name`,`phone1`,`camera`,`transportation`,`contact_name`,`contact_num`,`relation`,`contact_time`,`type`,`completedTraining`,`profile_pic`,`force_password_change`,`gender`) VALUES
+('testCohort@test.com','testCohort@test.com','John','Doe','5551234567','Yes','Yes','Jane Doe','5559876543','Spouse','Anytime','cohort','False','',0,'Male'),
+('testApplicant@test.com','testApplicant@test.com','Jane','Smith','5552345678','No','Yes','John Smith','5558765432','Parent','Evenings','applicant','False','',0,'Female'),
+('testCM@test.com','testCM@test.com','Alex','Johnson','5553456789','Yes','No','Taylor Johnson','5557654321','Friend','Anytime','cm','False','',0,'Other');
+
+
+-- --------------------------------------------------------
+--
+-- Table structure for table `dbApplicant`
+--
+
+CREATE TABLE `dbApplicant` (
+  `id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `person_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `Application_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
+)  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+
+--
+-- Table structure for table `dbCohort`
+--
+
+CREATE TABLE `dbCohort` (
+  `id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `person_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `Application_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `dateAccepted` date not NULL,
+  `onboardingAppointment_id` varchar(256) DEFAULT NULL,
+  `Cycle_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `acceptanceConfirmedAt` date,
+  UNIQUE KEY `unique_cohort_application` (`Application_id`)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Table structure for table `dbCM`
+--
+
+CREATE TABLE `dbCM` (
+  `id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `person_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `committeeRole` text,
+  `appointedAt` date,
+  `retiredAt` date,
+  `canSubmitRecommendation` boolean,
+  `conflictOfInterestAcknowledgementAt` date,
+  `createdAt` date,
+  `updatedAt` date
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+--
+-- Table structure for table `dbQuestions`
+--
+CREATE TABLE `dbQuestions` (
+  `number` int,
+  `application_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `type` text,
+  `comment` text,
+  `answer` text,
+  `question` text
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+--
+-- Table structure for table `dbAnswers`
+--
+CREATE TABLE `dbAnswers` (
+  `number` int(11) NOT NULL, 
+  `answer` text, 
+  `isSample` boolean,
+  `application_id`  varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Table structure for table `dbAdmin`
+--
+
+CREATE TABLE `dbAdmin` (
+  `id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `person_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `createdAt` date,
+  `updatedAt` date
+  
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+
+--
+-- Table structure for table `dbApplication`
+--
+
+CREATE TABLE `dbApplication` (
+  `id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL PRIMARY KEY,
+  `applicant_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `createdAt` date NOT NULL DEFAULT (CURRENT_DATE),
+  `paymentStatus` boolean NOT NULL DEFAULT FALSE,
+  `applicationSaved` date DEFAULT NULL,
+  `cycle_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `submittedAt` date DEFAULT NULL,  
+  /*questions below*/
+  `answer1` text, /* name? */
+  `answer2` text,  /* message? */
+  /*below is staff*/
+  `reviewer_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `reviewStatus` boolean NOT NULL DEFAULT FALSE,
+  `decisionStatus` varchar(20) NOT NULL DEFAULT 'undecided', /* yes, no, undecided */
+  `decisionDate` date DEFAULT NULL,
+  UNIQUE KEY `unique_applicant_cycle` (`applicant_id`, `cycle_id`)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Table structure for table `dbScholarship`
+--
+
+CREATE TABLE `dbScholarships` (
+  `scholarship_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `application_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `scholarshipStatus` text,
+  `submittedDate` date,
+  `decisionStatus` boolean,
+  `amountAwarded` int,
+  `cycle_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Table structure for table `dbCommitment`
+--
+
+CREATE TABLE `dbCommitment` (
+  `commitment_id` varchar(256) NOT NULL,
+  `cohort_id` varchar(256) NOT NULL,
+  `commitmentStatus` text,
+  `submittedDate` date,
+  `tuitionStatus` boolean,
+  `createdAt` date,
+  `participationConfirmed` boolean,
+  `shirtSize` text,
+  `emergencyContactName` text,
+  `emergencyContactPhone` text,
+  `allergyInformation` text,
+  `selfAssessmentSubmittedAt` date,
+  `biography` text,
+  `cycle_id` varchar(256) NOT NULL,
+  PRIMARY KEY (`commitment_id`),
+  UNIQUE KEY `unique_commitment_cohort` (`cohort_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+--
+-- Table structure for table 'dbCohortForms'
+--
+
+CREATE TABLE `dbCohortForms` (
+    `form_id` varchar(256) NOT NULL,
+    `cohort_id` varchar(256) NOT NULL,
+    `form_type` varchar(64) NOT NULL,
+    `cycle_id` varchar(256) NOT NULL,
+    `createdAt` date NOT NULL DEFAULT (CURRENT_DATE),
+    `submittedDate` date DEFAULT NULL,
+    `completedAt` datetime DEFAULT NULL,
+    PRIMARY KEY (`form_id`),
+    UNIQUE KEY `unique_cohort_form_cycle`
+        (`cohort_id`, `form_type`, `cycle_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_general_ci;
+
+--
+-- Table structure for table 'dbOnboardingAppointments'
+--
+
+CREATE TABLE `dbOnboardingAppointments` (
+    `appointment_id` varchar(256) NOT NULL,
+    `cycle_id` varchar(256) NOT NULL,
+    `meetingAt` datetime NOT NULL,
+    `cohort_id` varchar(256) DEFAULT NULL,
+    `completedAt` datetime DEFAULT NULL,
+    PRIMARY KEY (`appointment_id`),
+    UNIQUE KEY `unique_appointment_time` (`cycle_id`, `meetingAt`),
+    UNIQUE KEY `unique_cohort_appointment` (`cohort_id`, `cycle_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_general_ci;
+
+--
+-- Table structure for table `dbTrainingPeriods`
+--
+
+CREATE TABLE `dbTrainingPeriods` (
+  `id` int(11) NOT NULL,
+  `semester` varchar(50) NOT NULL,
+  `year` varchar(50) NOT NULL,
+  `startdate` date NOT NULL,
+  `enddate` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `dbTrainingPeriods`
+--
+
+INSERT INTO `dbTrainingPeriods` (`id`, `semester`, `year`, `startdate`, `enddate`) VALUES
+(1, 'Spring', '2025', '2025-01-01', '2025-02-28'),
+(2, 'Spring', '2029', '2029-01-01', '2029-02-28'),
+(3, 'Summer', '2028', '2028-05-01', '2028-06-30'),
+(4, 'Spring', '2032', '2032-01-01', '2032-02-28'),
+(5, 'Summer', '2030', '2030-05-01', '2030-06-30'),
+(6, 'Spring', '2026', '2026-01-01', '2026-02-28'),
+(7, 'Spring', '2026', '2026-01-01', '2026-02-28'),
+(8, 'Spring', '2026', '2026-01-01', '2026-02-28'),
+(9, 'Fall', '2030', '2030-09-01', '2030-10-31'),
+(10, 'Summer', '2032', '2032-05-01', '2032-06-30');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `dbCourses`
+--
+ALTER TABLE `dbCourses`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FkPeriodID` (`periodId`);
+
+--
+-- Indexes for table `dbEventMedia`
+--
+ALTER TABLE `dbEventMedia`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FKeventID2` (`eventID`);
+
+--
+-- Indexes for table `dbEvents`
+--
+ALTER TABLE `dbEvents`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `dbEventVolunteers`
+--
+ALTER TABLE `dbEventVolunteers`
+  ADD KEY `FKeventID` (`eventID`),
+  ADD KEY `FKpersonID` (`userID`);
+
+--
+-- Indexes for table `dbMessages`
+--
+ALTER TABLE `dbMessages`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `dbPersons`
+--
+ALTER TABLE `dbPersons`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `dbTrainingPeriods`
+--
+ALTER TABLE `dbTrainingPeriods`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `dbApplication`
+--
+ALTER TABLE `dbApplication`
+  ADD FOREIGN KEY (`applicant_id`) REFERENCES `dbPersons`(`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `dbCourses`
+--
+ALTER TABLE `dbCourses`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `dbEventMedia`
+--
+ALTER TABLE `dbEventMedia`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `dbEvents`
+--
+ALTER TABLE `dbEvents`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
+-- AUTO_INCREMENT for table `dbMessages`
+--
+ALTER TABLE `dbMessages`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `dbTrainingPeriods`
+--
+ALTER TABLE `dbTrainingPeriods`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `dbCourses`
+--
+ALTER TABLE `dbCourses`
+  ADD CONSTRAINT `FkPeriodID` FOREIGN KEY (`periodId`) REFERENCES `dbTrainingPeriods` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `dbEventMedia`
+--
+ALTER TABLE `dbEventMedia`
+  ADD CONSTRAINT `FKeventID2` FOREIGN KEY (`eventID`) REFERENCES `dbEvents` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `dbEventVolunteers`
+--
+ALTER TABLE `dbEventVolunteers`
+  ADD CONSTRAINT `FKeventID` FOREIGN KEY (`eventID`) REFERENCES `dbEvents` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FKpersonID` FOREIGN KEY (`userID`) REFERENCES `dbPersons` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
