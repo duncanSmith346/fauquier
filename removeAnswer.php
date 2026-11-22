@@ -34,6 +34,14 @@ if ($success) {
         header("Location: editScholarshipQuestions.php");
     } elseif ($_GET['form'] === 'samplecommitment') {
         header("Location: editCommitmentQuestions.php");
+    } elseif ($_GET['form'] === 'sampleallergy') {
+        header("Location: editAllergyQuestions.php");
+    } elseif ($_GET['form'] === 'sampleemergencycontact') {
+        header("Location: editEmergencyContactQuestions.php");
+    } elseif ($_GET['form'] === 'sampleselfassessment') {
+        header("Location: editSelfAssessmentQuestions.php");
+    } elseif ($_GET['form'] === 'sampleonboardingappointment') {
+        header("Location: editOnboardingAppointmentQuestion.php");
     }
     exit;
 }

@@ -210,6 +210,35 @@ function removeAnswer($question, $answer,$form) {
     return $success;
 }
 
+// deletes the question anaswer for onboarding appointments upon submition
+function claimOnboardingTime($con, $question, $answer) {
+    $form = 'sampleonboardingappointment';
+
+    $sql = "DELETE FROM dbAnswers
+            WHERE number = ?
+            AND isSample = 1
+            AND answer = ?
+            AND application_id = ?";
+
+    $stmt = mysqli_prepare($con, $sql);
+
+    mysqli_stmt_bind_param(
+        $stmt,
+        "iss",
+        $question,
+        $answer,
+        $form
+    );
+
+    $success = mysqli_stmt_execute($stmt);
+
+    $claimed = $success && mysqli_stmt_affected_rows($stmt) === 1;
+
+    mysqli_stmt_close($stmt);
+
+    return $claimed;
+}
+
 // Add a committee member's comment
 function add_comment($comment, $question_number, $application_id) {
     $con = connect();

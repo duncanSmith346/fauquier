@@ -39,6 +39,8 @@ DROP TABLE IF EXISTS `dbapplication`;
 DROP TABLE IF EXISTS `dbpersons`;
 DROP TABLE IF EXISTS `dbscholarships`;
 DROP TABLE IF EXISTS `dbcommitment`;
+DROP TABLE IF EXISTS `dbcohortforms`;
+DROP TABLE IF EXISTS `dbonboardingappointments`;
 
 DROP TABLE IF EXISTS `dbCourses`;
 DROP TABLE IF EXISTS `dbEventMedia`;
@@ -56,6 +58,9 @@ DROP TABLE IF EXISTS `dbApplication`;
 DROP TABLE IF EXISTS `dbPersons`;
 DROP TABLE IF EXISTS `dbScholarships`;
 DROP TABLE IF EXISTS `dbCommitment`;
+DROP TABLE IF EXISTS `dbCohortforms`;
+DROP TABLE IF EXISTS `dbCohortForms`;
+DROP TABLE IF EXISTS `dbOnboardingAppointments`;
 
 SET FOREIGN_KEY_CHECKS = 1;
 
@@ -386,6 +391,41 @@ CREATE TABLE `dbCommitment` (
   PRIMARY KEY (`commitment_id`),
   UNIQUE KEY `unique_commitment_cohort` (`cohort_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+--
+-- Table structure for table 'dbCohortForms'
+--
+
+CREATE TABLE `dbCohortForms` (
+    `form_id` varchar(256) NOT NULL,
+    `cohort_id` varchar(256) NOT NULL,
+    `form_type` varchar(64) NOT NULL,
+    `cycle_id` varchar(256) NOT NULL,
+    `createdAt` date NOT NULL DEFAULT (CURRENT_DATE),
+    `submittedDate` date DEFAULT NULL,
+    `completedAt` datetime DEFAULT NULL,
+    PRIMARY KEY (`form_id`),
+    UNIQUE KEY `unique_cohort_form_cycle`
+        (`cohort_id`, `form_type`, `cycle_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_general_ci;
+
+--
+-- Table structure for table 'dbOnboardingAppointments'
+--
+
+CREATE TABLE `dbOnboardingAppointments` (
+    `appointment_id` varchar(256) NOT NULL,
+    `cycle_id` varchar(256) NOT NULL,
+    `meetingAt` datetime NOT NULL,
+    `cohort_id` varchar(256) DEFAULT NULL,
+    `completedAt` datetime DEFAULT NULL,
+    PRIMARY KEY (`appointment_id`),
+    UNIQUE KEY `unique_appointment_time` (`cycle_id`, `meetingAt`),
+    UNIQUE KEY `unique_cohort_appointment` (`cohort_id`, `cycle_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_general_ci;
 
 --
 -- Table structure for table `dbTrainingPeriods`

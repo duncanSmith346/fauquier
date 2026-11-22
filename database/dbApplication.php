@@ -677,17 +677,24 @@ function Admin_list($page) {
 
     $sql = "SELECT CONCAT(dbPersons.first_name, ' ', dbPersons.last_name) AS fullname, 
             dbApplication.id AS appid, 
+            dbPersons.type AS person_type,
+            dbPersons.id AS person_id,
             dbCommitment.commitment_id AS commitment, 
             dbCommitment.submittedDate,
             dbApplication.submittedAt,
             dbApplication.decisionStatus AS decisionStatus,
             dbApplication.reviewStatus AS reviewStatus,
             dbApplication.paymentStatus AS applicationFee,
-            dbCommitment.tuitionStatus AS tuition
+            dbCommitment.tuitionStatus AS tuition,
+            dbCohortForms.form_id AS onboarding_form_id,
+            dbCohortForms.completedAt AS onboarding_completed_at
             FROM dbPersons
             LEFT JOIN dbApplication ON dbApplication.applicant_id=dbPersons.id
             LEFT JOIN dbCohort ON dbCohort.person_id=dbPersons.id
             LEFT JOIN dbCommitment ON dbCohort.id=dbCommitment.cohort_id
+            LEFT JOIN dbCohortForms
+                ON dbCohortForms.cohort_id = dbCohort.id
+                AND dbCohortForms.form_type = 'sampleonboardingappointment'
             WHERE dbPersons.type='applicant' OR dbPersons.type='cohort'
             LIMIT 10 OFFSET ?";
     
@@ -970,4 +977,350 @@ function save_uploaded_files($con, $id, array $files, array &$new_files, array &
         $old = save_file_answer($con, $id, $number, $question, $stored);
         if ($old !== '') $old_files[] = $old;
     }
+}
+
+function get_cohort_form($person_id, $cycle_id, $form_type) {
+    $con = connect();
+
+    $sql = "SELECT dbCohortForms.*
+            FROM dbCohortForms
+            INNER JOIN dbCohort
+                ON dbCohortForms.cohort_id = dbCohort.id
+            WHERE dbCohort.person_id = ?
+            AND dbCohortForms.cycle_id = ?
+            AND dbCohortForms.form_type = ?";
+
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "sss", $person_id, $cycle_id, $form_type);
+    mysqli_stmt_execute($stmt);
+
+    $result = mysqli_stmt_get_result($stmt);
+    $form = mysqli_fetch_assoc($result);
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+
+    return $form ?: null;
+}
+
+function submit_cohort_form($form_id, $person_id, $cycle_id,
+                            $form_type, $answers, $files,
+                            $appointment_id = null) {
+
+    require_once(__DIR__ . '/dbQuestions.php');
+
+   
+
+    $con = connect();
+    $new_files = [];
+    $old_files = [];
+
+    try {
+        mysqli_begin_transaction($con);
+
+        // Verify the form type.
+        if (!in_array($form_type, [
+            'sampleallergy',
+            'sampleemergencycontact',
+            'sampleselfassessment',
+            'sampleonboardingappointment'
+        ], true)) {
+            throw new Exception("Invalid form type.");
+        }
+
+        // Find the cohort member.
+        $sql = "SELECT id FROM dbCohort
+                WHERE person_id = ? AND Cycle_id = ?
+                LIMIT 1";
+
+        $stmt = mysqli_prepare($con, $sql);
+        mysqli_stmt_bind_param($stmt, "ss", $person_id, $cycle_id);
+        mysqli_stmt_execute($stmt);
+
+        $result = mysqli_stmt_get_result($stmt);
+        $cohort = mysqli_fetch_assoc($result);
+        mysqli_stmt_close($stmt);
+
+        if (!$cohort) {
+            throw new Exception("No cohort record found.");
+        }
+
+        $cohort_id = $cohort['id'];
+
+        // Create the submitted form record.
+        $sql = "INSERT INTO dbCohortForms
+                (form_id, cohort_id, form_type, cycle_id,
+                 createdAt, submittedDate)
+                VALUES (?, ?, ?, ?, CURRENT_DATE, CURRENT_DATE)";
+
+        $stmt = mysqli_prepare($con, $sql);
+        mysqli_stmt_bind_param(
+            $stmt, "ssss",
+            $form_id, $cohort_id, $form_type, $cycle_id
+        );
+
+        if (!mysqli_stmt_execute($stmt)) {
+            throw new Exception(mysqli_stmt_error($stmt));
+        }
+
+        mysqli_stmt_close($stmt);
+
+        // Track how many appointment times are selected.
+        $appointmentCount = 0;
+
+        // Save each answer.
+        foreach ($answers as $number => $answer) {
+            $number = (int) $number;
+
+            if (is_array($answer)) {
+                $answer = implode(", ", array_filter(
+                    $answer,
+                    static function ($value) {
+                        return is_scalar($value)
+                            && trim((string) $value) !== '';
+                    }
+                ));
+            }
+
+            $answer = trim((string) $answer);
+            $question = getQuestion($form_type, $number);
+
+            if (!$question) {
+                throw new Exception("Question not found.");
+            }
+
+            if (
+                $form_type === 'sampleonboardingappointment' &&
+                $question['type'] === 'onboardingDateTime'
+                ) 
+            {
+                if ($answer === '') {
+                    throw new Exception("Please select an appointment time.");
+                }
+
+               // require_once('dbQuestions.php');
+
+                if (!claimOnboardingTime($con, $number, $answer)) {
+                    throw new Exception(
+                        "That appointment time is no longer available."
+                    );
+                }
+                $appointmentCount++;
+            }
+
+            if ($question['type'] === 'file') {
+                continue;
+            }
+
+            $sql = "INSERT INTO dbQuestions
+                    (number, application_id, answer, question, type)
+                    VALUES (?, ?, ?, ?, ?)";
+
+            $stmt = mysqli_prepare($con, $sql);
+            mysqli_stmt_bind_param(
+                $stmt,
+                "issss",
+                $number,
+                $form_id,
+                $answer,
+                $question['question'],
+                $question['type']
+            );
+
+            if (!mysqli_stmt_execute($stmt)) {
+                throw new Exception(mysqli_stmt_error($stmt));
+            }
+
+            mysqli_stmt_close($stmt);
+        }
+
+        // Onboarding forms must reserve exactly one appointment.
+        if ($form_type === 'sampleonboardingappointment' && $appointmentCount !== 1) 
+        {
+            throw new Exception(
+               "You must select exactly one onboarding appointment."
+            );
+        }
+
+        // Save uploaded files.
+        save_uploaded_files(
+            $con, $form_id, $files,
+            $new_files, $old_files, $form_type
+        );
+
+        mysqli_commit($con);
+        mysqli_close($con);
+
+        return true;
+
+    } catch (Throwable $e) {
+        mysqli_rollback($con);
+        mysqli_close($con);
+
+        error_log("Cohort form submission failed: " . $e->getMessage());
+        die("Cohort form submission failed: " . $e->getMessage());
+        return false;
+    }
+}
+
+function create_onboarding_appointment($cycle_id, $meetingAt) {
+    $con = connect();
+
+    $appointment_id = bin2hex(random_bytes(16));
+
+    $sql = "INSERT INTO dbOnboardingAppointments
+            (appointment_id, cycle_id, meetingAt)
+            VALUES (?, ?, ?)";
+
+    $stmt = mysqli_prepare($con, $sql);
+
+    mysqli_stmt_bind_param(
+        $stmt, "sss",
+        $appointment_id, $cycle_id, $meetingAt
+    );
+
+    $success = mysqli_stmt_execute($stmt);
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+
+    return $success;
+}
+
+function get_available_onboarding_appointments($cycle_id) {
+    $con = connect();
+
+    $sql = "SELECT *
+            FROM dbOnboardingAppointments
+            WHERE cycle_id = ?
+            AND cohort_id IS NULL
+            AND completedAt IS NULL
+            AND meetingAt > NOW()
+            ORDER BY meetingAt ASC";
+
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "s", $cycle_id);
+    mysqli_stmt_execute($stmt);
+
+    $result = mysqli_stmt_get_result($stmt);
+    $appointments = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+
+    return $appointments;
+}
+
+function get_onboarding_appointment($person_id, $cycle_id) {
+    $con = connect();
+
+    $sql = "SELECT dbOnboardingAppointments.*
+            FROM dbOnboardingAppointments
+            INNER JOIN dbCohort
+                ON dbOnboardingAppointments.cohort_id = dbCohort.id
+            WHERE dbCohort.person_id = ?
+            AND dbOnboardingAppointments.cycle_id = ?";
+
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "ss", $person_id, $cycle_id);
+    mysqli_stmt_execute($stmt);
+
+    $result = mysqli_stmt_get_result($stmt);
+    $appointment = mysqli_fetch_assoc($result);
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+
+    return $appointment ?: null;
+}
+
+function reserve_onboarding_appointment($person_id, $cycle_id, $appointment_id) {
+    $con = connect();
+
+    $sql = "UPDATE dbOnboardingAppointments
+            INNER JOIN dbCohort
+                ON dbCohort.person_id = ?
+                AND dbCohort.Cycle_id = ?
+            SET dbOnboardingAppointments.cohort_id = dbCohort.id
+            WHERE dbOnboardingAppointments.appointment_id = ?
+            AND dbOnboardingAppointments.cycle_id = ?
+            AND dbOnboardingAppointments.cohort_id IS NULL
+            AND dbOnboardingAppointments.completedAt IS NULL
+            AND dbOnboardingAppointments.meetingAt > NOW()";
+
+    try {
+        $stmt = mysqli_prepare($con, $sql);
+
+        mysqli_stmt_bind_param(
+            $stmt, "ssss",
+            $person_id, $cycle_id, $appointment_id, $cycle_id
+        );
+
+        mysqli_stmt_execute($stmt);
+
+        $success = mysqli_stmt_affected_rows($stmt) === 1;
+
+        mysqli_stmt_close($stmt);
+        mysqli_close($con);
+
+        return $success;
+
+    } catch (Throwable $e) {
+        mysqli_close($con);
+        return false;
+    }
+}
+
+function complete_onboarding_appointment($appointment_id, $cycle_id) {
+    $con = connect();
+
+    $sql = "UPDATE dbOnboardingAppointments
+            SET completedAt = NOW()
+            WHERE appointment_id = ?
+            AND cycle_id = ?
+            AND cohort_id IS NOT NULL
+            AND completedAt IS NULL";
+
+    $stmt = mysqli_prepare($con, $sql);
+
+    mysqli_stmt_bind_param(
+        $stmt, "ss",
+        $appointment_id, $cycle_id
+    );
+
+    mysqli_stmt_execute($stmt);
+
+    $success = mysqli_stmt_affected_rows($stmt) === 1;
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+
+    return $success;
+}
+
+function get_all_onboarding_appointments($cycle_id) {
+    $con = connect();
+
+    $sql = "SELECT dbOnboardingAppointments.*,
+                   CONCAT(dbPersons.first_name, ' ',
+                          dbPersons.last_name) AS fullname
+            FROM dbOnboardingAppointments
+            LEFT JOIN dbCohort
+                ON dbOnboardingAppointments.cohort_id = dbCohort.id
+            LEFT JOIN dbPersons
+                ON dbCohort.person_id = dbPersons.id
+            WHERE dbOnboardingAppointments.cycle_id = ?
+            ORDER BY meetingAt ASC";
+
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "s", $cycle_id);
+    mysqli_stmt_execute($stmt);
+
+    $result = mysqli_stmt_get_result($stmt);
+    $appointments = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+
+    return $appointments;
 }

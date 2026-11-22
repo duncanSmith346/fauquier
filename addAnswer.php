@@ -28,6 +28,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     include_once('database/dbQuestions.php');
     $question = $_GET['number'];
     $form = $_GET['form'];
+
+    if ($form === 'sampleonboardingappointment') {
+        $existingAnswers = getAnswers($question, $form);
+        $existingTimes = [];
+
+        foreach ($existingAnswers as $existingAnswer) {
+            $existingTimes[] = trim($existingAnswer['answer']);
+        }
+
+        $submittedTimes = [];
+
+        for ($i = 1; $i <= 5; $i++) {
+            $key = 'answer' . $i;
+
+            if (!isset($_GET[$key]) || trim($_GET[$key]) === '') {
+                continue;
+            }
+
+            $time = trim($_GET[$key]);
+
+            if (
+                in_array($time, $existingTimes, true) ||
+                in_array($time, $submittedTimes, true)
+            ) {
+                die('Duplicate appointment time: ' .
+                    htmlspecialchars($time, ENT_QUOTES, 'UTF-8'));
+            }
+
+            $submittedTimes[] = $time;
+        }
+    }
+
+
     if (isset($_GET['answer1'])) {
         if ($_GET['answer1'] !== "" && $_GET['answer1'] !== NULL) {
             $answer1 = $_GET['answer1'];
@@ -66,6 +99,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             header("Location: editScholarshipQuestions.php");
         } elseif ($form === 'samplecommitment') {
             header("Location: editCommitmentQuestions.php");
+        } elseif ($form === 'sampleallergy') {
+            header("Location: editAllergyQuestions.php");
+        } elseif ($form === 'sampleemergencycontact') {
+            header("Location: editEmergencyContactQuestions.php");
+        } elseif ($form === 'sampleselfassessment') {
+            header("Location: editSelfAssessmentQuestions.php");
+        } elseif ($form === 'sampleonboardingappointment') {
+            header("Location: editOnboardingAppointmentQuestion.php");
         }
         exit;
     }
@@ -73,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
 ?>
 
-<DOCTYPE html>
+<!DOCTYPE html>
 <html>
     <head>
         <?php require('universal.inc'); ?>

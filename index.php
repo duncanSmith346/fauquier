@@ -230,23 +230,22 @@
                             <tr class='admin_applicatin_table'>
                                 <!--Applicant-->
                                 <td class='admin_applicatin_table'>
-                                    <?php if ($result['appid'] !== NULL):?>
-                                    <a href='Application.php?id=<?= urldecode($result['appid'])?>' class='adminlist_applicationName'>
-                                    <?php echo $result['fullname'];?></a>
-                                    <?php 
-                                    else: 
-                                        echo $result['fullname'];
-                                    endif;
-                                    ?>
+                                    <a href="CohortProfile.php?id=<?= urlencode($result['person_id']) ?>"
+                                       class="adminlist_applicationName">
+                                       <?= htmlspecialchars($result['fullname']) ?>
+                                    </a>
                                 </td>
+
                                 <!--Application-->
                                 <td class='admin_applicatin_table'>
-                                    <?php 
-                                    if ($result['appid'] == NULL): echo 'missing';
-                                    elseif ($result['submittedAt'] === NULL): echo 'in progress';
-                                    else: echo 'complete';
-                                    endif;
-                                    ?>
+                                    <?php if ($result['appid'] === NULL): ?>
+                                        missing
+                                    <?php else: ?>
+                                        <a href="Application.php?id=<?= urlencode($result['appid']) ?>"
+                                           class="adminlist_applicationName">
+                                            <?= $result['submittedAt'] === NULL ? 'in progress' : 'complete' ?>
+                                        </a>
+                                    <?php endif; ?>
                                 </td>
                                 <!--Documents-->
                                 <td class='admin_applicatin_table'>unfinished</td>
@@ -316,7 +315,14 @@
                                 </td>
                                 <!--Onboarding Status-->
                                 <td class='admin_applicatin_table'>
-                                    unfinished
+                                    <?php if ($result['onboarding_form_id'] !== NULL): ?>
+                                        <a href="AdminOnboarding.php?id=<?= urlencode($result['onboarding_form_id']) ?>"
+                                            class="adminlist_applicationName">
+                                                <?= $result['onboarding_completed_at'] !== NULL ? 'Finished' : 'Unfinished' ?>
+                                        </a>
+                                    <?php else: ?>
+                                         Not Submitted
+                                    <?php endif; ?>
                                 </td>
                             </tr>
                             <?php endforeach; ?>
@@ -424,9 +430,9 @@
                             }
                         ?></span>
                     </div>
-                    <div class="dashboard-item" data-link="calendar.php">
+                    <div class="dashboard-item" data-link="CohortForm.php?type=sampleonboardingappointment">
                         <img src="images/view-calendar.svg">
-                        <span>View Calendar</span>
+                        <span>Onboarding Appointment</span>
                     </div>
                     <div class="dashboard-item" data-link="Commitment.php">
                         <img src="images/create-report.svg">
@@ -439,15 +445,15 @@
                             <span class="payment-icon" style="font-size: 6rem !important; line-height: 6rem;">$</span>
                             <span>Pay Tuition</span>
                     </a>
-                    <div class="dashboard-item" data-link="documents.php">
+                    <div class="dashboard-item" data-link="CohortForm.php?type=sampleselfassessment">
                         <img src="images/create-report.svg">
                         <span>Self-Assessment</span>
                     </div>
-                    <div class="dashboard-item" data-link="documents.php">
+                    <div class="dashboard-item" data-link="CohortForm.php?type=sampleemergencycontact">
                         <img src="images/create-report.svg">
                         <span>Emergency Contact</span>
                     </div>
-                    <div class="dashboard-item" data-link="documents.php">
+                    <div class="dashboard-item" data-link="CohortForm.php?type=sampleallergy">
                         <img src="images/create-report.svg">
                         <span>Allergy Information</span>
                     </div>

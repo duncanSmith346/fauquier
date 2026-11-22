@@ -36,6 +36,14 @@
                 header("Location: editScholarshipQuestions.php");
             } elseif ($_POST['form'] === 'samplecommitment') {
                 header("Location: editCommitmentQuestions.php");
+            } elseif ($_POST['form'] === 'sampleallergy') {
+                header("Location: editAllergyQuestions.php");
+            } elseif ($_POST['form'] === 'sampleemergencycontact') {
+                header("Location: editEmergencyContactQuestions.php");
+            } elseif ($_POST['form'] === 'sampleselfassessment') {
+                header("Location: editSelfAssessmentQuestions.php");
+            } elseif ($_POST['form'] === 'sampleonboardingappointment') {
+                header("Location: editOnboardingAppointmentQuestion.php");
             }
             exit;
         }
@@ -60,6 +68,7 @@
                         <option value='text'>Short Text</option>
                         <option value='textarea'> Long Text</option>
                         <option value='multipleChoice'>Multiple Choice</option>
+                        <option value='onboardingDateTime'>Onboarding Date/Time</option>
                         <option value='date'>Date</option>
                         <option value='checkbox'>Checkbox</option>
                         <option value='email'>Email</option>

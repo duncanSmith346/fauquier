@@ -74,6 +74,7 @@
         $permission_array['addtrainingperiod.php'] = 1;
         $permission_array['coursesignup.php'] = 1;
         $permission_array['tshirtsize.php'] = 1;
+        $permission_array['onboardingappointment.php'] = 1;
 
 
         //pages only managers can view
@@ -104,6 +105,7 @@
         $permission_array['takeattendance.php'] = 2;
         $permission_array['takeattendance-2.php'] = 2;
         $permission_array['forms.php'] = 2;
+        $permission_array['adminonboarding.php'] = 2;
 
         //Check if they're at a valid page for their access level.
 	$current_page = strtolower(basename($_SERVER['PHP_SELF']));
