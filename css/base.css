@@ -551,6 +551,20 @@ main.dashboard > p {
     justify-content: center;
 }
 
+main.dashboardForForms {
+    padding: 0 4rem 2rem 4rem;
+}
+
+#dashboardForForms {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    /* padding: 0 8rem 4rem 8rem; */
+    gap: 1rem;
+    justify-content: center;
+}
+
 .dashboard-item {
     display: inline;
     background-color: var(--main-color);
@@ -940,6 +954,7 @@ a.navigation_button {
 }
 
 div.application_list {
+    width: 100%;
     display: flex;
     flex-direction: column;
     position: relative;
