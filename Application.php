@@ -546,7 +546,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <?php while ($question = mysqli_fetch_assoc($questions)):
                             ?>
                             <p style="padding: 0.3rem;"><strong><?php echo htmlspecialchars($question['question']); ?></strong></p>
-                            <p class="application_responses"><?php echo htmlspecialchars($question['answer']); ?></p>
+                            <p class="application_responses">
+                                <?php if (($question['type'] ?? '') === 'file' && $question['answer'] !== ''): ?>
+                                    <a href="downloadFile.php?file=<?php echo urlencode($question['answer']); ?>">Download file</a>
+                                <?php else: ?>
+                                    <?php echo htmlspecialchars($question['answer']); ?>
+                                <?php endif; ?>
+                            </p>
 
                             <?php if ($question['comment'] !== NULL): ?>
                             <div style="margin-left: 2rem;">
