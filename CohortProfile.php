@@ -36,74 +36,74 @@ $commitment = get_applicant_commitment($person_id, $cycle_id);
     <title>Profile - Leadership Fauquier</title>
 </head>
 
-<body>
-    <?php require('header.php'); ?>
+    <body>
+        <?php require('header.php'); ?>
 
-    <h1>
-        <?= htmlspecialchars($member->get_first_name()) ?>
-        <?= htmlspecialchars($member->get_last_name()) ?>
-    </h1>
+        <h1>
+            <?= htmlspecialchars($member->get_first_name()) ?>
+            <?= htmlspecialchars($member->get_last_name()) ?>
+        </h1>
 
-    <main>
-        <div class="navigation">
-            <a href="index.php" class="navigation_button">Dashboard</a>
-        </div>
+        <main class="signup-form">
+            <div class="navigation">
+                <a href="index.php" class="navigation_button">Dashboard</a>
+            </div>
+            <div style="margin-left: 25rem; margin-bottom: 2rem;">
+                <h2>Profile Information</h2>
 
-        <h2>Profile Information</h2>
+                <p>Role: <?= htmlspecialchars(implode(', ', (array) $member->get_type())) ?></p>
+                <p>T-Shirt Size: <?= htmlspecialchars($member->get_shirt_size() ?: 'Not selected') ?></p>
+                <br>
+                <h2>Forms</h2>
 
-        <p>Role: <?= htmlspecialchars(implode(', ', (array) $member->get_type())) ?></p>
-        <p>T-Shirt Size: <?= htmlspecialchars($member->get_shirt_size() ?: 'Not selected') ?></p>
+                <p>
+                    Commitment:
+                    <?php if ($commitment): ?>
+                        <a href="Commitment.php?id=<?= urlencode($commitment['commitment_id']) ?>">
+                            View Commitment
+                        </a>
+                    <?php else: ?>
+                        Missing
+                    <?php endif; ?>
+                </p>
 
-        <h2>Forms</h2>
+                <?php
+                $forms = [
+                    'sampleallergy' => 'Allergy Information',
+                    'sampleemergencycontact' => 'Emergency Contact',
+                    'sampleselfassessment' => 'Self-Assessment'
+                ];
+                ?>
 
-        <p>
-            Commitment:
-            <?php if ($commitment): ?>
-                <a href="Commitment.php?id=<?= urlencode($commitment['commitment_id']) ?>">
-                    View Commitment
-                </a>
-            <?php else: ?>
-                Missing
-            <?php endif; ?>
-        </p>
+                <?php foreach ($forms as $form_type => $label): ?>
 
-        <?php
-        $forms = [
-            'sampleallergy' => 'Allergy Information',
-            'sampleemergencycontact' => 'Emergency Contact',
-            'sampleselfassessment' => 'Self-Assessment'
-        ];
-        ?>
+                    <?php
+                    $form = get_cohort_form($person_id, $cycle_id, $form_type);
+                    ?>
 
-        <?php foreach ($forms as $form_type => $label): ?>
+                <p>
+                    <?= htmlspecialchars($label) ?>:
 
-            <?php
-            $form = get_cohort_form($person_id, $cycle_id, $form_type);
-            ?>
+                    <?php if ($form): ?>
 
-           <p>
-               <?= htmlspecialchars($label) ?>:
+                        <a href="CohortForm.php?type=<?= urlencode($form_type) ?>&id=<?= urlencode($person_id) ?>">
+                            Finished
+                        </a>
 
-               <?php if ($form): ?>
+                    <?php else: ?>
 
-                 <a href="CohortForm.php?type=<?= urlencode($form_type) ?>&id=<?= urlencode($person_id) ?>">
-                     Finished
-                 </a>
+                        Unfinished
 
-             <?php else: ?>
+                    <?php endif; ?>
+                </p>
 
-                 Unfinished
+                <?php endforeach; ?>
 
-            <?php endif; ?>
-           </p>
-
-        <?php endforeach; ?>
-
-        <form action='export.php' method='POST'>
-            <input type='hidden' name='id' value='<?php echo $person_id; ?>' />
-            <button class="application_buttons" type='submit'>export profile</button>
-        </form>
-
-    </main>
-</body>
+            </div>
+            <form action='export.php' method='POST'>
+                <input type='hidden' name='id' value='<?php echo $person_id; ?>' />
+                <button class="application_buttons" type='submit'>export profile</button>
+            </form>
+        </main>
+    </body>
 </html>
