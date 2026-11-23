@@ -28,6 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     include_once('database/dbQuestions.php');
     $question = $_GET['number'];
     $form = $_GET['form'];
+    $type = getQuestion($form, $question)['type'];
 
     if ($form === 'sampleonboardingappointment') {
         $existingAnswers = getAnswers($question, $form);
@@ -57,6 +58,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             }
 
             $submittedTimes[] = $time;
+        }
+    }
+    if ($type === 'link' && isset($_GET['link'])) {
+        $link = $_GET['link'];
+        $existingAnswer = mysqli_fetch_assoc(getAnswers($question,$form));
+        var_dump($existingAnswer);
+        if ($existingAnswer === NULL) {
+            $success = addAnswer($question, $link, $form);
+        } else {
+            $success = removeAnswer($question, $existingAnswer['answer'], $existingAnswer['application_id']);
+            $success = addAnswer($question, $link, $form);
         }
     }
 
@@ -124,6 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         <h1>Add Answers</h1>
         <main class='dashboard'>
             <form action='addAnswer.php' method='GET'>
+                <?php if ($type !== 'link'): ?>
                 <label for="answer1">Answer 1:</label>
                 <input type='text' name="answer1">
                 <label for="answer2">Answer 2:</label>
@@ -134,6 +147,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 <input type='text' name="answer4">
                 <label for="answer5">Answer 5:</label>
                 <input type='text' name="answer5">
+                <?php else: ?>
+                <label for='link'>link:</label>
+                <input type="text" name='link'>
+                <?php endif; ?>
                 <input type='hidden' name='number' value='<?php echo $question; ?>'/>
                 <input type='hidden' name='form' value='<?php echo $form;?>'/>
                 <button type='submit'>Add Answers</button>

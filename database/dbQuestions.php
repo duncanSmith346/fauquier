@@ -220,7 +220,7 @@ function getAnswers($number,$form) {
 
     return $results ?: null;
 }
-function removeAnswer($question, $answer,$form) {
+function removeAnswer($question, $answer, $form) {
         $con = connect();
 
     $sql = "DELETE FROM dbAnswers WHERE " . "number" . "=? AND isSample=1 AND answer= ? and application_id=?";

@@ -392,6 +392,11 @@ if (!$admin && $cohort && !$existing_form) {
                                    accept=".jpg,.jpeg,.png,.pdf,.docx"
                                    required>
 
+                        <?php elseif ($question['type'] === 'link'): ?>
+                            <?php $ans = getAnswers($question['number'], $form_type); ?>
+                            <?php foreach($ans as $an): ?>
+                                <a href="<?php echo $an['answer']; ?>"><?php echo $an['answer']; ?></a>
+                            <?php endforeach; ?>
                         <?php else: ?>
 
                             <?php

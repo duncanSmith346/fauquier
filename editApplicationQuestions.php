@@ -53,9 +53,11 @@
                             echo $question['question'];
                             echo " -- ";
                             echo $question['type'];
-                        if ($question['type'] === "multipleChoice" || $question['type'] === "checkbox"):
+                        if ($question['type'] === "multipleChoice" || $question['type'] === "checkbox" || $question['type'] === 'link'):
                         ?>
+                            <?php if ($question['type'] !== 'link') : ?>
                             <p>Possible answers include:</p>
+                            <?php endif; ?>
                             <ul>
                                 <?php $answers = getAnswers($question['number'],'sampleapplicatio');
                                     foreach($answers as $answer):
@@ -71,7 +73,11 @@
                             </ul>
                             <form action="addAnswer.php" Method='GET'>
                                 <input type='hidden' name='form' value='sampleapplicatio'/>
+                                <?php if ($question['type'] === 'link'): ?>
+                                <button type='submit' name='number' value='<?php echo $question['number']; ?>'>Swap Answer</button>
+                                <?php else: ?>
                                 <button type='submit' name='number' value='<?php echo $question['number']; ?>'>Add Answers</button>
+                                <?php endif; ?>
                             </form>
                         <?php endif; ?>
                         <form action="removeQuestion.php" Method='GET'>

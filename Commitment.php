@@ -221,6 +221,11 @@ function commitment_escape($value) {
                             <?php if (!empty($saved_answers[$question['number']])): ?>
                                 <br><small>A file is already saved. Choose a new one only to replace it.</small>
                             <?php endif; ?>
+                        <?php elseif ($question['type'] === 'link'): ?>
+                            <?php $ans = getAnswers($question['number'],'samplecommitment'); ?>
+                            <?php foreach($ans as $an): ?>
+                                <a href="<?php echo $an['answer']; ?>"><?php echo $an['answer']; ?></a>
+                            <?php endforeach; ?>
                         <?php else: ?>
                             <?php $type = in_array($question['type'], ['text', 'email', 'tel', 'date', 'number'], true) ? $question['type'] : 'text'; ?>
                             <input type="<?= commitment_escape($type) ?>" id="question_<?= $number ?>" name="answers[<?= $number ?>]" value="<?= commitment_escape($answers[$number] ?? '') ?>" required>

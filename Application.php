@@ -324,6 +324,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <?php if (!empty($saved_answers[$question['number']])): ?>
                                 <br><small>A file is already saved. Choose a new one only to replace it.</small>
                             <?php endif; ?>
+                        <?php elseif ($question['type'] === 'link'): ?>
+                            <?php $ans = getAnswers($question['number'],'sampleapplicatio'); ?>
+                            <?php foreach($ans as $an): ?>
+                                <a href="<?php echo $an['answer']; ?>"><?php echo $an['answer']; ?></a>
+                            <?php endforeach; ?>
                         <?php else: ?>
                             <input type="<?php echo $question['type'];?>" 
                             id="question_<?php echo $question['number'];?>"
