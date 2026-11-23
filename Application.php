@@ -444,8 +444,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <br>
                 <form action="Application.php" method="GET">
                     <input type='hidden' name='id' value='<?php echo $result['id'] ?>' />
-                    <button class="application_buttons" type='submit' name='reject' value='reject'>Reject</button>
                     <button class="application_buttons" type='submit' name='accept' value='accept'>Accept</button>
+                    <button class="application_buttons removeButton" type='submit' name='reject' value='reject'>Reject</button>
                 </form>
 
 

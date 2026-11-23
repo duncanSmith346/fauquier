@@ -79,7 +79,7 @@
                         <?php endif; ?>
                         <form action="removeQuestion.php" Method='GET'>
                             <input type='hidden' name='form' value='samplescholarshi'/>
-                            <button type='submit' name='number' value='<?php echo $question['number']; ?>'>Remove</button>
+                            <button class="removeButton" type='submit' name='number' value='<?php echo $question['number']; ?>'>Remove</button>
                         </form>
                     </div>
                     <?php endforeach ?>

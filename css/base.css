@@ -265,6 +265,14 @@ input[type=submit]:hover, button:hover, .button:hover {
     background-color: var(--accent-color);
 }
 
+.removeButton:hover {
+    background-color: #a11d1d;
+}
+
+.tdButton:hover {
+    background-color: #109220;
+}
+
 /* input.visited:invalid {
     outline: 2px solid var(--secondary-accent-color);
 } */
@@ -951,6 +959,7 @@ a.navigation_button {
     color: var(--button-font-color);
     background-color: var(--main-color);
     margin-bottom: 0.5rem;
+    text-align: center;
 }
 
 div.application_list {
@@ -983,7 +992,6 @@ td.admin_applicatin_table {
     border-top-color: var(--page-background-color);
     border-bottom: 4px solid;
     border-bottom-color: var(--page-background-color);
-    
 }
 
 tr:nth-child(even) {background-color: #2b3379cc; color: var(--page-background-color);}
