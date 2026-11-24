@@ -229,10 +229,10 @@
                             <tr class='admin_applicatin_table'>
                                 <!--Applicant-->
                                 <td class='admin_applicatin_table'>
-                                    <a href="CohortProfile.php?id=<?= urlencode($result['person_id']) ?>"
-                                       class="adminlist_applicationName">
-                                       <?= htmlspecialchars($result['fullname']) ?>
-                                    </a>
+                                    <form action="CohortProfile.php" Method='GET'>
+                                        <input type='hidden' name='id' value="<?= $result['person_id'] ?>"/>
+                                        <button class="payment-toggle tdButton" type='submit' value="<?= $result['person_id'] ?>"><?= htmlspecialchars($result['fullname']) ?></button>
+                                    </form>
                                 </td>
 
                                 <!--Application-->
@@ -240,17 +240,19 @@
                                     <?php if ($result['appid'] === NULL): ?>
                                         missing
                                     <?php else: ?>
-                                        <a href="Application.php?id=<?= urlencode($result['appid']) ?>"
-                                           class="adminlist_applicationName">
-                                            <?= $result['submittedAt'] === NULL ? 'in progress' : 'complete' ?>
-                                        </a>
+                                        <form action="Application.php" Method='GET'>
+                                            <input type='hidden' name='id' value="<?= $result['appid'] ?>"/>
+                                            <button class="payment-toggle tdButton" type='submit' value="<?= $result['appid'] ?>">
+                                                <?= $result['submittedAt'] === NULL ? 'in progress' : 'complete' ?>
+                                            </button>
+                                        </form>
                                     <?php endif; ?>
                                 </td>
                                 <!--Documents-->
                                 <td class='admin_applicatin_table'>unfinished</td>
                                 <!--Application Fee-->
                                 <td class='admin_applicatin_table'>
-                                   <?php if ($result['appid'] !== NULL): ?>
+                                    <?php if ($result['appid'] !== NULL): ?>
                                        <form method="POST" action="index.php">
                                          <input type="hidden" name="application_id"
                                              value="<?= htmlspecialchars($result['appid']) ?>">
@@ -260,13 +262,13 @@
                                          <input type="hidden" name="payment_status"
                                               value="<?= (int)$result['applicationFee'] === 1 ? 0 : 1 ?>">
 
-                                         <button type="submit" class="payment-toggle">
+                                         <button type="submit" class="payment-toggle tdButton">
                                              <?= (int)$result['applicationFee'] === 1 ? 'Paid' : 'Unpaid' ?>
                                          </button>
                                       </form>
-                                  <?php else: ?>
+                                    <?php else: ?>
                                         N/A
-                                  <?php endif; ?>
+                                    <?php endif; ?>
                                 </td>
                                 <!--Review Status-->
                                 <td class='admin_applicatin_table'>
@@ -304,7 +306,7 @@
                                             <input type="hidden" name="payment_status"
                                                     value="<?= (int)$result['tuition'] === 1 ? 0 : 1 ?>">
 
-                                            <button type="submit" class="payment-toggle">
+                                            <button type="submit" class="payment-toggle tdButton">
                                                 <?= (int)$result['tuition'] === 1 ? 'Paid' : 'Unpaid' ?>
                                             </button>
                                         </form>
@@ -432,7 +434,7 @@
                     </div>
                     <div class="dashboard-item" data-link="CohortForm.php?type=sampleonboardingappointment">
                         <img src="images/view-calendar.svg">
-                        <span>Onboarding Appointment</span>
+                        <span style="text-align:center;">Onboarding Appointment</span>
                     </div>
                     <div class="dashboard-item" data-link="Commitment.php">
                         <img src="images/create-report.svg">
@@ -451,7 +453,7 @@
                     </div>
                     <div class="dashboard-item" data-link="CohortForm.php?type=sampleemergencycontact">
                         <img src="images/create-report.svg">
-                        <span>Emergency Contact</span>
+                        <span style="text-align:center;">Emergency Contact</span>
                     </div>
                     <div class="dashboard-item" data-link="CohortForm.php?type=sampleallergy">
                         <img src="images/create-report.svg">

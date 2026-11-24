@@ -36,12 +36,12 @@
         <main class='dashboard'>
             <div class="forms_dashboard">
                 <div class="navigation">
-                    <a style="text-align:center;" href="addQuestion.php?form=samplecommitment" class='navigation_button'> Add Question</a>
-                    <a style="text-align:center;" href='index.php' class='navigation_button'> Home</a>
-                    <a style="text-align:center;" href="forms.php" class="navigation_button"> Forms</a>
-                    <a style="text-align:center;" href="index.php" class="navigation_button"> Committee Members</a>
-                    <a style="text-align:center;" href="personSearch.php" class="navigation_button"> Person Search</a>
-                    <a style="text-align:center;" href="logout.php" class="navigation_button"> Log out</a>
+                    <a href="addQuestion.php?form=samplecommitment" class='navigation_button'> Add Question</a>
+                    <a href='index.php' class='navigation_button'> Home</a>
+                    <a href="forms.php" class="navigation_button"> Forms</a>
+                    <a href="index.php" class="navigation_button"> Committee Members</a>
+                    <a href="personSearch.php" class="navigation_button"> Person Search</a>
+                    <a href="logout.php" class="navigation_button"> Log out</a>
                 </div>
                 <div class='question_list'>
                     <?php
@@ -85,7 +85,7 @@
                         <?php endif; ?>
                         <form action="removeQuestion.php" Method='GET'>
                             <input type='hidden' name='form' value='samplecommitment'/>
-                            <button type='submit' name='number' value='<?php echo $question['number']; ?>'>Remove</button>
+                            <button class="removeButton" type='submit' name='number' value='<?php echo $question['number']; ?>'>Remove</button>
                         </form>
                     </div>
                     <?php endforeach ?>

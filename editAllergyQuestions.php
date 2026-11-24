@@ -51,9 +51,9 @@
                     <div class='question_card'>
                         <?php
                         echo $question['number'];
-                        echo " ";
+                        echo ". ";
                         echo $question['question'];
-                        echo " ";
+                        echo " -- ";
                         echo $question['type'];
                         if ($question['type'] === "multipleChoice" || $question['type'] === "checkbox" || $question['type'] === 'link'):
                         ?>
@@ -85,7 +85,7 @@
                         <?php endif; ?>
                         <form action="removeQuestion.php" Method='GET'>
                             <input type='hidden' name='form' value='sampleallergy'/>
-                            <button type='submit' name='number' value='<?php echo $question['number']; ?>'>Remove</button>
+                            <button class="removeButton" type='submit' name='number' value='<?php echo $question['number']; ?>'>Remove</button>
                         </form>
                     </div>
                     <?php endforeach ?>

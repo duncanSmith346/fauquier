@@ -37,10 +37,10 @@
         <main class='dashboard'>
             <div class="admin_dashboard">
                 <div class="navigation">
-                    <a style="text-align:center;" href="index.php" class="navigation_button"> Home</a>
-                    <a style="text-align:center;" href="manageCommitteeMembers.php" class="navigation_button"> Committee Members</a>
-                    <a style="text-align:center;" href="personSearch.php" class="navigation_button"> Person Search</a>
-                    <a style="text-align:center;" href="logout.php" class="navigation_button"> Log out</a> 
+                    <a href="index.php" class="navigation_button"> Home</a>
+                    <a href="manageCommitteeMembers.php" class="navigation_button"> Committee Members</a>
+                    <a href="personSearch.php" class="navigation_button"> Person Search</a>
+                    <a href="logout.php" class="navigation_button"> Log out</a> 
                 </div>
                 <div id="dashboardForForms">
                     <a href="editApplicationQuestions.php">
@@ -57,32 +57,32 @@
                     </a>
                     <a href="editCommitmentQuestions.php">
                         <div class="form_dashboard-item">
-                        <img src="images/document.svg">
-                        <span>Commitment</span>
-                    </div>
+                            <img src="images/document.svg">
+                            <span>Commitment</span>
+                        </div>
                     </a>
                     <a href="editAllergyQuestions.php">
                     <div class="form_dashboard-item">
-                        <img src="images/document.svg">
-                        <span>Allergy Information</span>
+                            <img src="images/document.svg">
+                            <span style="text-align:center;">Allergy Information</span>
                         </div>
                     </a>
                     <a href="editEmergencyContactQuestions.php">
                     <div class="form_dashboard-item">
-                        <img src="images/document.svg">
-                        <span>Emergency Contact</span>
+                            <img src="images/document.svg">
+                            <span style="text-align:center;">Emergency Contact</span>
                         </div>
                     </a>
                     <a href="editSelfAssessmentQuestions.php">
                         <div class="form_dashboard-item">
-                        <img src="images/document.svg">
-                        <span>Self-Assessment</span>
+                            <img src="images/document.svg">
+                            <span>Self-Assessment</span>
                         </div>
                     </a>
                     <a href="editOnboardingAppointmentQuestion.php">
                         <div class="form_dashboard-item">
-                        <img src="images/document.svg">
-                        <span>Onboarding Appointment</span>
+                            <img src="images/document.svg">
+                            <span style="text-align:center;">Onboarding Appointment</span>
                         </div>
                     </a>  
                 </div>
