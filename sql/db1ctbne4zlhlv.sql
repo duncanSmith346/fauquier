@@ -356,6 +356,19 @@ CREATE TABLE `dbApplication` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- Table structure for table `dbScoring`
+--
+
+CREATE TABLE `dbScoring` (
+  `application_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `catagory` varchar(100),
+  `reviewer_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `score` int,
+  `conflictOfInterestAckknowledgement` text,
+  PRIMARY KEY (`application_id`, `catagory`,`reviewer_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
 -- Table structure for table `dbScholarship`
 --
 
