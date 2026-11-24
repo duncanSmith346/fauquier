@@ -364,6 +364,7 @@ CREATE TABLE `dbScoring` (
   `catagory` varchar(100),
   `reviewer_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `score` int,
+  `weight` int,
   `conflictOfInterestAckknowledgement` text,
   PRIMARY KEY (`application_id`, `catagory`,`reviewer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
