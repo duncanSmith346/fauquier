@@ -428,19 +428,16 @@ if (!$admin && $cohort && !$existing_form) {
             <?php endif; ?>
 
             <?php if ($admin): ?>
-
                 <p>
                     <a href="CohortProfile.php?id=<?= urlencode($person_id) ?>">
                         Back to Profile
                     </a>
                 </p>
-
             <?php else: ?>
-
-                <p><a href="index.php">Back to Dashboard</a></p>
-
+                <div class="application_returnLink">
+                    <p><strong><a href="index.php">Back to Dashboard</a></strong></p>
+                </div>
             <?php endif; ?>
-
         </div>
     </main>
 

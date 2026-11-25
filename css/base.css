@@ -1018,12 +1018,15 @@ div.cm_application_list {
 }
 
 div.application_card {
+    max-width: 40rem;
+    width: 100%;
     padding: var(--button-padding);
     border-radius: var(--button-border-radius);
     color: var(--button-font-color);
     background-color: var(--main-color);
     margin-bottom: 0.5rem;
     border-color: black;
+    text-align: center;
 }
 
 select.application_list_select {

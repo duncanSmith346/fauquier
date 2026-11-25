@@ -49,7 +49,7 @@
                     $status = $args['status'];
                     if (!($name || $id || $phone || $zip || $role || $status)) {
                         echo '<div class="error-toast">At least one search criterion is required.</div>';
-                    } else if (!valueConstrainedTo($role, ['admin', 'superadmin', 'volunteer', ''])) {
+                    } else if (!valueConstrainedTo($role, ['admin', 'cm', 'applicant', 'cohort', ''])) {
                         echo '<div class="error-toast">The system did not understand your request.</div>';
                     } else if (!valueConstrainedTo($status, ['Active', 'Inactive', ''])) {
                         echo '<div class="error-toast">The system did not understand your request.</div>';
@@ -122,9 +122,10 @@
 			<label for="role">Role</label>
             <select id="role" name="role">
                 <option value="">Any</option>
-                <option value="volunteer" <?php if (isset($role) && $role == 'volunteer') echo 'selected' ?>>Volunteer</option>
+                <option value="applicant" <?php if (isset($role) && $role == 'applicant') echo 'selected' ?>>Applicant</option>
                 <option value="admin" <?php if (isset($role) && $role == 'admin') echo 'selected' ?>>Admin</option>
-                <option value="superadmin" <?php if (isset($role) && $role == 'superadmin') echo 'selected' ?>>Super Admin</option>
+                <option value="cm" <?php if (isset($role) && $role == 'cm') echo 'selected' ?>>Committee Member</option>
+                <option value="cohort" <?php if (isset($role) && $role == 'cohort') echo 'selected' ?>>Cohort</option>
             </select>
             <label for="status">Status</label>
             <select id="status" name="status">
