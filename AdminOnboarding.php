@@ -186,8 +186,9 @@ function onboarding_escape($value) {
                 <p><strong>Onboarding completed.</strong></p>
             <?php endif; ?>
 
-            <p><a href="index.php">Back to Dashboard</a></p>
-
+            <div class="application_returnLink">
+                <p><strong><a href="index.php">Back to Dashboard</a></strong></p>
+            </div>
         </div>
     </main>
 </body>

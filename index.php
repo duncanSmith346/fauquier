@@ -80,9 +80,9 @@
         <h1>Dashboard</h1>
         <main class='dashboard'>
             <?php if (isset($_GET['pcSuccess'])): ?>
-                <div class="happy-toast">Password changed successfully!</div>
+                <div style="text-align:center;" class="happy-toast">Password changed successfully!</div>
             <?php elseif (isset($_GET['registerSuccess'])): ?>
-                <div class="happy-toast">Volunteer registered successfully!</div>
+                <div style="text-align:center;" class="happy-toast">Volunteer registered successfully!</div>
             <?php endif ?>
 <!--            <p>Welcome back, <?php echo $person->get_first_name() ?>!</p> -->
 <!--            <p>Today is <?php echo date('l, F j, Y'); ?>.</p>       -->     
@@ -201,15 +201,16 @@
             <?php endif ?>
 
             <!-- Below here we shall add the code for each version of index acording to how Ryan wrote the if Admin section. -->
+            
             <!-- Dashboard for if Admin -->
-
             <?php if ($admin):?>
                 <div class="admin_dashboard">
                     <div class="navigation">
-                        <a style="text-align:center;" href="forms.php" class="navigation_button"> Forms</a>
-                        <a style="text-align:center;" href="manageCommitteeMembers.php" class="navigation_button"> Committee Members</a>
-                        <a style="text-align:center;" href="personSearch.php" class="navigation_button"> Person Search</a>
-                        <a style="text-align:center;" href="logout.php" class="navigation_button"> Log out</a>
+                        <a href="forms.php" class="navigation_button">Forms</a>
+                        <a href="manageCommitteeMembers.php" class="navigation_button">Committee Members</a>
+                        <a href="personSearch.php" class="navigation_button">Person Search</a>
+                        <a href="changePassword.php" class="navigation_button">Change Password</a>
+                        <a href="logout.php" class="navigation_button">Log out</a>
                     </div>
                     <div class='application_list'>
                         <?php $results = admin_list($page);?>
@@ -286,13 +287,16 @@
                                 </td>
                                 <!--Commitment Status-->
                                 <td class='admin_applicatin_table'>
-                                    <?php 
-                                    if ($result['commitment'] === NULL) echo 'missing';
-                                    elseif ($result['submittedDate'] === NULL) echo 'in progress'; 
-                                    else echo '<a href="Commitment.php?id=' .
-                                         urlencode($result['commitment']) .
-                                         '" class="adminlist_applicationName">complete</a>';
-                                    ?>
+                                    <?php if ($result['commitment'] === NULL): ?>
+                                        missing
+                                    <?php elseif ($result['submittedDate'] === NULL): ?>
+                                        in progress
+                                    <?php else: ?>
+                                        <form action="Commitment.php" Method='GET'>
+                                            <input type='hidden' name='id' value="<?= $result['commitment'] ?>"/>
+                                            <button class="payment-toggle tdButton" type='submit' value="<?= $result['commitment'] ?>">complete</button>
+                                        </form>
+                                    <?php endif; ?>
                                 </td>
                                 <!--Tuition Status-->
                                 <td class='admin_applicatin_table'>
@@ -317,10 +321,12 @@
                                 <!--Onboarding Status-->
                                 <td class='admin_applicatin_table'>
                                     <?php if ($result['onboarding_form_id'] !== NULL): ?>
-                                        <a href="AdminOnboarding.php?id=<?= urlencode($result['onboarding_form_id']) ?>"
-                                            class="adminlist_applicationName">
+                                        <form action="AdminOnboarding.php" Method='GET'>
+                                            <input type='hidden' name='id' value="<?= $result['onboarding_form_id'] ?>"/>
+                                            <button class="payment-toggle tdButton" type='submit' value="<?= $result['onboarding_form_id'] ?>">
                                                 <?= $result['onboarding_completed_at'] !== NULL ? 'Finished' : 'Unfinished' ?>
-                                        </a>
+                                            </button>
+                                        </form>
                                     <?php else: ?>
                                          Not Submitted
                                     <?php endif; ?>
@@ -348,69 +354,68 @@
             <?php endif ?>
 
             <!-- Dashboard for if CM -->
-
             <?php if ($cm): ?>
-            <div class="admin_dashboard">
-                <div class="navigation">
-                    <a style="text-align:center;" href="index.php" class="navigation_button"> Applications </a>
-                    <a style="text-align:center;" href="logout.php" class="navigation_button"> Log out </a>
-                    
-                </div>
-                <div class='cm_application_list'>
-                    <?php
-                        if (isset($_GET['assignedOnly'])):
-                            $results = get_assigned_applications($_SESSION['_id'],$page);
-                        ?>
-                        <form action="index.php">
-                            <button type='submit'>View All Applications</button>
-                        </form>
+                <div class="admin_dashboard">
+                    <div class="navigation">
+                        <a style="text-align:center;" href="index.php" class="navigation_button"> Applications </a>
+                        <a href="changePassword.php" class="navigation_button">Change Password</a>
+                        <a style="text-align:center;" href="logout.php" class="navigation_button"> Log out </a>
+                    </div>
+                    <div class='cm_application_list'>
                         <?php
-                        else: 
-                            $results = retrieve_undecided_applicantions_names($page);
+                            if (isset($_GET['assignedOnly'])):
+                                $results = get_assigned_applications($_SESSION['_id'],$page);
+                            ?>
+                            <form action="index.php">
+                                <button type='submit'>View All Applications</button>
+                            </form>
+                            <?php
+                            else: 
+                                $results = retrieve_undecided_applicantions_names($page);
+                            ?>
+                            <form action="index.php" method='GET'>
+                                <button type='submit' name='assignedOnly' value='True'>View Only Assigned</button>
+                            </form>
+                        <?php endif; ?>
+                        <br>
+                        <?php foreach($results as $result) : 
                         ?>
-                        <form action="index.php" method='GET'>
-                            <button type='submit' name='assignedOnly' value='True'>View Only Assigned</button>
-                        </form>
-                    <?php endif; ?>
-                    <br>
-                    <?php foreach($results as $result) : 
-                    ?>
-                        <div class="application_card">
-                            <a href='Application.php?id=<?= urldecode($result['id'])?>' class='href_application_card'> 
-                                Applicant Name: <?php echo $result['answer1'];?>  
-                            </a>
-                            | Committee Member: 
-                            <?php if ($result['reviewer_id'] === NULL) echo 'undecided';
-                                else {
-                                    $name = get_name_from_id($result['reviewer_id']);
-                                    echo $name['first_name'];
-                                    echo ' '; 
-                                    echo $name['last_name'];
-                                }
-                            ?>
-                        </div>
-                    <?php endforeach; ?>
-                    <br>
-                    <div class='paging'>
-                        <form action="index.php">
-                            <?php if (isset($_GET['assignedOnly'])):?>
-                                <input type='hidden' name='assignedOnly' value='True'/>
-                            <?php endif;?>
-                            <?php  $count = get_count_admin_list()["count(dbPersons.id)"]/10;
-                            $i = 0;
-                            while ($i < $count): 
-                                $n = $i +1;
+                            <div class="application_card">
+                                <a href='Application.php?id=<?= urldecode($result['id'])?>' class='href_application_card'> 
+                                    Applicant Name: <?php echo $result['answer1'];?>  
+                                </a>
+                                | Committee Member: 
+                                <?php if ($result['reviewer_id'] === NULL) echo 'undecided';
+                                    else {
+                                        $name = get_name_from_id($result['reviewer_id']);
+                                        echo $name['first_name'];
+                                        echo ' '; 
+                                        echo $name['last_name'];
+                                    }
                                 ?>
-                            <button class='dashboardPaging' type='submit' name='page' value='<?php echo $i;?>'><?php echo $n;?></button>
+                            </div>
+                        <?php endforeach; ?>
+                        <br>
+                        <div class='paging'>
+                            <form action="index.php">
+                                <?php if (isset($_GET['assignedOnly'])):?>
+                                    <input type='hidden' name='assignedOnly' value='True'/>
+                                <?php endif;?>
+                                <?php  $count = get_count_admin_list()["count(dbPersons.id)"]/10;
+                                $i = 0;
+                                while ($i < $count): 
+                                    $n = $i +1;
+                                    ?>
+                                <button class='dashboardPaging' type='submit' name='page' value='<?php echo $i;?>'><?php echo $n;?></button>
 
-                            <?php 
-                            $i = $i + 1; 
-                            endwhile;
-                            ?>
-                        </form>
+                                <?php 
+                                $i = $i + 1; 
+                                endwhile;
+                                ?>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
             <?php endif ?>
 
             <!-- Dashboard for if Cohort -->
@@ -483,7 +488,7 @@
                 <?php
                     $application = get_applicant_application($_SESSION['_id'], '2026');
                 ?>
-                <div id="dashboard">
+                <div style="width:90%;margin:auto;" id="dashboard">
                     <div class="dashboard-item" data-link="Application.php">
                         <img src="images/document.svg">
                         <span style="text-align:center;">Manage Application</span>
@@ -508,6 +513,15 @@
                             <span class="payment-icon" style="font-size: 6rem !important; line-height: 6rem;">$</span>
                             <span style="text-align:center;">Pay Application Fee</span>
                     </a>
+
+                    <div class="dashboard-item" data-link="changePassword.php">
+                        <img src="images/change-password.svg">
+                        <span>Change Password</span>
+                    </div>
+                    <div class="dashboard-item" data-link="logout.php">
+                        <img src="images/logout.svg">
+                        <span>Log out</span>
+                    </div>
                 </div>
             <?php endif; ?> 
         </main>

@@ -44,7 +44,7 @@ $commitment = get_applicant_commitment($person_id, $cycle_id);
             <?= htmlspecialchars($member->get_last_name()) ?>
         </h1>
 
-        <main class="signup-form">
+        <main class="dashboard">
             <div class="navigation">
                 <a href="index.php" class="navigation_button">Dashboard</a>
             </div>
@@ -102,7 +102,7 @@ $commitment = get_applicant_commitment($person_id, $cycle_id);
             </div>
             <form action='export.php' method='POST'>
                 <input type='hidden' name='id' value='<?php echo $person_id; ?>' />
-                <button class="application_buttons" type='submit'>export profile</button>
+                <button style="text-align:center;" class="application_buttons" type='submit'>Export Profile</button>
             </form>
         </main>
     </body>

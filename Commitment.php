@@ -167,11 +167,10 @@ function commitment_escape($value) {
 
             <?php if ($admin): ?>
                 <?php if ($admin_commitment): ?>
-                    <h2>Commitment Form</h2>
-                    <p><strong>Status:</strong> <?= commitment_escape($admin_commitment['commitmentStatus'] ?? 'Submitted') ?></p>
-                    <p><strong>Submitted:</strong> <?= commitment_escape($admin_commitment['submittedDate'] ?? '') ?></p>
+                    <p style="text-align:center;"><strong>Status:</strong> <?= commitment_escape($admin_commitment['commitmentStatus'] ?? 'Submitted') ?></p>
+                    <p style="text-align:center;"><strong>Submitted:</strong> <?= commitment_escape($admin_commitment['submittedDate'] ?? '') ?></p>
                     <?php foreach ($admin_answers as $answer): ?>
-                        <p><strong><?= commitment_escape($answer['question'] ?? ('Question ' . $answer['number'])) ?></strong></p>
+                        <p style="padding: 0.3rem;"><strong><?= commitment_escape($answer['question'] ?? ('Question ' . $answer['number'])) ?></strong></p>
                         <p class="application_responses">
                             <?php if (($answer['type'] ?? '') === 'file' && $answer['answer'] !== ''): ?>
                                 <a href="downloadFile.php?file=<?php echo urlencode($answer['answer']); ?>">Download file</a>

@@ -87,7 +87,7 @@
                 <?php endif ?>
                 <label for="new-password">New Password</label>
                 <input type="password" id="new-password" name="new-password" placeholder="Enter new password" required>
-                <label for="reenter-new-password">Current Password</label>
+                <label for="reenter-new-password">Re-enter New Password</label>
                 <input type="password" id="new-password-reenter" placeholder="Re-enter new password" required>
                 <p id="password-match-error" class="error hidden">Passwords must match!</p>
                 <input type="submit" id="submit" name="submit" value="Change Password">
