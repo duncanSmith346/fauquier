@@ -1349,3 +1349,103 @@ function get_all_onboarding_appointments($cycle_id) {
 
     return $appointments;
 }
+
+
+function addScoringCategory ($name, $maxScore, $weight) {
+    $con = connect();
+    if (getScoringCategory($name) === NULL) {
+        $sql = "INSERT INTO dbScoring
+                (category, score, weight, application_id)
+                VALUES (?, ?, ?,'sampleapplicatio')";
+
+        $stmt = mysqli_prepare($con, $sql);
+
+        mysqli_stmt_bind_param(
+            $stmt, "sii",
+            $name, $maxScore, $weight
+        );
+
+        $success = mysqli_stmt_execute($stmt);
+
+        mysqli_stmt_close($stmt);
+        mysqli_close($con);
+
+        return $success;
+    }
+    return false;
+}
+
+function removeScoringCategory ($name) {
+    $con = connect();
+
+    $sql = "DELETE FROM dbScoring WHERE category=? and application_id='sampleapplicatio'";
+
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt,"s",$name);
+    $success = mysqli_stmt_execute($stmt);
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+    return $success;
+
+}
+
+function getScoringCategory ($name) {
+    $con = connect();
+
+    $sql = "SELECT distinct category
+            FROM dbScoring WHERE category=?";
+
+    $stmt = mysqli_prepare($con, $sql);
+    
+    mysqli_stmt_bind_param(
+        $stmt, "s", $name
+    );
+
+    mysqli_stmt_execute($stmt);
+
+    $result = mysqli_stmt_get_result($stmt);
+    $exists = mysqli_fetch_assoc($result);
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+
+    return $exists ?: null;
+}
+
+function getScoringCategoies () {
+        $con = connect();
+
+    $sql = "SELECT distinct category
+            FROM dbScoring";
+
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_execute($stmt);
+
+    $result = mysqli_stmt_get_result($stmt);
+
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+
+    return $result ?: null;
+}
+
+function getScoringCategoiesAll () {
+        $con = connect();
+
+    $sql = "SELECT *
+            FROM dbScoring
+            WHERE application_id='sampleapplicatio'";
+
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_execute($stmt);
+
+    $result = mysqli_stmt_get_result($stmt);
+
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+
+    return $result ?: null;
+}
