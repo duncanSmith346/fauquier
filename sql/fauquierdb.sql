@@ -361,7 +361,7 @@ CREATE TABLE `dbApplication` (
 
 CREATE TABLE `dbScoring` (
   `application_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `catagory` varchar(100),
+  `category` varchar(100),
   `reviewer_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `score` int,
   `weight` int,

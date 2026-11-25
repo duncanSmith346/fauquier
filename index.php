@@ -208,6 +208,7 @@
                     <div class="navigation">
                         <a href="forms.php" class="navigation_button">Forms</a>
                         <a href="manageCommitteeMembers.php" class="navigation_button">Committee Members</a>
+                        <a href='editScoring.php' class="navigation_button"> Scoring</a>
                         <a href="personSearch.php" class="navigation_button">Person Search</a>
                         <a href="changePassword.php" class="navigation_button">Change Password</a>
                         <a href="logout.php" class="navigation_button">Log out</a>
