@@ -134,6 +134,20 @@ if ($admin) {
 
         if ($admin_commitment) {
             $admin_answers = getQuestions($id);
+
+            $con = connect();
+            $sql = 'SELECT * FROM dbCohort WHERE id = ?';
+            $stmt = mysqli_prepare($con, $sql);
+            mysqli_stmt_bind_param($stmt, 's', $admin_commitment['cohort_id']);
+            mysqli_stmt_execute($stmt);
+            $result = mysqli_stmt_get_result($stmt);
+            $cohort_extract = mysqli_fetch_assoc($result) ?: null;
+            mysqli_stmt_close($stmt);
+            mysqli_close($con);
+
+            if ($cohort_extract) {
+                $person_id = $cohort_extract['person_id'];
+            }
         } else {
             $error = 'No commitment form was found for that ID.';
         }
@@ -235,6 +249,10 @@ function commitment_escape($value) {
                 </form>
             <?php endif; ?>
             <div class="application_returnLink">
+                <?php if ($admin && $admin_commitment && !empty($person_id)): ?>
+                    <p><strong><a href="CohortProfile.php?id=<?= urlencode($person_id) ?>">Back to Cohort Profile</a></strong></p>
+                    <br>
+                <?php endif; ?>
                 <p><strong><a href="index.php">Back to Dashboard</a></strong></p>
             </div>
         </div>
