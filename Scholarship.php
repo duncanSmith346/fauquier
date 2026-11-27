@@ -221,7 +221,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     endif;
                     elseif($admin):
                         $id = $_GET['id'];
-
+                        $scholarship = get_scholarship($id);
                 ?>
                 
                 <?php
@@ -242,6 +242,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </p>
                 <br>
                 <?php endforeach; ?>
+                <?php endif; ?>
+
+                <?php if ($admin): ?>
+                    <br>
+                    <form action='Application.php' method='GET'>
+                        <button class="application_buttons" style="width:35%;" type='submit' name='id' value='<?= $scholarship['application_id'] ?>'>Back to Main Application</button>
+                    </form>
                 <?php endif; ?>
                 <div class="application_returnLink">
                     <p><strong><a href="index.php">Back to Dashboard</a></strong></p>

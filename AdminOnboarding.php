@@ -128,24 +128,21 @@ function onboarding_escape($value) {
         <div class="application_main" style="max-width:100%;">
 
             <h2>Onboarding Review</h2>
-
             <p>
                 <strong>Cohort Member:</strong>
                 <?= onboarding_escape($form['first_name'] . ' ' . $form['last_name']) ?>
             </p>
-
             <p>
                 <strong>Submitted:</strong>
                 <?= onboarding_escape($form['submittedDate']) ?>
             </p>
-
             <p>
                 <strong>Status:</strong>
                 <?= $form['completedAt'] === null ? 'Unfinished' : 'Finished' ?>
             </p>
-
+            <br>
             <?php foreach ($answers as $answer): ?>
-                <p>
+                <p style="padding: 0.3rem;">
                     <strong>
                         <?= onboarding_escape(
                             $answer['question'] ?? ('Question ' . $answer['number'])

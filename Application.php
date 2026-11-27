@@ -24,7 +24,7 @@ function get_uploaded_files($field = 'files') {
         ];
     }
     return $out;
-} 
+}
 
 // True if any required file question has neither a new upload nor a saved file.
 function missing_required_file($files, $saved_answers) {
@@ -188,6 +188,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $id = $_GET['id'] ?? null;
         $choice = null;
         $application_id = $_GET['id'];
+        $application = retrieve_application($id);
         if (isset($_GET['CM'])) {
             $reviewer_id = $_GET['CM'];
             if ($reviewer_id === 'Unselected'){
@@ -205,7 +206,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $success = update_choice($choice, $id);
 
             if ($choice == 'accept') {
-                $application = retrieve_application($id);
                 if (create_cohort($id)) {
                      update_type($application['applicant_id'], 'cohort');
                 } else {
@@ -596,6 +596,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php endif;?>
                     <?php endif;?>
                 <div class="application_returnLink">
+                    <?php if ($admin): ?>
+                        <p><strong><a href="CohortProfile.php?id=<?= urlencode($application['applicant_id']) ?>">Back to Applicant Profile</a></strong></p>
+                        <br>
+                    <?php endif; ?>
                     <p><strong><a href="index.php">Back to Dashboard</a></strong></p>
                 </div>
             </div>

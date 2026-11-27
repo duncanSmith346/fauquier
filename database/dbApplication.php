@@ -102,6 +102,26 @@ function get_applicant_scholarship($application_id, $cycle_id) {
     return $application ?: null;
 }
 
+// Find an existing scholarship
+function get_scholarship($scholarship_id) {
+    $con = connect();
+
+    $sql = "SELECT * FROM dbScholarships
+            WHERE scholarship_id = ?";
+    
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "s", $scholarship_id);
+    mysqli_stmt_execute($stmt);
+
+    $result = mysqli_stmt_get_result($stmt);
+    $scholarship = mysqli_fetch_assoc($result);
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($con);
+
+    return $scholarship ?: null;
+}
+
 // Retrieve undecided applications and their assigned reviewers
 function retrieve_undecided_applicantions_names($page) {
     $con = connect();
