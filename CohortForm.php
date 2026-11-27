@@ -213,7 +213,6 @@ if (!$admin && $cohort && !$existing_form) {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -221,11 +220,10 @@ if (!$admin && $cohort && !$existing_form) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/base.css" type="text/css">
+    <link rel="icon" type="image/x-icon" href="https://leadershipfauquier.org/wp-content/uploads/2022/09/LeadershipFauquierLogo-404x236-1.png">
     <title><?= cohort_escape($title) ?> - Leadership Fauquier</title>
 </head>
-
 <body>
-
     <nav class="nav_application"></nav>
 
     <h2 class="application_header">
@@ -249,19 +247,16 @@ if (!$admin && $cohort && !$existing_form) {
             <?php if ($admin): ?>
 
                 <?php if ($existing_form): ?>
+                    <p style="text-align:center;"><strong>Status:</strong> Submitted</p>
 
-                    <h2><?= cohort_escape($title) ?></h2>
-
-                    <p><strong>Status:</strong> Submitted</p>
-
-                    <p>
+                    <p style="text-align:center;">
                         <strong>Submitted:</strong>
                         <?= cohort_escape($existing_form['submittedDate']) ?>
                     </p>
-
+                    <br>
                     <?php foreach ($admin_answers as $answer): ?>
 
-                        <p>
+                        <p style="padding: 0.3rem;">
                             <strong>
                                 <?= cohort_escape($answer['question']) ?>
                             </strong>
@@ -299,7 +294,7 @@ if (!$admin && $cohort && !$existing_form) {
                 <h2 style="text-align:center;">
                     <?= cohort_escape($title) ?> Status
                 </h2>
-
+                <br>
                 <p style="text-align:center;">Submitted</p>
 
             <?php elseif (empty($questions)): ?>
@@ -348,7 +343,7 @@ if (!$admin && $cohort && !$existing_form) {
                                            value="<?= cohort_escape($value) ?>"
                                            <?= in_array($value, (array) ($answers[$number] ?? []), true) ? 'checked' : '' ?>>
 
-                                    <label class="checkbox-label"
+                                    <label class="checkbox-label" style="padding: 0.1rem;"
                                            for="question_<?= $number ?>_<?= md5($value) ?>">
                                         <?= cohort_escape($value) ?>
                                     </label>
@@ -427,19 +422,18 @@ if (!$admin && $cohort && !$existing_form) {
 
             <?php endif; ?>
 
-            <?php if ($admin): ?>
-                <p>
-                    <a href="CohortProfile.php?id=<?= urlencode($person_id) ?>">
-                        Back to Profile
-                    </a>
-                </p>
-            <?php else: ?>
-                <div class="application_returnLink">
+            <div class="application_returnLink">
+                <?php if ($admin): ?>
+                    <p><strong>
+                        <a href="CohortProfile.php?id=<?= urlencode($person_id) ?>">
+                            Back to Cohort Profile
+                        </a></strong>
+                    </p>
+                <?php else: ?>
                     <p><strong><a href="index.php">Back to Dashboard</a></strong></p>
-                </div>
-            <?php endif; ?>
+                <?php endif; ?>
+            </div>
         </div>
     </main>
-
 </body>
 </html>

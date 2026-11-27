@@ -199,6 +199,7 @@ function commitment_escape($value) {
                 <?php endif; ?>
             <?php elseif ($existing_commitment): ?>
                 <h2 style="text-align:center;">Commitment Status</h2>
+                <br>
                 <p style="text-align:center;">Submitted</p>
             <?php else: ?>
                 <form method="POST" action="Commitment.php" enctype='multipart/form-data'>
